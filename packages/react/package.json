@@ -1,0 +1,26 @@
+{
+  "name": "flintui-react",
+  "version": "1.0.0",
+  "description": "FlintUI for React",
+  "keywords": [
+    "react",
+    "ui",
+    "dark-mode",
+    "components"
+  ],
+  "license": "GPL-3.0",
+  "author": "CazyUndee",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "scripts": {
+    "build": "echo 'TODO: add build script'"
+  }
+}
