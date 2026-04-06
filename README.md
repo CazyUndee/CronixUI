@@ -1,6 +1,7 @@
 # FlintUI
 
 A dark-mode UI toolkit with crimson accents and Outfit typography. Built for modern web applications.
+super cool because its mine so its the best ui system ever
 
 ## Installation
 
