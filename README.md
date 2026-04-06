@@ -566,4 +566,4 @@ FlintUI.createEl(tag, className, attrs);
 
 ## License
 
-MIT
+GPL 3.0, see LICENSE for details.
