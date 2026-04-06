@@ -18,7 +18,11 @@
     "src/"
   ],
   "peerDependencies": {
-    "react": ">=17"
+    "react": ">=17",
+    "react-dom": ">=17"
+  },
+  "dependencies": {
+    "flintui-web": "*"
   },
   "scripts": {
     "build": "echo 'TODO: add build script'"
