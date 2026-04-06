@@ -1,0 +1,357 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #222222;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --text-muted: rgba(240,237,232,0.5);
+    --text-dim: rgba(240,237,232,0.25);
+    --accent: #6b2323;
+    --accent-hover: #7d2a2a;
+    --accent-glow: rgba(107,35,35,0.3);
+    --radius: 10px;
+    --radius-lg: 14px;
+    --font: 'Outfit', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    padding: 2rem;
+    min-height: 100vh;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .section { margin-bottom: 2.5rem; }
+
+  /* Typography */
+  .type-demo h1 { font-size: 28px; font-weight: 600; line-height: 1.2; color: var(--text); }
+  .type-demo h2 { font-size: 20px; font-weight: 500; color: var(--text); margin-top: 8px; }
+  .type-demo p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-top: 8px; }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--surface2);
+    color: var(--text);
+  }
+  .btn:hover { border-color: var(--border-hover); background: var(--surface3); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #f0ede8;
+  }
+  .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn.ghost { background: transparent; }
+  .btn.ghost:hover { background: var(--surface2); }
+  .btn.sm { padding: 5px 12px; font-size: 12px; }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.2rem;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: var(--border-hover); }
+  .card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .card-icon svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .card h3 { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* Inputs */
+  .input-row { display: flex; flex-direction: column; gap: 10px; }
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-group label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .input {
+    font-family: var(--font);
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .input:focus { border-color: var(--accent); }
+  .input::placeholder { color: var(--text-dim); }
+
+  /* Badges */
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .badge.default { background: var(--surface2); border-color: var(--border); color: var(--text-muted); }
+  .badge.accent { background: var(--accent-glow); border-color: var(--accent); color: #c97a7a; }
+  .badge.success { background: rgba(30,80,40,0.3); border-color: rgba(60,140,70,0.4); color: #6bc47a; }
+  .badge.warn { background: rgba(80,60,20,0.3); border-color: rgba(150,110,30,0.4); color: #c4a43a; }
+
+  /* Stat cards */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+  }
+  .stat-val { font-size: 22px; font-weight: 600; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .stat-delta { font-size: 11px; margin-top: 6px; }
+  .stat-delta.up { color: #6bc47a; }
+  .stat-delta.down { color: #c46b6b; }
+
+  /* Toggle */
+  .toggle-row { display: flex; align-items: center; gap: 10px; }
+  .toggle {
+    width: 36px; height: 20px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    top: 2px; left: 2px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .toggle.on::after { transform: translateX(16px); background: #f0ede8; }
+  .toggle-label { font-size: 13px; color: var(--text-muted); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+  /* Nav pill */
+  .nav { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; width: fit-content; }
+  .nav-item {
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .nav-item.active { background: var(--surface3); color: var(--text); }
+  .nav-item:hover:not(.active) { color: var(--text); }
+
+  /* Progress */
+  .progress-track {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .progress-row { display: flex; flex-direction: column; gap: 12px; }
+  .progress-item-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+</style>
+
+<div style="max-width: 600px;">
+
+  <div style="margin-bottom: 2rem;">
+    <div style="font-size: 22px; font-weight: 600; color: var(--text); font-family: var(--font);">FlintUI</div>
+    <div style="font-size: 13px; color: var(--text-muted); font-family: var(--font); margin-top: 4px;">Design system demo — dark mode, Outfit font, crimson accent</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Navigation</div>
+    <div class="nav">
+      <button class="nav-item active" onclick="setNav(this)">Overview</button>
+      <button class="nav-item" onclick="setNav(this)">Projects</button>
+      <button class="nav-item" onclick="setNav(this)">Settings</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Stats</div>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-val">2,847</div>
+        <div class="stat-label">Total runs</div>
+        <div class="stat-delta up">+12% this week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">94ms</div>
+        <div class="stat-label">Avg latency</div>
+        <div class="stat-delta up">-8ms vs last</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">99.2%</div>
+        <div class="stat-label">Uptime</div>
+        <div class="stat-delta down">-0.1%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">41</div>
+        <div class="stat-label">Active agents</div>
+        <div class="stat-delta up">+5 today</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Cards</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Live inference</h3>
+        <p>Real-time model serving with auto-scaling.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        </div>
+        <h3>Solar grid</h3>
+        <p>Energy-aware scheduling across nodes.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <h3>Model registry</h3>
+        <p>Version and deploy with one command.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Progress</div>
+    <div class="progress-row">
+      <div>
+        <div class="progress-item-label"><span>Training epoch</span><span>68%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width: 68%;"></div></div>
+      </div>
+      <div>
+        <div class="progress-item-label"><span>Storage used</span><span>41%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width: 41%; background: #4a7a6b;"></div></div>
+      </div>
+      <div>
+        <div class="progress-item-label"><span>GPU memory</span><span>87%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width: 87%; background: #7a4a4a;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Inputs</div>
+    <div class="input-row">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="input-group">
+          <label>Project name</label>
+          <input class="input" placeholder="e.g. zovler-inference" />
+        </div>
+        <div class="input-group">
+          <label>Region</label>
+          <input class="input" placeholder="eu-west-1" />
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Description</label>
+        <input class="input" placeholder="What does this project do?" />
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Buttons</div>
+    <div class="btn-row">
+      <button class="btn primary">Deploy</button>
+      <button class="btn">Configure</button>
+      <button class="btn ghost">Cancel</button>
+      <button class="btn sm">View logs</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Badges</div>
+    <div class="badge-row">
+      <span class="badge accent">Crimson</span>
+      <span class="badge success">Running</span>
+      <span class="badge warn">Degraded</span>
+      <span class="badge default">Idle</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Toggles</div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="toggle-row">
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        <span class="toggle-label">Auto-deploy on push</span>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle" onclick="this.classList.toggle('on')"></div>
+        <span class="toggle-label">Enable experimental features</span>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        <span class="toggle-label">Transparency dashboard</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setNav(el) {
+  el.closest('.nav').querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>

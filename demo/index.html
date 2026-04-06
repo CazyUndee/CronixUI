@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlintUI - Complete UI Toolkit Demo</title>
+  <link rel="stylesheet" href="flintui.css">
+  <style>
+    .demo-section { margin-bottom: 48px; }
+    .demo-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fl-text-dim); margin-bottom: 16px; }
+    .demo-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  </style>
+</head>
+<body>
+  <div class="fl-container" style="padding: 40px 0;">
+    <!-- Header -->
+    <div style="margin-bottom: 48px;">
+      <h1 class="fl-h1">FlintUI</h1>
+      <p class="fl-text-muted" style="margin-top: 8px;">A complete dark-mode UI toolkit with crimson accents and Outfit typography.</p>
+    </div>
+
+    <!-- Typography -->
+    <div class="demo-section">
+      <div class="demo-title">Typography</div>
+      <h1 class="fl-h1">Heading 1</h1>
+      <h2 class="fl-h2">Heading 2</h2>
+      <h3 class="fl-h3">Heading 3</h3>
+      <h4 class="fl-h4">Heading 4</h4>
+      <p class="fl-text-muted" style="margin-top: 12px;">Muted text for secondary content and descriptions.</p>
+      <p class="fl-text-dim" style="margin-top: 8px;">Dim text for subtle labels and placeholders.</p>
+      <p class="fl-text-accent" style="margin-top: 8px;">Accent colored text for highlights.</p>
+      <code class="fl-text-mono" style="background: var(--fl-surface-2); padding: 2px 6px; border-radius: 4px;">console.log('mono text')</code>
+    </div>
+
+    <!-- Buttons -->
+    <div class="demo-section">
+      <div class="demo-title">Buttons</div>
+      <div class="demo-row">
+        <button class="fl-btn fl-btn-primary">Primary</button>
+        <button class="fl-btn">Default</button>
+        <button class="fl-btn fl-btn-ghost">Ghost</button>
+        <button class="fl-btn fl-btn-outline">Outline</button>
+        <button class="fl-btn fl-btn-success">Success</button>
+        <button class="fl-btn fl-btn-danger">Danger</button>
+      </div>
+      <div class="demo-row" style="margin-top: 12px;">
+        <button class="fl-btn fl-btn-primary fl-btn-sm">Small</button>
+        <button class="fl-btn fl-btn-primary fl-btn-lg">Large</button>
+        <button class="fl-btn fl-btn-primary" disabled>Disabled</button>
+        <button class="fl-btn fl-btn-icon fl-btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="demo-row" style="margin-top: 12px;">
+        <div class="fl-btn-group">
+          <button class="fl-btn">Left</button>
+          <button class="fl-btn">Center</button>
+          <button class="fl-btn">Right</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="demo-section">
+      <div class="demo-title">Inputs</div>
+      <div class="fl-grid" style="gap: 16px;">
+        <div class="fl-form-group">
+          <label class="fl-form-label">Default Input</label>
+          <input class="fl-input" placeholder="Enter text...">
+        </div>
+        <div class="fl-form-group">
+          <label class="fl-form-label">With Error</label>
+          <input class="fl-input fl-input-error" value="Invalid value">
+          <span class="fl-form-error">This field is required</span>
+        </div>
+        <div class="fl-form-group">
+          <label class="fl-form-label">Small</label>
+          <input class="fl-input fl-input-sm" placeholder="Small input">
+        </div>
+        <div class="fl-form-group">
+          <label class="fl-form-label">Large</label>
+          <input class="fl-input fl-input-lg" placeholder="Large input">
+        </div>
+        <div class="fl-form-group">
+          <label class="fl-form-label">With Icon</label>
+          <div class="fl-input-icon-wrapper">
+            <svg class="fl-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="fl-input" placeholder="Search...">
+          </div>
+        </div>
+        <div class="fl-form-group">
+          <label class="fl-form-label">Select</label>
+          <div class="fl-select-wrapper">
+            <select class="fl-select">
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="fl-form-group" style="margin-top: 16px;">
+        <label class="fl-form-label">Textarea</label>
+        <textarea class="fl-input fl-textarea" placeholder="Enter long text..."></textarea>
+      </div>
+    </div>
+
+    <!-- Checkbox & Radio -->
+    <div class="demo-section">
+      <div class="demo-title">Checkbox & Radio</div>
+      <div class="demo-row">
+        <label class="fl-checkbox">
+          <input type="checkbox" checked>
+          <span class="fl-checkbox-box"></span>
+          <span class="fl-checkbox-label">Checked</span>
+        </label>
+        <label class="fl-checkbox">
+          <input type="checkbox">
+          <span class="fl-checkbox-box"></span>
+          <span class="fl-checkbox-label">Unchecked</span>
+        </label>
+        <label class="fl-checkbox disabled">
+          <input type="checkbox" disabled>
+          <span class="fl-checkbox-box"></span>
+          <span class="fl-checkbox-label">Disabled</span>
+        </label>
+      </div>
+      <div class="demo-row" style="margin-top: 12px;">
+        <label class="fl-radio">
+          <input type="radio" name="demo-radio" checked>
+          <span class="fl-radio-box"></span>
+          <span class="fl-radio-label">Option A</span>
+        </label>
+        <label class="fl-radio">
+          <input type="radio" name="demo-radio">
+          <span class="fl-radio-box"></span>
+          <span class="fl-radio-label">Option B</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Toggle & Slider -->
+    <div class="demo-section">
+      <div class="demo-title">Toggle & Slider</div>
+      <div class="demo-row">
+        <div class="fl-hstack">
+          <div class="fl-toggle on"></div>
+          <span class="fl-toggle-label">Enabled</span>
+        </div>
+        <div class="fl-hstack">
+          <div class="fl-toggle"></div>
+          <span class="fl-toggle-label">Disabled</span>
+        </div>
+      </div>
+      <div style="margin-top: 16px; max-width: 300px;">
+        <label class="fl-form-label" style="margin-bottom: 8px;">Slider</label>
+        <input type="range" class="fl-slider" min="0" max="100" value="50">
+      </div>
+    </div>
+
+    <!-- Badges & Tags -->
+    <div class="demo-section">
+      <div class="demo-title">Badges & Tags</div>
+      <div class="demo-row">
+        <span class="fl-badge fl-badge-default">Default</span>
+        <span class="fl-badge fl-badge-accent">Accent</span>
+        <span class="fl-badge fl-badge-success">Success</span>
+        <span class="fl-badge fl-badge-warning">Warning</span>
+        <span class="fl-badge fl-badge-error">Error</span>
+        <span class="fl-badge fl-badge-info">Info</span>
+      </div>
+      <div class="demo-row" style="margin-top: 12px;">
+        <span class="fl-badge fl-badge-solid fl-badge-accent">Solid</span>
+        <span class="fl-badge fl-badge-solid fl-badge-success">Solid</span>
+        <span class="fl-badge fl-badge-solid fl-badge-warning">Solid</span>
+        <span class="fl-badge fl-badge-solid fl-badge-error">Solid</span>
+      </div>
+      <div class="demo-row" style="margin-top: 12px;">
+        <span class="fl-tag">
+          Tag
+          <span class="fl-tag-remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </span>
+        </span>
+        <span class="fl-tag">Static Tag</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="demo-section">
+      <div class="demo-title">Stats</div>
+      <div class="fl-grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px;">
+        <div class="fl-stat">
+          <div class="fl-stat-value">2,847</div>
+          <div class="fl-stat-label">Total runs</div>
+          <div class="fl-stat-delta fl-stat-delta-up">+12% this week</div>
+        </div>
+        <div class="fl-stat">
+          <div class="fl-stat-value">94ms</div>
+          <div class="fl-stat-label">Avg latency</div>
+          <div class="fl-stat-delta fl-stat-delta-up">-8ms vs last</div>
+        </div>
+        <div class="fl-stat">
+          <div class="fl-stat-value">99.2%</div>
+          <div class="fl-stat-label">Uptime</div>
+          <div class="fl-stat-delta fl-stat-delta-down">-0.1%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="demo-section">
+      <div class="demo-title">Progress</div>
+      <div style="max-width: 400px;">
+        <div style="margin-bottom: 16px;">
+          <div class="fl-progress-label"><span>Training epoch</span><span>68%</span></div>
+          <div class="fl-progress"><div class="fl-progress-bar" style="width: 68%;"></div></div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div class="fl-progress-label"><span>Storage</span><span>41%</span></div>
+          <div class="fl-progress fl-progress-success"><div class="fl-progress-bar" style="width: 41%;"></div></div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div class="fl-progress-label"><span>Memory</span><span>87%</span></div>
+          <div class="fl-progress fl-progress-error"><div class="fl-progress-bar" style="width: 87%;"></div></div>
+        </div>
+        <div>
+          <div class="fl-progress-label"><span>Large</span><span>50%</span></div>
+          <div class="fl-progress fl-progress-lg"><div class="fl-progress-bar" style="width: 50%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="demo-section">
+      <div class="demo-title">Cards</div>
+      <div class="demo-grid">
+        <div class="fl-card">
+          <div class="fl-card-icon">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3 style="font-size: 14px; font-weight: 500; color: var(--fl-text); margin-bottom: 4px;">Live inference</h3>
+          <p style="font-size: 12px; color: var(--fl-text-muted);">Real-time model serving with auto-scaling.</p>
+        </div>
+        <div class="fl-card">
+          <div class="fl-card-header">
+            <span class="fl-card-title">Card Title</span>
+            <button class="fl-btn fl-btn-sm fl-btn-ghost">Action</button>
+          </div>
+          <p class="fl-card-body">Card content goes here. This is the main body of the card with descriptive text.</p>
+          <div class="fl-card-footer">
+            <span class="fl-badge fl-badge-success">Active</span>
+          </div>
+        </div>
+        <div class="fl-card fl-card-clickable">
+          <span class="fl-card-title">Clickable Card</span>
+          <p class="fl-card-body">This card has a hover effect indicating it's interactive.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="demo-section">
+      <div class="demo-title">Navigation</div>
+      <div class="fl-nav">
+        <button class="fl-nav-item fl-nav-active">Overview</button>
+        <button class="fl-nav-item">Projects</button>
+        <button class="fl-nav-item">Analytics</button>
+        <button class="fl-nav-item">Settings</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="demo-section">
+      <div class="demo-title">Tabs</div>
+      <div class="fl-tabs">
+        <div class="fl-tabs-list">
+          <button class="fl-tab fl-tab-active" data-tab="0">Tab One</button>
+          <button class="fl-tab" data-tab="1">Tab Two</button>
+          <button class="fl-tab" data-tab="2">Tab Three</button>
+        </div>
+      </div>
+      <div class="fl-tab-content">
+        <div class="fl-tab-panel fl-tab-panel-active">Content for tab one.</div>
+        <div class="fl-tab-panel">Content for tab two.</div>
+        <div class="fl-tab-panel">Content for tab three.</div>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="demo-section">
+      <div class="demo-title">Breadcrumb</div>
+      <div class="fl-breadcrumb">
+        <a href="#" class="fl-breadcrumb-item">Home</a>
+        <span class="fl-breadcrumb-separator">/</span>
+        <a href="#" class="fl-breadcrumb-item">Projects</a>
+        <span class="fl-breadcrumb-separator">/</span>
+        <span class="fl-breadcrumb-current">FlintUI</span>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="demo-section">
+      <div class="demo-title">Alerts</div>
+      <div class="fl-stack" style="gap: 12px;">
+        <div class="fl-alert fl-alert-info">
+          <div class="fl-alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div class="fl-alert-content">
+            <div class="fl-alert-title">Information</div>
+            <div class="fl-alert-message">This is an informational alert message.</div>
+          </div>
+        </div>
+        <div class="fl-alert fl-alert-success">
+          <div class="fl-alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="fl-alert-content">
+            <div class="fl-alert-title">Success</div>
+            <div class="fl-alert-message">Your changes have been saved successfully.</div>
+          </div>
+        </div>
+        <div class="fl-alert fl-alert-warning">
+          <div class="fl-alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="fl-alert-content">
+            <div class="fl-alert-title">Warning</div>
+            <div class="fl-alert-message">This action cannot be undone.</div>
+          </div>
+        </div>
+        <div class="fl-alert fl-alert-error">
+          <div class="fl-alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="fl-alert-content">
+            <div class="fl-alert-title">Error</div>
+            <div class="fl-alert-message">Something went wrong. Please try again.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading States -->
+    <div class="demo-section">
+      <div class="demo-title">Loading States</div>
+      <div class="demo-row">
+        <div class="fl-spinner"></div>
+        <div class="fl-spinner fl-spinner-sm"></div>
+        <div class="fl-spinner fl-spinner-lg"></div>
+      </div>
+      <div style="margin-top: 16px; max-width: 300px;">
+        <div class="fl-skeleton fl-skeleton-title"></div>
+        <div class="fl-skeleton fl-skeleton-text"></div>
+        <div class="fl-skeleton fl-skeleton-text" style="width: 80%;"></div>
+      </div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="demo-section">
+      <div class="demo-title">Avatars</div>
+      <div class="demo-row">
+        <div class="fl-avatar">JD</div>
+        <div class="fl-avatar fl-avatar-sm">AB</div>
+        <div class="fl-avatar fl-avatar-lg">XY</div>
+        <div class="fl-avatar fl-avatar-xl">ZZ</div>
+        <div class="fl-avatar-group">
+          <div class="fl-avatar">A</div>
+          <div class="fl-avatar">B</div>
+          <div class="fl-avatar">C</div>
+          <div class="fl-avatar">+5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropdown -->
+    <div class="demo-section">
+      <div class="demo-title">Dropdown</div>
+      <div class="fl-dropdown">
+        <button class="fl-btn fl-dropdown-trigger">
+          Dropdown
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="fl-dropdown-menu">
+          <div class="fl-dropdown-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </div>
+          <div class="fl-dropdown-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+          <div class="fl-dropdown-divider"></div>
+          <div class="fl-dropdown-item" style="color: var(--fl-error-text);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="demo-section">
+      <div class="demo-title">Tooltip</div>
+      <div class="demo-row">
+        <div class="fl-tooltip">
+          <button class="fl-btn">Hover me</button>
+          <div class="fl-tooltip-content">This is a tooltip</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="demo-section">
+      <div class="demo-title">List</div>
+      <div class="fl-list" style="max-width: 400px;">
+        <div class="fl-list-item fl-list-item-clickable">
+          <div class="fl-avatar fl-avatar-sm">A</div>
+          <div class="fl-list-item-content">
+            <div class="fl-list-item-title">List Item One</div>
+            <div class="fl-list-item-subtitle">Description here</div>
+          </div>
+          <span class="fl-badge fl-badge-success">Active</span>
+        </div>
+        <div class="fl-list-item fl-list-item-clickable">
+          <div class="fl-avatar fl-avatar-sm">B</div>
+          <div class="fl-list-item-content">
+            <div class="fl-list-item-title">List Item Two</div>
+            <div class="fl-list-item-subtitle">Another description</div>
+          </div>
+          <span class="fl-badge fl-badge-warning">Pending</span>
+        </div>
+        <div class="fl-list-item">
+          <div class="fl-avatar fl-avatar-sm">C</div>
+          <div class="fl-list-item-content">
+            <div class="fl-list-item-title">List Item Three</div>
+            <div class="fl-list-item-subtitle">Non-clickable item</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="demo-section">
+      <div class="demo-title">Accordion</div>
+      <div class="fl-accordion" style="max-width: 400px;">
+        <div class="fl-accordion-item fl-accordion-open">
+          <div class="fl-accordion-header">
+            <span class="fl-accordion-title">Section 1</span>
+            <svg class="fl-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fl-accordion-content">
+            <p style="color: var(--fl-text-muted);">Content for section 1. This can contain any elements.</p>
+          </div>
+        </div>
+        <div class="fl-accordion-item">
+          <div class="fl-accordion-header">
+            <span class="fl-accordion-title">Section 2</span>
+            <svg class="fl-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fl-accordion-content">
+            <p style="color: var(--fl-text-muted);">Content for section 2.</p>
+          </div>
+        </div>
+        <div class="fl-accordion-item">
+          <div class="fl-accordion-header">
+            <span class="fl-accordion-title">Section 3</span>
+            <svg class="fl-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fl-accordion-content">
+            <p style="color: var(--fl-text-muted);">Content for section 3.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="demo-section">
+      <div class="demo-title">Table</div>
+      <div class="fl-table-wrapper fl-table-sortable" style="max-width: 700px;">
+        <table class="fl-table">
+          <thead>
+            <tr>
+              <th data-sort="name">Name</th>
+              <th data-sort="status">Status</th>
+              <th data-sort="date">Date</th>
+              <th data-sort="value">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Project Alpha</td>
+              <td><span class="fl-badge fl-badge-success">Active</span></td>
+              <td>2024-01-15</td>
+              <td>$2,450</td>
+            </tr>
+            <tr>
+              <td>Project Beta</td>
+              <td><span class="fl-badge fl-badge-warning">Pending</span></td>
+              <td>2024-02-20</td>
+              <td>$1,890</td>
+            </tr>
+            <tr>
+              <td>Project Gamma</td>
+              <td><span class="fl-badge fl-badge-error">Error</span></td>
+              <td>2024-03-10</td>
+              <td>$3,200</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="demo-section">
+      <div class="demo-title">Pagination</div>
+      <div id="pagination-demo" class="fl-pagination"></div>
+    </div>
+
+    <!-- File Input -->
+    <div class="demo-section">
+      <div class="demo-title">File Input</div>
+      <div class="fl-file-input" style="max-width: 400px;">
+        <input type="file">
+        <div class="fl-file-input-label">
+          <svg class="fl-file-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="fl-file-input-text"><span>Click to upload</span> or drag and drop</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="demo-section">
+      <div class="demo-title">Modal</div>
+      <button class="fl-btn fl-btn-primary" onclick="openModal()">Open Modal</button>
+      <div class="fl-modal-backdrop" id="demo-modal">
+        <div class="fl-modal">
+          <div class="fl-modal-header">
+            <h3 class="fl-modal-title">Modal Title</h3>
+            <button class="fl-modal-close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="fl-modal-body">
+            <p class="fl-text-muted">Modal content goes here. You can place any content inside a modal dialog.</p>
+            <div class="fl-form-group" style="margin-top: 16px;">
+              <label class="fl-form-label">Input Field</label>
+              <input class="fl-input" placeholder="Enter something...">
+            </div>
+          </div>
+          <div class="fl-modal-footer">
+            <button class="fl-btn fl-btn-ghost fl-modal-close-btn">Cancel</button>
+            <button class="fl-btn fl-btn-primary">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="demo-section">
+      <div class="demo-title">Toast Notifications</div>
+      <div class="demo-row">
+        <button class="fl-btn" onclick="FlintUI.Toast.success('Operation completed successfully!')">Success</button>
+        <button class="fl-btn" onclick="FlintUI.Toast.error('Something went wrong!')">Error</button>
+        <button class="fl-btn" onclick="FlintUI.Toast.warning('Please review your changes.')">Warning</button>
+        <button class="fl-btn" onclick="FlintUI.Toast.info('New updates available.')">Info</button>
+      </div>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="demo-section">
+      <div class="demo-title">Command Palette</div>
+      <p class="fl-text-muted" style="margin-bottom: 12px;">Press <kbd class="fl-kbd" style="background: var(--fl-surface-2); padding: 2px 6px; border-radius: 4px;">Ctrl+K</kbd> to open</p>
+      <button class="fl-btn" onclick="openCommandPalette()">Open Command Palette</button>
+      <div class="fl-command-palette" id="demo-command-palette">
+        <div class="fl-command-palette-inner">
+          <input class="fl-command-palette-input" placeholder="Type a command or search...">
+          <div class="fl-command-palette-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="demo-section">
+      <div class="demo-title">Search</div>
+      <div class="fl-search" style="max-width: 300px;">
+        <span class="fl-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:100%;height:100%;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input class="fl-input fl-search-input" placeholder="Search...">
+        <div class="fl-search-results"></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="demo-section">
+      <div class="demo-title">Divider</div>
+      <div class="fl-divider"></div>
+    </div>
+
+    <!-- Buttons Demo -->
+    <div class="demo-section" style="text-align: center; padding: 32px 0;">
+      <p class="fl-text-muted" style="margin-bottom: 16px;">FlintUI - Dark Mode UI Toolkit</p>
+      <a href="https://github.com" class="fl-btn fl-btn-primary">View on GitHub</a>
+    </div>
+  </div>
+
+  <script src="flintui.js"></script>
+  <script>
+    // Modal
+    function openModal() {
+      const modal = document.getElementById('demo-modal');
+      if (modal._flModal) {
+        modal._flModal.open();
+      }
+    }
+
+    // Pagination
+    new FlintUI.Pagination(document.getElementById('pagination-demo'), {
+      total: 10,
+      current: 1,
+      onChange: (page) => console.log('Page:', page)
+    });
+
+    // Command Palette
+    const commandPalette = document.getElementById('demo-command-palette');
+    if (!commandPalette._flCommandPalette) {
+      new FlintUI.CommandPalette(commandPalette);
+    }
+    commandPalette._flCommandPalette.setItems([
+      { title: 'Go to Dashboard', subtitle: 'Navigate to main dashboard', kbd: 'G D', action: () => alert('Dashboard') },
+      { title: 'New Project', subtitle: 'Create a new project', kbd: 'N P', action: () => alert('New Project') },
+      { title: 'Search Files', subtitle: 'Search across all files', kbd: 'Ctrl+F', action: () => alert('Search') },
+      { title: 'Settings', subtitle: 'Open settings', kbd: 'Ctrl+,', action: () => alert('Settings') },
+      { title: 'Toggle Theme', subtitle: 'Switch between themes', kbd: 'Ctrl+T', action: () => alert('Theme') },
+    ]);
+
+    function openCommandPalette() {
+      commandPalette._flCommandPalette.open();
+    }
+
+    // Keyboard shortcut for command palette
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        openCommandPalette();
+      }
+    });
+
+    // Search
+    document.querySelectorAll('.fl-search').forEach(search => {
+      if (!search._flSearch) {
+        new FlintUI.Search(search);
+      }
+      search._flSearch.setItems([
+        { title: 'Project Alpha', subtitle: 'Active project', action: () => alert('Selected Alpha') },
+        { title: 'Project Beta', subtitle: 'Pending project', action: () => alert('Selected Beta') },
+        { title: 'Project Gamma', subtitle: 'Archived project', action: () => alert('Selected Gamma') },
+      ]);
+    });
+
+    // Tabs
+    document.querySelectorAll('.fl-tabs').forEach(tabs => {
+      if (!tabs._flTabs) {
+        new FlintUI.Tabs(tabs);
+      }
+    });
+
+    // Close modal buttons
+    document.querySelectorAll('.fl-modal-close-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.closest('.fl-modal-backdrop')._flModal.close();
+      });
+    });
+  </script>
+</body>
+</html>

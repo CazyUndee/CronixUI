@@ -1,0 +1,93 @@
+:root {
+  /* Colors */
+  --fl-bg: #0a0a0a;
+  --fl-surface: #111111;
+  --fl-surface-2: #1a1a1a;
+  --fl-surface-3: #222222;
+  --fl-surface-4: #2a2a2a;
+  --fl-border: rgba(255, 255, 255, 0.08);
+  --fl-border-hover: rgba(255, 255, 255, 0.15);
+  --fl-border-focus: rgba(255, 255, 255, 0.25);
+  --fl-text: #f0ede8;
+  --fl-text-muted: rgba(240, 237, 232, 0.5);
+  --fl-text-dim: rgba(240, 237, 232, 0.25);
+
+  /* Accent (Crimson) */
+  --fl-accent: #6b2323;
+  --fl-accent-hover: #7d2a2a;
+  --fl-accent-light: #8a3535;
+  --fl-accent-glow: rgba(107, 35, 35, 0.3);
+  --fl-accent-text: #c97a7a;
+
+  /* Status Colors */
+  --fl-success: #1e5028;
+  --fl-success-border: rgba(60, 140, 70, 0.4);
+  --fl-success-text: #6bc47a;
+  --fl-warning: #503c14;
+  --fl-warning-border: rgba(150, 110, 30, 0.4);
+  --fl-warning-text: #c4a43a;
+  --fl-error: #501414;
+  --fl-error-border: rgba(180, 60, 60, 0.4);
+  --fl-error-text: #c46b6b;
+  --fl-info: #143550;
+  --fl-info-border: rgba(60, 140, 200, 0.4);
+  --fl-info-text: #6ba8c4;
+
+  /* Typography */
+  --fl-font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --fl-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Font Sizes */
+  --fl-text-xs: 11px;
+  --fl-text-sm: 12px;
+  --fl-text-base: 13px;
+  --fl-text-md: 14px;
+  --fl-text-lg: 16px;
+  --fl-text-xl: 20px;
+  --fl-text-2xl: 28px;
+  --fl-text-3xl: 36px;
+
+  /* Spacing */
+  --fl-space-1: 4px;
+  --fl-space-2: 8px;
+  --fl-space-3: 12px;
+  --fl-space-4: 16px;
+  --fl-space-5: 20px;
+  --fl-space-6: 24px;
+  --fl-space-8: 32px;
+  --fl-space-10: 40px;
+  --fl-space-12: 48px;
+
+  /* Border Radius */
+  --fl-radius-sm: 6px;
+  --fl-radius: 10px;
+  --fl-radius-lg: 14px;
+  --fl-radius-xl: 20px;
+  --fl-radius-full: 9999px;
+
+  /* Shadows */
+  --fl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --fl-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --fl-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --fl-shadow-glow: 0 0 20px var(--fl-accent-glow);
+
+  /* Transitions */
+  --fl-transition-fast: 0.1s ease;
+  --fl-transition: 0.15s ease;
+  --fl-transition-slow: 0.25s ease;
+
+  /* Z-Index */
+  --fl-z-dropdown: 100;
+  --fl-z-sticky: 200;
+  --fl-z-fixed: 300;
+  --fl-z-modal-backdrop: 400;
+  --fl-z-modal: 500;
+  --fl-z-popover: 600;
+  --fl-z-tooltip: 700;
+  --fl-z-toast: 800;
+
+  /* Layout */
+  --fl-container-max: 1200px;
+  --fl-sidebar-width: 260px;
+  --fl-header-height: 56px;
+}

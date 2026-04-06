@@ -1,0 +1,23 @@
+{
+  "name": "flintui",
+  "version": "1.0.0",
+  "description": "A dark-themed UI toolkit with crimson accents and Outfit typography",
+  "main": "dist/flintui.js",
+  "style": "dist/flintui.css",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "npx live-server demo"
+  },
+  "keywords": [
+    "ui",
+    "css",
+    "dark-mode",
+    "design-system",
+    "components"
+  ],
+  "license": "MIT"
+}
