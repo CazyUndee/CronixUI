@@ -1,7 +1,7 @@
 {
   "name": "cronixui",
-  "version": "1.0.4",
-  "description": "CronixUI - A dark-themed UI toolkit with crimson accents and Outfit typography",
+  "version": "1.0.6",
+  "description": "CronixUI - A dark-themed UI toolkit with crimson accents and Outfit typography. Available for JavaScript, TypeScript, Python, Go, and Rust.",
   "keywords": [
     "ui",
     "css",
@@ -30,6 +30,10 @@
       "import": "./packages/react/src/index.js",
       "types": "./packages/react/src/index.d.ts"
     },
+    "./tokens": {
+      "import": "./packages/web/src/tokens.ts",
+      "types": "./packages/web/src/tokens.ts"
+    },
     "./css": "./packages/web/dist/cronixui.css",
     "./css/min": "./packages/web/dist/cronixui.min.css",
     "./js": "./packages/web/dist/cronixui.js",
@@ -40,6 +44,9 @@
     "packages/web/src/",
     "packages/react/src/",
     "packages/win/CronixUI.WinUI/",
+    "packages/python/cronixui/",
+    "packages/go/cronixui/",
+    "packages/rust/cronixui/src/",
     "README.md"
   ],
   "scripts": {

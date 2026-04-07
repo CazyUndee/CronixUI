@@ -1,10 +1,5 @@
-[package]
-name = "cronixui"
-version = "1.0.2"
-description = "CronixUI - A dark-themed UI toolkit with crimson accents and Outfit typography"
-license = "GPL-3.0"
-authors = ["CazyUndee"]
-keywords = ["ui", "dark-mode", "design-system", "components"]
+module github.com/CazyUndee/CronixUI/packages/go/cronixui
 
-[lib]
-path = "cronixui.go"
+go 1.21
+
+require fyne.io/fyne/v2 v2.4.3
