@@ -1,0 +1,22 @@
+{
+  "name": "cronixui-svelte",
+  "version": "1.0.6",
+  "description": "CronixUI Svelte components",
+  "type": "module",
+  "svelte": "./src/index.js",
+  "exports": {
+    ".": {
+      "svelte": "./src/index.js"
+    },
+    "./tokens": {
+      "import": "./src/tokens.js"
+    }
+  },
+  "files": ["src"],
+  "keywords": ["svelte", "ui", "dark-mode", "components"],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CazyUndee/CronixUI"
+  }
+}

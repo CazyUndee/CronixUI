@@ -1,0 +1,376 @@
+{
+  "components": [
+    {
+      "name": "Button",
+      "prefix": "btn",
+      "category": "form",
+      "props": [
+        {"name": "variant", "type": "enum", "values": ["primary", "ghost", "outline", "danger", "success"], "default": "primary"},
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg"], "default": "md"},
+        {"name": "disabled", "type": "boolean", "default": false},
+        {"name": "icon", "type": "node", "required": false},
+        {"name": "children", "type": "node", "required": true}
+      ],
+      "slots": ["default"],
+      "events": ["onClick", "onFocus", "onBlur"]
+    },
+    {
+      "name": "Card",
+      "prefix": "card",
+      "category": "display",
+      "props": [
+        {"name": "clickable", "type": "boolean", "default": false},
+        {"name": "children", "type": "node", "required": true}
+      ],
+      "slots": ["header", "body", "footer"],
+      "events": ["onClick"]
+    },
+    {
+      "name": "Input",
+      "prefix": "input",
+      "category": "form",
+      "props": [
+        {"name": "value", "type": "string", "default": ""},
+        {"name": "placeholder", "type": "string", "default": ""},
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg"], "default": "md"},
+        {"name": "error", "type": "boolean", "default": false},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange", "onInput", "onFocus", "onBlur"]
+    },
+    {
+      "name": "Textarea",
+      "prefix": "textarea",
+      "category": "form",
+      "props": [
+        {"name": "value", "type": "string", "default": ""},
+        {"name": "placeholder", "type": "string", "default": ""},
+        {"name": "rows", "type": "number", "default": 4},
+        {"name": "error", "type": "boolean", "default": false},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange", "onInput", "onFocus", "onBlur"]
+    },
+    {
+      "name": "Checkbox",
+      "prefix": "checkbox",
+      "category": "form",
+      "props": [
+        {"name": "checked", "type": "boolean", "default": false},
+        {"name": "disabled", "type": "boolean", "default": false},
+        {"name": "label", "type": "string", "required": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Radio",
+      "prefix": "radio",
+      "category": "form",
+      "props": [
+        {"name": "name", "type": "string", "required": true},
+        {"name": "options", "type": "array", "items": {"value": "string", "label": "string"}},
+        {"name": "selected", "type": "string", "default": ""},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Select",
+      "prefix": "select",
+      "category": "form",
+      "props": [
+        {"name": "options", "type": "array", "items": {"value": "string", "label": "string"}},
+        {"name": "value", "type": "string", "default": ""},
+        {"name": "placeholder", "type": "string", "default": ""},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Slider",
+      "prefix": "slider",
+      "category": "form",
+      "props": [
+        {"name": "min", "type": "number", "default": 0},
+        {"name": "max", "type": "number", "default": 100},
+        {"name": "value", "type": "number", "default": 50},
+        {"name": "step", "type": "number", "default": 1},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Toggle",
+      "prefix": "toggle",
+      "category": "form",
+      "props": [
+        {"name": "on", "type": "boolean", "default": false},
+        {"name": "disabled", "type": "boolean", "default": false},
+        {"name": "label", "type": "string", "required": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "FileInput",
+      "prefix": "file-input",
+      "category": "form",
+      "props": [
+        {"name": "accept", "type": "string", "default": "*"},
+        {"name": "multiple", "type": "boolean", "default": false},
+        {"name": "disabled", "type": "boolean", "default": false}
+      ],
+      "events": ["onChange", "onDrop"]
+    },
+    {
+      "name": "Badge",
+      "prefix": "badge",
+      "category": "display",
+      "props": [
+        {"name": "variant", "type": "enum", "values": ["default", "accent", "success", "warning", "error", "info"], "default": "default"},
+        {"name": "solid", "type": "boolean", "default": false},
+        {"name": "children", "type": "node", "required": true}
+      ]
+    },
+    {
+      "name": "Avatar",
+      "prefix": "avatar",
+      "category": "display",
+      "props": [
+        {"name": "src", "type": "string", "required": false},
+        {"name": "initials", "type": "string", "required": false},
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg", "xl"], "default": "md"}
+      ]
+    },
+    {
+      "name": "Alert",
+      "prefix": "alert",
+      "category": "display",
+      "props": [
+        {"name": "type", "type": "enum", "values": ["info", "success", "warning", "error"], "default": "info"},
+        {"name": "title", "type": "string", "required": false},
+        {"name": "message", "type": "string", "required": true},
+        {"name": "dismissible", "type": "boolean", "default": false}
+      ],
+      "events": ["onClose"]
+    },
+    {
+      "name": "Spinner",
+      "prefix": "spinner",
+      "category": "display",
+      "props": [
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg"], "default": "md"}
+      ]
+    },
+    {
+      "name": "Skeleton",
+      "prefix": "skeleton",
+      "category": "display",
+      "props": [
+        {"name": "variant", "type": "enum", "values": ["text", "title", "avatar", "rectangular"], "default": "text"},
+        {"name": "width", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "Progress",
+      "prefix": "progress",
+      "category": "display",
+      "props": [
+        {"name": "value", "type": "number", "default": 0},
+        {"name": "max", "type": "number", "default": 100},
+        {"name": "variant", "type": "enum", "values": ["default", "success", "warning", "error"], "default": "default"},
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg"], "default": "md"},
+        {"name": "label", "type": "string", "required": false}
+      ]
+    },
+    {
+      "name": "Tag",
+      "prefix": "tag",
+      "category": "display",
+      "props": [
+        {"name": "children", "type": "node", "required": true},
+        {"name": "removable", "type": "boolean", "default": false}
+      ],
+      "events": ["onRemove"]
+    },
+    {
+      "name": "Table",
+      "prefix": "table",
+      "category": "data",
+      "props": [
+        {"name": "columns", "type": "array", "items": {"key": "string", "label": "string", "sortable": "boolean"}},
+        {"name": "data", "type": "array", "items": "object"},
+        {"name": "sortable", "type": "boolean", "default": false}
+      ],
+      "events": ["onSort"]
+    },
+    {
+      "name": "List",
+      "prefix": "list",
+      "category": "data",
+      "props": [
+        {"name": "items", "type": "array", "items": {"icon": "node", "title": "string", "subtitle": "string", "actions": "node"}},
+        {"name": "clickable", "type": "boolean", "default": false}
+      ],
+      "events": ["onClick"]
+    },
+    {
+      "name": "Tooltip",
+      "prefix": "tooltip",
+      "category": "data",
+      "props": [
+        {"name": "content", "type": "string", "required": true},
+        {"name": "position", "type": "enum", "values": ["top", "bottom", "left", "right"], "default": "top"},
+        {"name": "children", "type": "node", "required": true}
+      ]
+    },
+    {
+      "name": "Stat",
+      "prefix": "stat",
+      "category": "data",
+      "props": [
+        {"name": "value", "type": "string", "required": true},
+        {"name": "label", "type": "string", "required": true},
+        {"name": "delta", "type": "number", "required": false}
+      ]
+    },
+    {
+      "name": "Modal",
+      "prefix": "modal",
+      "category": "overlay",
+      "props": [
+        {"name": "open", "type": "boolean", "default": false},
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg", "xl", "full"], "default": "md"},
+        {"name": "title", "type": "string", "required": false}
+      ],
+      "slots": ["header", "body", "footer"],
+      "events": ["onClose"]
+    },
+    {
+      "name": "Dropdown",
+      "prefix": "dropdown",
+      "category": "overlay",
+      "props": [
+        {"name": "items", "type": "array", "items": {"label": "string", "icon": "node", "divider": "boolean", "onClick": "function"}},
+        {"name": "open", "type": "boolean", "default": false}
+      ],
+      "slots": ["trigger"],
+      "events": ["onOpen", "onClose"]
+    },
+    {
+      "name": "Tabs",
+      "prefix": "tabs",
+      "category": "overlay",
+      "props": [
+        {"name": "tabs", "type": "array", "items": {"id": "string", "label": "string"}},
+        {"name": "activeIndex", "type": "number", "default": 0}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Accordion",
+      "prefix": "accordion",
+      "category": "overlay",
+      "props": [
+        {"name": "items", "type": "array", "items": {"title": "string", "content": "node"}},
+        {"name": "allowMultiple", "type": "boolean", "default": false}
+      ]
+    },
+    {
+      "name": "Toast",
+      "prefix": "toast",
+      "category": "overlay",
+      "props": [
+        {"name": "type", "type": "enum", "values": ["info", "success", "warning", "error"], "default": "info"},
+        {"name": "message", "type": "string", "required": true},
+        {"name": "duration", "type": "number", "default": 3000}
+      ],
+      "events": ["onClose"]
+    },
+    {
+      "name": "Pagination",
+      "prefix": "pagination",
+      "category": "navigation",
+      "props": [
+        {"name": "total", "type": "number", "required": true},
+        {"name": "current", "type": "number", "default": 1},
+        {"name": "perPage", "type": "number", "default": 10}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Search",
+      "prefix": "search",
+      "category": "navigation",
+      "props": [
+        {"name": "value", "type": "string", "default": ""},
+        {"name": "results", "type": "array", "items": {"title": "string", "subtitle": "string"}},
+        {"name": "placeholder", "type": "string", "default": "Search..."}
+      ],
+      "events": ["onChange", "onSelect"]
+    },
+    {
+      "name": "CommandPalette",
+      "prefix": "command-palette",
+      "category": "navigation",
+      "props": [
+        {"name": "commands", "type": "array", "items": {"id": "string", "title": "string", "shortcut": "string", "icon": "node"}},
+        {"name": "open", "type": "boolean", "default": false}
+      ],
+      "events": ["onSelect", "onClose"]
+    },
+    {
+      "name": "Nav",
+      "prefix": "nav",
+      "category": "navigation",
+      "props": [
+        {"name": "items", "type": "array", "items": {"id": "string", "label": "string"}},
+        {"name": "active", "type": "string", "required": false}
+      ],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Breadcrumb",
+      "prefix": "breadcrumb",
+      "category": "navigation",
+      "props": [
+        {"name": "items", "type": "array", "items": {"label": "string", "href": "string"}},
+        {"name": "separator", "type": "string", "default": "/"}
+      ]
+    },
+    {
+      "name": "Container",
+      "prefix": "container",
+      "category": "layout",
+      "props": [
+        {"name": "size", "type": "enum", "values": ["sm", "md", "lg", "xl", "fluid"], "default": "lg"},
+        {"name": "children", "type": "node", "required": true}
+      ]
+    },
+    {
+      "name": "Header",
+      "prefix": "header",
+      "category": "layout",
+      "slots": ["brand", "nav", "actions"]
+    },
+    {
+      "name": "Sidebar",
+      "prefix": "sidebar",
+      "category": "layout",
+      "props": [
+        {"name": "items", "type": "array", "items": {"id": "string", "label": "string", "icon": "node", "href": "string"}},
+        {"name": "active", "type": "string", "required": false}
+      ],
+      "slots": ["header", "footer"],
+      "events": ["onChange"]
+    },
+    {
+      "name": "Footer",
+      "prefix": "footer",
+      "category": "layout",
+      "props": [
+        {"name": "links", "type": "array", "items": {"label": "string", "href": "string"}},
+        {"name": "copyright", "type": "string", "required": false}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "cronixui-vue",
+  "version": "1.0.6",
+  "description": "CronixUI Vue 3 components",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js"
+    },
+    "./tokens": {
+      "import": "./src/tokens/index.js"
+    }
+  },
+  "files": ["src"],
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "keywords": ["vue", "vue3", "ui", "dark-mode", "components"],
+  "license": "GPL-3.0"
+}

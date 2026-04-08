@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="CronixUI Developers" description="Developer docs for CronixUI">
+  <section class="hero">
+    <p class="eyebrow">Developer docs</p>
+    <h1>Build against the spec, not against one framework.</h1>
+    <p class="lede">
+      CronixUI is designed so tokens, components, and exports stay aligned across every platform.
+      The source of truth lives in `packages/spec/`.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Project layout</h2>
+    <pre class="code">packages/
+  spec/        design tokens + component schemas + generator
+  web/         canonical CSS reference
+  react/       React port
+  vue/         Vue port
+  svelte/      Svelte port
+  solid/       Solid port
+  flutter/     Flutter/Dart port
+  python/      Python port
+  go/          Go/Fyne port
+  rust/        Rust/egui port</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Core commands</h2>
+    <pre class="code">pnpm gen       # generate framework components from the spec
+pnpm gen:all   # generate everything
+pnpm build     # build all packages
+pnpm docs:dev  # run docs locally
+pnpm docs:build # build docs for deploy</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Adding a component</h2>
+    <ol>
+      <li>Add the token or component definition to `packages/spec/`.</li>
+      <li>Generate or update each framework implementation.</li>
+      <li>Export the component from each package index.</li>
+      <li>Document the component page in the docs site.</li>
+      <li>Verify class names use the `cn-` prefix and tokens use `--cn-`.</li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2>Design rules</h2>
+    <ul>
+      <li>Use `#0a0a0a` for background, `#f0ede8` for primary text, and `#6b2323` for accent.</li>
+      <li>Prefer small, composable components with one clear responsibility.</li>
+      <li>Keep component names and prop names consistent across frameworks.</li>
+      <li>Favor accessibility: labels, keyboard support, and semantic markup.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Publishing</h2>
+    <pre class="code">npm publish              # React, Svelte, Vue, Solid
+cargo publish            # Rust
+poetry publish           # Python
+flutter pub publish      # Flutter
+git tag v1.0.0 && git push --tags # Go versioning</pre>
+  </section>
+</BaseLayout>

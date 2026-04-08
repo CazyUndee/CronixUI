@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { components } from '../data/spec';
+---
+
+<BaseLayout title="CronixUI" description="CronixUI documentation">
+  <section class="hero">
+    <p class="eyebrow">Unified design system</p>
+    <h1>35 components. 10 platforms. One crimson system.</h1>
+    <p class="lede">
+      CronixUI is a spec-first UI kit built around shared tokens, generated components,
+      and a consistent dark visual language.
+    </p>
+    <div class="actions">
+      <a class="button primary" href="/components">Browse components</a>
+      <a class="button" href="/tokens">View tokens</a>
+    </div>
+  </section>
+
+  <section class="grid stats">
+    <div class="card"><strong>35</strong><span>Components</span></div>
+    <div class="card"><strong>10</strong><span>Platforms</span></div>
+    <div class="card"><strong>1</strong><span>Spec source</span></div>
+  </section>
+
+  <section class="panel">
+    <h2>Component coverage</h2>
+    <div class="component-grid">
+      {components.map((component) => (
+        <a class="component-card" href={`/components/${component.name.toLowerCase()}`}>
+          <strong>{component.name}</strong>
+          <span>{component.category}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

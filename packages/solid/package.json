@@ -1,0 +1,21 @@
+{
+  "name": "cronixui-solid",
+  "version": "1.0.6",
+  "description": "CronixUI SolidJS components",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js"
+    },
+    "./tokens": {
+      "import": "./src/tokens/index.js"
+    }
+  },
+  "files": ["src"],
+  "peerDependencies": {
+    "solid-js": "^1.0.0"
+  },
+  "keywords": ["solid", "solidjs", "ui", "dark-mode", "components"],
+  "license": "GPL-3.0"
+}

@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { components } from '../../data/spec';
+---
+
+<BaseLayout title="CronixUI Components" description="All CronixUI components">
+  <section class="panel">
+    <h1>Components</h1>
+    <p class="lede">Each component is defined once in the spec and rendered across frameworks.</p>
+    <div class="component-grid">
+      {components.map((component) => (
+        <a class="component-card" href={`/components/${component.name.toLowerCase()}`}>
+          <strong>{component.name}</strong>
+          <span>{component.category}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

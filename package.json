@@ -30,9 +30,13 @@
       "import": "./packages/react/src/index.js",
       "types": "./packages/react/src/index.d.ts"
     },
+    "./typescript": {
+      "import": "./packages/typescript/dist/index.js",
+      "types": "./packages/typescript/dist/index.d.ts"
+    },
     "./tokens": {
-      "import": "./packages/web/src/tokens.ts",
-      "types": "./packages/web/src/tokens.ts"
+      "import": "./packages/typescript/dist/tokens.js",
+      "types": "./packages/typescript/dist/tokens.d.ts"
     },
     "./css": "./packages/web/dist/cronixui.css",
     "./css/min": "./packages/web/dist/cronixui.min.css",
@@ -43,6 +47,7 @@
     "packages/web/dist/",
     "packages/web/src/",
     "packages/react/src/",
+    "packages/typescript/dist/",
     "packages/win/CronixUI.WinUI/",
     "packages/python/cronixui/",
     "packages/go/cronixui/",
@@ -50,7 +55,16 @@
     "README.md"
   ],
   "scripts": {
-    "build": "node packages/web/scripts/build.js",
-    "dev": "npx live-server packages/web/demo"
+    "build": "pnpm -r build",
+    "build:web": "node packages/web/scripts/build.js",
+    "build:ts": "cd packages/typescript && npm run build",
+    "dev": "npx live-server packages/web/demo",
+    "gen": "tsx packages/spec/generate.ts",
+    "gen:all": "tsx packages/spec/generate.ts --all",
+    "docs:dev": "cd docs && pnpm dev",
+    "docs:build": "cd docs && pnpm build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "publish:dry": "pnpm -r publish --dry-run --access public"
   }
 }

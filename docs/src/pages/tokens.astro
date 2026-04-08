@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { tokens } from '../data/spec';
+---
+
+<BaseLayout title="CronixUI Tokens" description="CronixUI design tokens">
+  <section class="panel">
+    <h1>Tokens</h1>
+    <p class="lede">The visual system is driven by a single token map.</p>
+    <pre class="code">{JSON.stringify(tokens, null, 2)}</pre>
+  </section>
+</BaseLayout>

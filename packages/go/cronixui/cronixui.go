@@ -12,110 +12,76 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Version of CronixUI
 const Version = "1.0.6"
 
 // =============================================================================
 // DESIGN TOKENS
 // =============================================================================
 
-// Color tokens - all extracted from CSS variables
 type Colors struct {
-	// Background
-	BG       color.Color
-	Surface  color.Color
-	Surface2 color.Color
-	Surface3 color.Color
-	Surface4 color.Color
-
-	// Text
-	Text      color.Color
-	TextMuted color.Color
-	TextDim   color.Color
-
-	// Accent (Crimson)
-	Accent      color.Color
-	AccentHover color.Color
-	AccentLight color.Color
-	AccentGlow  color.Color
-	AccentText  color.Color
-
-	// Semantic - Success
+	BG            color.Color
+	Surface       color.Color
+	Surface2      color.Color
+	Surface3      color.Color
+	Surface4      color.Color
+	Text          color.Color
+	TextMuted     color.Color
+	TextDim       color.Color
+	Accent        color.Color
+	AccentHover   color.Color
+	AccentLight   color.Color
+	AccentGlow    color.Color
+	AccentText    color.Color
 	Success       color.Color
 	SuccessBorder color.Color
 	SuccessText   color.Color
-
-	// Semantic - Warning
 	Warning       color.Color
 	WarningBorder color.Color
 	WarningText   color.Color
-
-	// Semantic - Error
-	ErrorColor  color.Color
-	ErrorBorder color.Color
-	ErrorText   color.Color
-
-	// Semantic - Info
-	Info       color.Color
-	InfoBorder color.Color
-	InfoText   color.Color
-
-	// Border
-	Border      color.Color
-	BorderHover color.Color
-	BorderFocus color.Color
+	Error         color.Color
+	ErrorBorder   color.Color
+	ErrorText     color.Color
+	Info          color.Color
+	InfoBorder    color.Color
+	InfoText      color.Color
+	Border        color.Color
+	BorderHover   color.Color
+	BorderFocus   color.Color
 }
 
-// DefaultColors returns the CronixUI color palette
 func DefaultColors() *Colors {
 	return &Colors{
-		// Background
-		BG:       color.RGBA{R: 10, G: 10, B: 10, A: 255},
-		Surface:  color.RGBA{R: 17, G: 17, B: 17, A: 255},
-		Surface2: color.RGBA{R: 26, G: 26, B: 26, A: 255},
-		Surface3: color.RGBA{R: 34, G: 34, B: 34, A: 255},
-		Surface4: color.RGBA{R: 42, G: 42, B: 42, A: 255},
-
-		// Text
-		Text:      color.RGBA{R: 240, G: 237, B: 232, A: 255},
-		TextMuted: color.RGBA{R: 240, G: 237, B: 232, A: 128},
-		TextDim:   color.RGBA{R: 240, G: 237, B: 232, A: 64},
-
-		// Accent
-		Accent:      color.RGBA{R: 107, G: 35, B: 35, A: 255},
-		AccentHover: color.RGBA{R: 125, G: 42, B: 42, A: 255},
-		AccentLight: color.RGBA{R: 138, G: 53, B: 53, A: 255},
-		AccentGlow:  color.RGBA{R: 107, G: 35, B: 35, A: 77},
-		AccentText:  color.RGBA{R: 201, G: 122, B: 122, A: 255},
-
-		// Success
+		BG:            color.RGBA{R: 10, G: 10, B: 10, A: 255},
+		Surface:       color.RGBA{R: 17, G: 17, B: 17, A: 255},
+		Surface2:      color.RGBA{R: 26, G: 26, B: 26, A: 255},
+		Surface3:      color.RGBA{R: 34, G: 34, B: 34, A: 255},
+		Surface4:      color.RGBA{R: 42, G: 42, B: 42, A: 255},
+		Text:          color.RGBA{R: 240, G: 237, B: 232, A: 255},
+		TextMuted:     color.RGBA{R: 240, G: 237, B: 232, A: 128},
+		TextDim:       color.RGBA{R: 240, G: 237, B: 232, A: 64},
+		Accent:        color.RGBA{R: 107, G: 35, B: 35, A: 255},
+		AccentHover:   color.RGBA{R: 125, G: 42, B: 42, A: 255},
+		AccentLight:   color.RGBA{R: 138, G: 53, B: 53, A: 255},
+		AccentGlow:    color.RGBA{R: 107, G: 35, B: 35, A: 77},
+		AccentText:    color.RGBA{R: 201, G: 122, B: 122, A: 255},
 		Success:       color.RGBA{R: 30, G: 80, B: 40, A: 255},
 		SuccessBorder: color.RGBA{R: 60, G: 140, B: 70, A: 102},
 		SuccessText:   color.RGBA{R: 107, G: 196, B: 122, A: 255},
-
-		// Warning
 		Warning:       color.RGBA{R: 80, G: 60, B: 20, A: 255},
 		WarningBorder: color.RGBA{R: 150, G: 110, B: 30, A: 102},
 		WarningText:   color.RGBA{R: 196, G: 164, B: 58, A: 255},
-
-		// Error
-		ErrorColor:  color.RGBA{R: 80, G: 20, B: 20, A: 255},
-		ErrorBorder: color.RGBA{R: 180, G: 60, B: 60, A: 102},
-		ErrorText:   color.RGBA{R: 196, G: 107, B: 107, A: 255},
-
-		// Info
-		Info:       color.RGBA{R: 20, G: 53, B: 80, A: 255},
-		InfoBorder: color.RGBA{R: 60, G: 140, B: 200, A: 102},
-		InfoText:   color.RGBA{R: 107, G: 168, B: 196, A: 255},
-
-		// Border
-		Border:      color.RGBA{R: 255, G: 255, B: 255, A: 20},
-		BorderHover: color.RGBA{R: 255, G: 255, B: 255, A: 38},
-		BorderFocus: color.RGBA{R: 255, G: 255, B: 255, A: 64},
+		Error:         color.RGBA{R: 80, G: 20, B: 20, A: 255},
+		ErrorBorder:   color.RGBA{R: 180, G: 60, B: 60, A: 102},
+		ErrorText:     color.RGBA{R: 196, G: 107, B: 107, A: 255},
+		Info:          color.RGBA{R: 20, G: 53, B: 80, A: 255},
+		InfoBorder:    color.RGBA{R: 60, G: 140, B: 200, A: 102},
+		InfoText:      color.RGBA{R: 107, G: 168, B: 196, A: 255},
+		Border:        color.RGBA{R: 255, G: 255, B: 255, A: 20},
+		BorderHover:   color.RGBA{R: 255, G: 255, B: 255, A: 38},
+		BorderFocus:   color.RGBA{R: 255, G: 255, B: 255, A: 64},
 	}
 }
 
-// Typography tokens
 type Typography struct {
 	FontFamily   string
 	FontMono     string
@@ -144,109 +110,74 @@ func DefaultTypography() *Typography {
 	}
 }
 
-// Spacing tokens
 type Spacing struct {
-	Space1  float32
-	Space2  float32
-	Space3  float32
-	Space4  float32
-	Space5  float32
-	Space6  float32
-	Space8  float32
-	Space10 float32
-	Space12 float32
+	Space1, Space2, Space3, Space4, Space5, Space6, Space8, Space10, Space12 float32
 }
 
 func DefaultSpacing() *Spacing {
-	return &Spacing{
-		Space1:  4,
-		Space2:  8,
-		Space3:  12,
-		Space4:  16,
-		Space5:  20,
-		Space6:  24,
-		Space8:  32,
-		Space10: 40,
-		Space12: 48,
+	return &Spacing{4, 8, 12, 16, 20, 24, 32, 40, 48}
+}
+
+type RadiusTokens struct {
+	SM, Default, LG, XL, Full float32
+}
+
+func DefaultRadiusTokens() *RadiusTokens {
+	return &RadiusTokens{6, 10, 14, 20, 9999}
+}
+
+type Shadow struct {
+	SM, Default, LG, Glow string
+}
+
+func DefaultShadow() *Shadow {
+	return &Shadow{
+		SM:      "0 1px 2px rgba(0, 0, 0, 0.3)",
+		Default: "0 4px 12px rgba(0, 0, 0, 0.4)",
+		LG:      "0 8px 24px rgba(0, 0, 0, 0.5)",
+		Glow:    "0 0 20px rgba(107, 35, 35, 0.3)",
 	}
 }
 
-// Radius tokens
-type Radius struct {
-	SM   float32
-	Def  float32
-	LG   float32
-	XL   float32
-	Full float32
+type Transition struct {
+	Fast, Default, Slow string
 }
 
-func DefaultRadius() *Radius {
-	return &Radius{
-		SM:   6,
-		Def:  10,
-		LG:   14,
-		XL:   20,
-		Full: 9999,
-	}
+func DefaultTransition() *Transition {
+	return &Transition{"0.1s ease", "0.15s ease", "0.25s ease"}
 }
 
-// ZIndex tokens
-type ZIndex struct {
-	Dropdown      int
-	Sticky        int
-	Fixed         int
-	ModalBackdrop int
-	Modal         int
-	Popover       int
-	Tooltip       int
-	Toast         int
+type ZIndexTokens struct {
+	Dropdown, Sticky, Fixed, ModalBackdrop, Modal, Popover, Tooltip, Toast int
 }
 
-func DefaultZIndex() *ZIndex {
-	return &ZIndex{
-		Dropdown:      100,
-		Sticky:        200,
-		Fixed:         300,
-		ModalBackdrop: 400,
-		Modal:         500,
-		Popover:       600,
-		Tooltip:       700,
-		Toast:         800,
-	}
+func DefaultZIndexTokens() *ZIndexTokens {
+	return &ZIndexTokens{100, 200, 300, 400, 500, 600, 700, 800}
 }
 
-// Layout tokens
-type Layout struct {
-	ContainerMax float32
-	SidebarWidth float32
-	HeaderHeight float32
+type LayoutTokens struct {
+	ContainerMax, SidebarWidth, HeaderHeight float32
 }
 
-func DefaultLayout() *Layout {
-	return &Layout{
-		ContainerMax: 1200,
-		SidebarWidth: 260,
-		HeaderHeight: 60,
-	}
+func DefaultLayoutTokens() *LayoutTokens {
+	return &LayoutTokens{1200, 260, 56}
 }
 
 // =============================================================================
-// CRONIX UI THEME
+// THEME
 // =============================================================================
 
-// Theme implements fyne.Theme with CronixUI colors
 type Theme struct {
 	colors  *Colors
 	spacing *Spacing
-	radius  *Radius
+	radius  *RadiusTokens
 }
 
-// NewTheme creates a new CronixUI theme
 func NewTheme() fyne.Theme {
 	return &Theme{
 		colors:  DefaultColors(),
 		spacing: DefaultSpacing(),
-		radius:  DefaultRadius(),
+		radius:  DefaultRadiusTokens(),
 	}
 }
 
@@ -283,7 +214,7 @@ func (t *Theme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) color
 	case theme.ColorNameWarning:
 		return t.colors.Warning
 	case theme.ColorNameError:
-		return t.colors.ErrorColor
+		return t.colors.Error
 	default:
 		return t.colors.Text
 	}
@@ -320,7 +251,7 @@ func (t *Theme) Size(name fyne.ThemeSizeName) float32 {
 	case theme.SizeNameInputBorder:
 		return 1
 	case theme.SizeNameInputRadius:
-		return t.radius.Def
+		return t.radius.Default
 	case theme.SizeNameSelectionRadius:
 		return t.radius.SM
 	default:
@@ -329,10 +260,9 @@ func (t *Theme) Size(name fyne.ThemeSizeName) float32 {
 }
 
 // =============================================================================
-// COMPONENTS
+// BUTTONS
 // =============================================================================
 
-// Button variants
 type ButtonVariant int
 
 const (
@@ -344,12 +274,8 @@ const (
 	ButtonSuccess
 )
 
-// NewButton creates a styled button
 func NewButton(text string, variant ButtonVariant, onTap func()) *widget.Button {
 	btn := widget.NewButton(text, onTap)
-
-	colors := DefaultColors()
-
 	switch variant {
 	case ButtonPrimary:
 		btn.Importance = widget.HighImportance
@@ -362,61 +288,77 @@ func NewButton(text string, variant ButtonVariant, onTap func()) *widget.Button 
 	default:
 		btn.Importance = widget.MediumImportance
 	}
-
 	return btn
 }
 
-// NewCard creates a card container
+func NewButtonGroup(buttons ...*widget.Button) *fyne.Container {
+	return container.NewHBox(buttons...)
+}
+
+// =============================================================================
+// CARD
+// =============================================================================
+
 func NewCard(title string, content fyne.CanvasObject) *widget.Card {
 	return widget.NewCard(title, "", content)
 }
 
-// NewInput creates a styled entry
+// =============================================================================
+// INPUTS
+// =============================================================================
+
 func NewInput(placeholder string) *widget.Entry {
 	entry := widget.NewEntry()
 	entry.SetPlaceHolder(placeholder)
 	return entry
 }
 
-// NewTextarea creates a multi-line entry
 func NewTextarea(placeholder string) *widget.Entry {
 	entry := widget.NewMultiLineEntry()
 	entry.SetPlaceHolder(placeholder)
 	return entry
 }
 
-// NewCheckbox creates a styled checkbox
+func NewPassword(placeholder string) *widget.Entry {
+	entry := widget.NewPasswordEntry()
+	entry.SetPlaceHolder(placeholder)
+	return entry
+}
+
+// =============================================================================
+// FORM ELEMENTS
+// =============================================================================
+
 func NewCheckbox(label string, onChanged func(bool)) *widget.Check {
 	return widget.NewCheck(label, onChanged)
 }
 
-// NewRadio creates radio buttons
 func NewRadio(options []string, onChanged func(string)) *widget.RadioGroup {
 	return widget.NewRadioGroup(options, onChanged)
 }
 
-// NewSelect creates a select dropdown
 func NewSelect(options []string, onChanged func(string)) *widget.Select {
 	return widget.NewSelect(options, onChanged)
 }
 
-// NewSlider creates a slider
 func NewSlider(min, max float64) *widget.Slider {
 	return widget.NewSlider(min, max)
 }
 
-// NewProgress creates a progress bar
+// =============================================================================
+// PROGRESS & LOADING
+// =============================================================================
+
 func NewProgress() *widget.ProgressBar {
 	return widget.NewProgressBar()
 }
 
-// NewProgressInfinite creates an infinite progress bar
 func NewProgressInfinite() *widget.ProgressBarInfinite {
 	return widget.NewProgressBarInfinite()
 }
 
 // =============================================================================
-// TOGGLE COMPONENT
+// TOGGLE
 // =============================================================================
 
 type Toggle struct {
@@ -426,9 +368,7 @@ type Toggle struct {
 }
 
 func NewToggle(onToggle func(bool)) *Toggle {
-	t := &Toggle{
-		onToggle: onToggle,
-	}
+	t := &Toggle{onToggle: onToggle}
 	t.ExtendBaseWidget(t)
 	return t
 }
@@ -441,17 +381,11 @@ func (t *Toggle) Toggle() {
 	t.Refresh()
 }
 
-func (t *Toggle) IsOn() bool {
-	return t.on
-}
-
-func (t *Toggle) SetOn(value bool) {
-	t.on = value
-	t.Refresh()
-}
+func (t *Toggle) IsOn() bool       { return t.on }
+func (t *Toggle) SetOn(value bool) { t.on = value; t.Refresh() }
 
 // =============================================================================
-// MODAL COMPONENT
+// MODAL
 // =============================================================================
 
 type Modal struct {
@@ -462,9 +396,7 @@ type Modal struct {
 }
 
 func NewModal(content fyne.CanvasObject) *Modal {
-	m := &Modal{
-		content: content,
-	}
+	m := &Modal{content: content}
 	m.ExtendBaseWidget(m)
 	return m
 }
@@ -475,28 +407,18 @@ func (m *Modal) Open(window fyne.Window) {
 	m.Show()
 }
 
-func (m *Modal) Close() {
-	m.open = false
-	m.Hide()
-}
-
-func (m *Modal) IsOpen() bool {
-	return m.open
-}
-
+func (m *Modal) Close()       { m.open = false; m.Hide() }
+func (m *Modal) IsOpen() bool { return m.open }
 func (m *Modal) Show() {
 	if m.window != nil {
 		popup := widget.NewModalPopUp(m.content, m.window.Canvas())
 		popup.Show()
 	}
 }
-
-func (m *Modal) Hide() {
-	// Modal popup close handled by Fyne
-}
+func (m *Modal) Hide() {}
 
 // =============================================================================
-// DROPDOWN COMPONENT
+// DROPDOWN
 // =============================================================================
 
 type Dropdown struct {
@@ -508,62 +430,26 @@ type Dropdown struct {
 }
 
 func NewDropdown(items []string, onSelect func(string)) *Dropdown {
-	d := &Dropdown{
-		items:    items,
-		onSelect: onSelect,
-	}
+	d := &Dropdown{items: items, onSelect: onSelect}
 	d.ExtendBaseWidget(d)
 	return d
 }
 
-func (d *Dropdown) Open() {
-	d.open = true
-	d.Refresh()
-}
+func (d *Dropdown) Open()        { d.open = true; d.Refresh() }
+func (d *Dropdown) Close()       { d.open = false; d.Refresh() }
+func (d *Dropdown) Toggle()      { d.open = !d.open; d.Refresh() }
+func (d *Dropdown) IsOpen() bool { return d.open }
 
-func (d *Dropdown) Close() {
-	d.open = false
-	d.Refresh()
-}
+// =============================================================================
+// TABS
+// =============================================================================
 
-func (d *Dropdown) Toggle() {
-	d.open = !d.open
-	d.Refresh()
-}
-
-func (d *Dropdown) IsOpen() bool {
-	return d.open
+func NewTabs(items ...*widget.TabItem) *container.AppTabs {
+	return container.NewAppTabs(items...)
 }
 
 // =============================================================================
-// TABS COMPONENT
-// =============================================================================
-
-type Tabs struct {
-	widget.BaseWidget
-	items       []*widget.TabItem
-	activeIndex int
-}
-
-func NewTabs(items ...*widget.TabItem) *Tabs {
-	t := &Tabs{
-		items: items,
-	}
-	t.ExtendBaseWidget(t)
-	return t
-}
-
-func (t *Tabs) SetActive(index int) {
-	t.activeIndex = index
-	t.Refresh()
-}
-
-func (t *Tabs) ActiveIndex() int {
-	return t.activeIndex
-}
-
-// =============================================================================
-// ACCORDION COMPONENT
+// ACCORDION
 // =============================================================================
 
 type AccordionItem struct {
@@ -578,47 +464,25 @@ type Accordion struct {
 }
 
 func NewAccordion(items ...AccordionItem) *Accordion {
-	a := &Accordion{
-		items:       items,
-		openIndices: make(map[int]bool),
-	}
+	a := &Accordion{items: items, openIndices: make(map[int]bool)}
 	a.ExtendBaseWidget(a)
 	return a
 }
 
-func (a *Accordion) Toggle(index int) {
-	a.openIndices[index] = !a.openIndices[index]
-	a.Refresh()
-}
-
-func (a *Accordion) Open(index int) {
-	a.openIndices[index] = true
-	a.Refresh()
-}
-
-func (a *Accordion) Close(index int) {
-	delete(a.openIndices, index)
-	a.Refresh()
-}
-
+func (a *Accordion) Toggle(index int) { a.openIndices[index] = !a.openIndices[index]; a.Refresh() }
+func (a *Accordion) Open(index int)   { a.openIndices[index] = true; a.Refresh() }
+func (a *Accordion) Close(index int)  { delete(a.openIndices, index); a.Refresh() }
 func (a *Accordion) OpenAll() {
 	for i := range a.items {
 		a.openIndices[i] = true
 	}
 	a.Refresh()
 }
-
-func (a *Accordion) CloseAll() {
-	a.openIndices = make(map[int]bool)
-	a.Refresh()
-}
-
-func (a *Accordion) IsOpen(index int) bool {
-	return a.openIndices[index]
-}
+func (a *Accordion) CloseAll()             { a.openIndices = make(map[int]bool); a.Refresh() }
+func (a *Accordion) IsOpen(index int) bool { return a.openIndices[index] }
 
 // =============================================================================
-// PAGINATION COMPONENT
+// PAGINATION
 // =============================================================================
 
 type Pagination struct {
@@ -629,11 +493,7 @@ type Pagination struct {
 }
 
 func NewPagination(total, current int, onChange func(int)) *Pagination {
-	p := &Pagination{
-		total:    total,
-		current:  current,
-		onChange: onChange,
-	}
+	p := &Pagination{total: total, current: current, onChange: onChange}
 	p.ExtendBaseWidget(p)
 	return p
 }
@@ -647,74 +507,57 @@ func (p *Pagination) GoTo(page int) {
 		p.Refresh()
 	}
 }
-
 func (p *Pagination) Next() {
 	if p.current < p.total {
 		p.GoTo(p.current + 1)
 	}
 }
-
 func (p *Pagination) Prev() {
 	if p.current > 1 {
 		p.GoTo(p.current - 1)
 	}
 }
-
-func (p *Pagination) Current() int {
-	return p.current
-}
-
-func (p *Pagination) Total() int {
-	return p.total
-}
+func (p *Pagination) Current() int { return p.current }
+func (p *Pagination) Total() int   { return p.total }
 
 // =============================================================================
-// TOAST NOTIFICATIONS
+// TOAST
 // =============================================================================
 
 type ToastType int
 
 const (
-	ToastTypeSuccess ToastType = iota
-	ToastTypeError
-	ToastTypeWarning
-	ToastTypeInfo
+	ToastSuccess ToastType = iota
+	ToastError
+	ToastWarning
+	ToastInfo
 )
 
 func ShowToast(window fyne.Window, message string, toastType ToastType) {
-	colors := DefaultColors()
-
+	c := DefaultColors()
 	var bgColor color.Color
 	var prefix string
-
 	switch toastType {
-	case ToastTypeSuccess:
-		bgColor = colors.Success
+	case ToastSuccess:
+		bgColor = c.Success
 		prefix = "✓ "
-	case ToastTypeError:
-		bgColor = colors.ErrorColor
+	case ToastError:
+		bgColor = c.Error
 		prefix = "✕ "
-	case ToastTypeWarning:
-		bgColor = colors.Warning
+	case ToastWarning:
+		bgColor = c.Warning
 		prefix = "⚠ "
 	default:
-		bgColor = colors.Info
+		bgColor = c.Info
 		prefix = "ℹ "
 	}
-
-	label := canvas.NewText(prefix+message, colors.Text)
+	label := canvas.NewText(prefix+message, c.Text)
 	label.TextSize = 13
-
 	bg := canvas.NewRectangle(bgColor)
 	bg.CornerRadius = 10
-
-	container := container.NewStack(bg, container.NewPadded(label))
-
-	popover := widget.NewPopUp(container, window.Canvas())
-	popover.Move(fyne.NewPos(
-		window.Canvas().Size().Width-320,
-		window.Canvas().Size().Height-60,
-	))
+	cont := container.NewStack(bg, container.NewPadded(label))
+	popover := widget.NewPopUp(cont, window.Canvas())
+	popover.Move(fyne.NewPos(window.Canvas().Size().Width-320, window.Canvas().Size().Height-60))
 }
 
 // =============================================================================
@@ -722,10 +565,8 @@ func ShowToast(window fyne.Window, message string, toastType ToastType) {
 // =============================================================================
 
 type CommandItem struct {
-	Title    string
-	Subtitle string
-	Kbd      string
-	Action   func()
+	Title, Subtitle, Kbd string
+	Action               func()
 }
 
 type CommandPalette struct {
@@ -735,35 +576,27 @@ type CommandPalette struct {
 }
 
 func NewCommandPalette(items ...CommandItem) *CommandPalette {
-	cp := &CommandPalette{
-		items: items,
-	}
+	cp := &CommandPalette{items: items}
 	cp.ExtendBaseWidget(cp)
 	return cp
 }
 
-func (cp *CommandPalette) SetItems(items []CommandItem) {
-	cp.items = items
-	cp.Refresh()
-}
-
+func (cp *CommandPalette) SetItems(items []CommandItem) { cp.items = items; cp.Refresh() }
 func (cp *CommandPalette) Filter(query string) []CommandItem {
 	var results []CommandItem
 	for _, item := range cp.items {
-		// Simple contains match
 		results = append(results, item)
 	}
 	return results
 }
 
 // =============================================================================
-// SEARCH COMPONENT
+// SEARCH
 // =============================================================================
 
 type SearchItem struct {
-	Title    string
-	Subtitle string
-	Action   func()
+	Title, Subtitle string
+	Action          func()
 }
 
 type Search struct {
@@ -773,18 +606,12 @@ type Search struct {
 }
 
 func NewSearch(items ...SearchItem) *Search {
-	s := &Search{
-		items: items,
-	}
+	s := &Search{items: items}
 	s.ExtendBaseWidget(s)
 	return s
 }
 
-func (s *Search) SetItems(items []SearchItem) {
-	s.items = items
-	s.Refresh()
-}
-
+func (s *Search) SetItems(items []SearchItem) { s.items = items; s.Refresh() }
 func (s *Search) Filter(query string) []SearchItem {
 	var results []SearchItem
 	for _, item := range s.items {
@@ -794,62 +621,114 @@ func (s *Search) Filter(query string) []SearchItem {
 }
 
 // =============================================================================
+// TABLE
+// =============================================================================
+
+func NewTable(rows, cols int, cellFunc func(row, col int) fyne.CanvasObject) *widget.Table {
+	return widget.NewTable(
+		func() (int, int) { return rows, cols },
+		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func(id widget.TableCellID, cell fyne.CanvasObject) {
+			if obj := cellFunc(id.Row, id.Col); obj != nil {
+				cell.(*widget.Label).SetText(obj.(*widget.Label).Text)
+			}
+		},
+	)
+}
+
+// =============================================================================
+// LIST
+// =============================================================================
+
+type ListItem struct {
+	Title, Subtitle string
+}
+
+func NewList(items []ListItem) *widget.List {
+	return widget.NewList(
+		func() int { return len(items) },
+		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func(id widget.ListItemID, item fyne.CanvasObject) {
+			item.(*widget.Label).SetText(items[id].Title)
+		},
+	)
+}
+
+// =============================================================================
 // LAYOUT HELPERS
 // =============================================================================
 
-// NewContainer creates a max-width container
 func NewContainer(content fyne.CanvasObject) fyne.CanvasObject {
 	return container.NewMax(content)
 }
 
-// NewFlex creates a flex container
 func NewFlex(objects ...fyne.CanvasObject) fyne.CanvasObject {
 	return container.NewHBox(objects...)
 }
 
-// NewStack creates a vertical stack
 func NewStack(objects ...fyne.CanvasObject) fyne.CanvasObject {
 	return container.NewVBox(objects...)
 }
 
-// NewGrid creates a grid layout
 func NewGrid(cols int, objects ...fyne.CanvasObject) fyne.CanvasObject {
 	return container.NewGridWithColumns(cols, objects...)
 }
 
-// NewForm creates a form group
 func NewForm(items ...*widget.FormItem) *widget.Form {
 	return widget.NewForm(items...)
+}
+
+// =============================================================================
+// NAV
+// =============================================================================
+
+type Nav struct {
+	widget.BaseWidget
+	Items []string
+}
+
+func NewNav(items ...string) *Nav {
+	n := &Nav{Items: items}
+	n.ExtendBaseWidget(n)
+	return n
+}
+
+// =============================================================================
+// STAT
+// =============================================================================
+
+type Stat struct {
+	widget.BaseWidget
+	Value, Label, Delta string
+	DeltaType           string
+}
+
+func NewStat(value, label string) *Stat {
+	s := &Stat{Value: value, Label: label}
+	s.ExtendBaseWidget(s)
+	return s
 }
 
 // =============================================================================
 // APPLICATION
 // =============================================================================
 
-// App represents a CronixUI application
 type App struct {
 	fyne.App
 	Theme fyne.Theme
 }
 
-// NewApp creates a new CronixUI application
 func NewApp() *App {
 	a := app.New()
-	theme := NewTheme()
-	a.Settings().SetTheme(theme)
-
-	return &App{
-		App:   a,
-		Theme: theme,
-	}
+	t := NewTheme()
+	a.Settings().SetTheme(t)
+	return &App{App: a, Theme: t}
 }
 
-// NewWindow creates a new themed window
 func (a *App) NewWindow(title string) fyne.Window {
 	return a.App.NewWindow(title)
 }
 
-// Init initializes CronixUI
 func Init() fyne.Theme {
 	return NewTheme()
 }

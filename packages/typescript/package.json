@@ -1,0 +1,36 @@
+{
+  "name": "cronixui",
+  "version": "1.0.6",
+  "description": "CronixUI TypeScript design tokens",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./tokens": {
+      "import": "./dist/tokens.js",
+      "types": "./dist/tokens.d.ts"
+    },
+    "./colors": {
+      "import": "./dist/colors.js",
+      "types": "./dist/colors.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["ui", "design-tokens", "dark-theme", "components"],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CazyUndee/CronixUI"
+  }
+}
