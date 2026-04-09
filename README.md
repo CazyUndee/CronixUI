@@ -10,6 +10,15 @@ A multi-platform, multi-language UI toolkit with a dark theme, crimson accents, 
 npm install cronixui
 ```
 
+### React, Vue, Svelte, Solid
+
+```bash
+npm install @cronixui/react
+npm install @cronixui/vue
+npm install @cronixui/svelte
+npm install @cronixui/solid
+```
+
 ### Python
 
 ```bash
@@ -26,14 +35,24 @@ go get github.com/CazyUndee/CronixUI/packages/go/cronixui
 
 ```toml
 [dependencies]
-cronixui = "1.0.2"
+cronixui = "1.1.2"
+```
+
+### Flutter
+
+```yaml
+dependencies:
+  cronixui:
+    git:
+      url: https://github.com/CazyUndee/CronixUI.git
+      path: packages/flutter
 ```
 
 ### CDN
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/cronixui@1.0.2/packages/web/dist/cronixui.css">
-<script src="https://unpkg.com/cronixui@1.0.2/packages/web/dist/cronixui.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.css">
+<script src="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.js"></script>
 ```
 
 ## Quick Start (Web)
@@ -45,14 +64,14 @@ cronixui = "1.0.2"
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My App</title>
-<link rel="stylesheet" href="https://unpkg.com/cronixui@1.0.2/packages/web/dist/cronixui.css">
+<link rel="stylesheet" href="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.css">
 </head>
 <body>
 <div class="cn-container">
 <h1 class="cn-h1">Hello, CronixUI!</h1>
 <button class="cn-btn cn-btn-primary">Get Started</button>
 </div>
-<script src="https://unpkg.com/cronixui@1.0.2/packages/web/dist/cronixui.js"></script>
+<script src="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.js"></script>
 </body>
 </html>
 ```

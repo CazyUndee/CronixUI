@@ -1,7 +1,7 @@
 name: cronixui
-description: A dark-themed Flutter UI component library with Material Design 3 base
-version: 0.1.0
-publish_to: none
+description: A dark-themed Flutter UI component library with Material Design base
+version: 1.1.1
+homepage: https://github.com/CazyUndee/CronixUI
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

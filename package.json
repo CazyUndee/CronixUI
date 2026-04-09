@@ -1,6 +1,6 @@
 {
   "name": "cronixui",
-  "version": "1.0.6",
+  "version": "1.1.2",
   "description": "CronixUI - A dark-themed UI toolkit with crimson accents and Outfit typography. Available for JavaScript, TypeScript, Python, Go, and Rust.",
   "keywords": [
     "ui",
@@ -52,6 +52,7 @@
     "packages/python/cronixui/",
     "packages/go/cronixui/",
     "packages/rust/cronixui/src/",
+    "packages/flutter/",
     "README.md"
   ],
   "scripts": {
