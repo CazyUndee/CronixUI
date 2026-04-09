@@ -11,15 +11,15 @@ if (!fs.existsSync(distDir)) {
 
 // Read source files
 const variablesCSS = fs.readFileSync(path.join(srcDir, 'variables.css'), 'utf8');
-const flintuiCSS = fs.readFileSync(path.join(srcDir, 'flintui.css'), 'utf8');
-const flintuiJS = fs.readFileSync(path.join(srcDir, 'flintui.js'), 'utf8');
+const cronixuiCSS = fs.readFileSync(path.join(srcDir, 'cronixui.css'), 'utf8');
+const cronixuiJS = fs.readFileSync(path.join(srcDir, 'cronixui.js'), 'utf8');
 
 // Combine CSS (replace @import with actual content)
-let combinedCSS = flintuiCSS.replace("@import 'variables.css';", variablesCSS);
+let combinedCSS = cronixuiCSS.replace("@import 'variables.css';", variablesCSS);
 
 // Write non-minified versions
-fs.writeFileSync(path.join(distDir, 'flintui.css'), combinedCSS);
-fs.writeFileSync(path.join(distDir, 'flintui.js'), flintuiJS);
+fs.writeFileSync(path.join(distDir, 'cronixui.css'), combinedCSS);
+fs.writeFileSync(path.join(distDir, 'cronixui.js'), cronixuiJS);
 
 // Simple minification for CSS
 function minifyCSS(css) {
@@ -42,11 +42,11 @@ function minifyJS(js) {
 }
 
 // Write minified versions
-fs.writeFileSync(path.join(distDir, 'flintui.min.css'), minifyCSS(combinedCSS));
-fs.writeFileSync(path.join(distDir, 'flintui.min.js'), minifyJS(flintuiJS));
+fs.writeFileSync(path.join(distDir, 'cronixui.min.css'), minifyCSS(combinedCSS));
+fs.writeFileSync(path.join(distDir, 'cronixui.min.js'), minifyJS(cronixuiJS));
 
 console.log('Build complete!');
-console.log('  dist/flintui.css');
-console.log('  dist/flintui.min.css');
-console.log('  dist/flintui.js');
-console.log('  dist/flintui.min.js');
+console.log('  dist/cronixui.css');
+console.log('  dist/cronixui.min.css');
+console.log('  dist/cronixui.js');
+console.log('  dist/cronixui.min.js');

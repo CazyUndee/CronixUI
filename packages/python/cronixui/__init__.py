@@ -24,7 +24,14 @@ from .tooltip import Tooltip
 from .layout import Header, Sidebar, Footer, Container, Divider, Section
 from .form import Input, Textarea, FormField, Checkbox, Radio, Select, Slider, FileInput
 from .progress import Progress, Stat
-from .core import init, query, query_all, create_el
+from .core import (
+    HtmlElement,
+    ComponentGroup,
+    el,
+    classes,
+    attrs,
+    escape_html,
+)
 from .tokens import (
     BG,
     SURFACE,
@@ -71,7 +78,7 @@ from .tokens import (
     Layout,
 )
 
-__version__ = "1.0.6"
+__version__ = "1.1.2"
 __all__ = [
     "Toast",
     "Toggle",
@@ -115,10 +122,12 @@ __all__ = [
     "FileInput",
     "Progress",
     "Stat",
-    "init",
-    "query",
-    "query_all",
-    "create_el",
+    "HtmlElement",
+    "ComponentGroup",
+    "el",
+    "classes",
+    "attrs",
+    "escape_html",
     "BG",
     "SURFACE",
     "SURFACE_2",

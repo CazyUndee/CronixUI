@@ -1,143 +1,405 @@
-"""CronixUI Layout Components"""
+"""CronixUI Layout Components.
 
-from .core import create_el
+Generates HTML for headers, sidebars, footers, containers, dividers, and sections.
+No browser DOM APIs are used - all output is HTML strings or data structures.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+
+
+@dataclass
+class LayoutElement:
+    """Represents a rendered layout element."""
+
+    tag: str = "div"
+    classes: List[str] = field(default_factory=list)
+    attributes: Dict[str, str] = field(default_factory=dict)
+    inner_html: str = ""
+
+    def render_html(self) -> str:
+        """Render as HTML string.
+
+        Returns:
+            Complete HTML for the layout element
+        """
+        class_str = " ".join(self.classes)
+        class_attr = f' class="{class_str}"' if class_str else ""
+        attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
+        return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
+
+    def render(self) -> "LayoutElement":
+        """Return self for API compatibility."""
+        return self
+
+
+@dataclass
+class NavItem:
+    """A navigation item for headers and sidebars.
+
+    Attributes:
+        text: Display text
+        href: Link URL (default: "#")
+        icon: Optional SVG icon markup
+        active: Whether item is highlighted
+    """
+
+    text: str
+    href: str = "#"
+    icon: Optional[str] = None
+    active: bool = False
 
 
 class Header:
-    """Header component."""
+    """Header component with brand, navigation, and action slots.
 
-    def __init__(self, brand: str = ""):
+    Args:
+        brand: Brand/site name
+        nav_items: Optional list of NavItem instances
+        action_html: Optional HTML string for the actions slot
+
+    Example:
+        >>> header = Header(
+        ...     brand="MyApp",
+        ...     nav_items=[
+        ...         NavItem(text="Home", href="/"),
+        ...         NavItem(text="About", href="/about"),
+        ...     ],
+        ... )
+        >>> print(header.render_html())
+        <header class="cn-header">
+            <a class="cn-header-brand">MyApp</a>
+            <nav class="cn-header-nav">
+                <a class="cn-btn cn-btn-ghost" href="/">Home</a>
+                <a class="cn-btn cn-btn-ghost" href="/about">About</a>
+            </nav>
+            <div class="cn-header-actions"></div>
+        </header>
+    """
+
+    def __init__(
+        self,
+        brand: str = "",
+        nav_items: Optional[List[NavItem]] = None,
+        action_html: Optional[str] = None,
+    ):
         self.brand = brand
-        self.element = self._render()
+        self.nav_items = nav_items or []
+        self.action_html = action_html or ""
 
-    def _render(self):
-        el = create_el("header", "cn-header")
+    def render(self) -> LayoutElement:
+        """Render the header as a LayoutElement.
 
-        brand_el = create_el("a", "cn-header-brand")
-        brand_el.textContent = self.brand
-        el.appendChild(brand_el)
+        Returns:
+            LayoutElement representing the header
+        """
+        parts = [f'<a class="cn-header-brand">{self._esc(self.brand)}</a>']
 
-        self.nav = create_el("nav", "cn-header-nav")
-        el.appendChild(self.nav)
+        # Navigation
+        nav_items_html = "".join(
+            f'<a class="cn-btn cn-btn-ghost" href="{self._esc(item.href)}">{self._esc(item.text)}</a>'
+            for item in self.nav_items
+        )
+        parts.append(f'<nav class="cn-header-nav">{nav_items_html}</nav>')
 
-        self.actions = create_el("div", "cn-header-actions")
-        el.appendChild(self.actions)
+        # Actions
+        parts.append(f'<div class="cn-header-actions">{self.action_html}</div>')
 
-        return el
+        return LayoutElement(
+            tag="header",
+            classes=["cn-header"],
+            inner_html="".join(parts),
+        )
 
-    def add_nav_item(self, text: str, href: str = "#"):
-        link = create_el("a", "cn-btn cn-btn-ghost")
-        link.textContent = text
-        link.setAttribute("href", href)
-        self.nav.appendChild(link)
+    def render_html(self) -> str:
+        """Render the header as an HTML string.
 
-    def add_action(self, element):
-        self.actions.appendChild(element)
+        Returns:
+            HTML string representation of the header
+        """
+        return self.render().render_html()
+
+    @staticmethod
+    def _esc(text: str) -> str:
+        return (
+            text.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#x27;")
+        )
 
 
 class Sidebar:
-    """Sidebar navigation component."""
+    """Sidebar navigation component.
 
-    def __init__(self):
-        self.element = self._render()
+    Args:
+        items: Optional list of NavItem instances
+        header_html: Optional HTML for the sidebar header
+        footer_html: Optional HTML for the sidebar footer
 
-    def _render(self):
-        el = create_el("aside", "cn-sidebar")
+    Example:
+        >>> sidebar = Sidebar(
+        ...     items=[
+        ...         NavItem(text="Dashboard", icon="<svg>...</svg>", active=True),
+        ...         NavItem(text="Settings", icon="<svg>...</svg>"),
+        ...     ],
+        ... )
+        >>> print(sidebar.render_html())
+    """
 
-        self.header = create_el("div", "cn-sidebar-header")
-        el.appendChild(self.header)
-
-        self.nav = create_el("nav", "cn-sidebar-nav")
-        el.appendChild(self.nav)
-
-        self.footer = create_el("div", "cn-sidebar-footer")
-        el.appendChild(self.footer)
-
-        return el
-
-    def add_item(
-        self, text: str, icon: str = None, href: str = "#", active: bool = False
+    def __init__(
+        self,
+        items: Optional[List[NavItem]] = None,
+        header_html: Optional[str] = None,
+        footer_html: Optional[str] = None,
     ):
-        item = create_el("a", "cn-sidebar-item")
-        item.setAttribute("href", href)
-        if active:
-            item.classList.add("cn-sidebar-active")
+        self.items = items or []
+        self.header_html = header_html or ""
+        self.footer_html = footer_html or ""
 
-        if icon:
-            icon_el = create_el("span")
-            icon_el.innerHTML = icon
-            item.appendChild(icon_el)
+    def render(self) -> LayoutElement:
+        """Render the sidebar as a LayoutElement.
 
-        text_el = create_el("span")
-        text_el.textContent = text
-        item.appendChild(text_el)
+        Returns:
+            LayoutElement representing the sidebar
+        """
+        parts = []
 
-        self.nav.appendChild(item)
+        # Header
+        if self.header_html:
+            parts.append(f'<div class="cn-sidebar-header">{self.header_html}</div>')
+        else:
+            parts.append('<div class="cn-sidebar-header"></div>')
+
+        # Nav items
+        nav_parts = []
+        for item in self.items:
+            active_class = " cn-sidebar-active" if item.active else ""
+            item_html = f'<a class="cn-sidebar-item{active_class}" href="{self._esc(item.href)}">'
+            if item.icon:
+                item_html += f'<span>{item.icon}</span>'
+            item_html += f'<span>{self._esc(item.text)}</span>'
+            item_html += "</a>"
+            nav_parts.append(item_html)
+
+        parts.append(f'<nav class="cn-sidebar-nav">{"".join(nav_parts)}</nav>')
+
+        # Footer
+        if self.footer_html:
+            parts.append(f'<div class="cn-sidebar-footer">{self.footer_html}</div>')
+        else:
+            parts.append('<div class="cn-sidebar-footer"></div>')
+
+        return LayoutElement(
+            tag="aside",
+            classes=["cn-sidebar"],
+            inner_html="".join(parts),
+        )
+
+    def render_html(self) -> str:
+        """Render the sidebar as an HTML string.
+
+        Returns:
+            HTML string representation of the sidebar
+        """
+        return self.render().render_html()
+
+    @staticmethod
+    def _esc(text: str) -> str:
+        return (
+            text.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#x27;")
+        )
 
 
 class Footer:
-    """Footer component."""
+    """Footer component with links and copyright.
 
-    def __init__(self, copyright: str = ""):
+    Args:
+        copyright: Copyright text
+        links: Optional list of (text, href) tuples
+
+    Example:
+        >>> footer = Footer(
+        ...     copyright="© 2026 My Company",
+        ...     links=[("Privacy", "/privacy"), ("Terms", "/terms")],
+        ... )
+        >>> print(footer.render_html())
+    """
+
+    def __init__(
+        self,
+        copyright: str = "",
+        links: Optional[List[tuple]] = None,
+    ):
         self.copyright = copyright
-        self.element = self._render()
+        self.links = links or []
 
-    def _render(self):
-        el = create_el("footer", "cn-footer")
+    def render(self) -> LayoutElement:
+        """Render the footer as a LayoutElement.
 
-        content = create_el("div", "cn-footer-content")
+        Returns:
+            LayoutElement representing the footer
+        """
+        links_html = "".join(
+            f'<a class="cn-footer-link" href="{self._esc(href)}">{self._esc(text)}</a>'
+            for text, href in self.links
+        )
 
-        self.links = create_el("div", "cn-footer-links")
-        content.appendChild(self.links)
+        inner = (
+            f'<div class="cn-footer-content">'
+            f'<div class="cn-footer-links">{links_html}</div>'
+            f'<div class="cn-footer-copyright">{self._esc(self.copyright)}</div>'
+            f"</div>"
+        )
 
-        copyright_el = create_el("div", "cn-footer-copyright")
-        copyright_el.textContent = self.copyright
-        content.appendChild(copyright_el)
+        return LayoutElement(
+            tag="footer",
+            classes=["cn-footer"],
+            inner_html=inner,
+        )
 
-        el.appendChild(content)
-        return el
+    def render_html(self) -> str:
+        """Render the footer as an HTML string.
 
-    def add_link(self, text: str, href: str = "#"):
-        link = create_el("a", "cn-footer-link")
-        link.textContent = text
-        link.setAttribute("href", href)
-        self.links.appendChild(link)
+        Returns:
+            HTML string representation of the footer
+        """
+        return self.render().render_html()
+
+    @staticmethod
+    def _esc(text: str) -> str:
+        return (
+            text.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#x27;")
+        )
 
 
 class Container:
-    """Container component."""
+    """Container component for constrained-width layouts.
+
+    Args:
+        size: Container size - sm, md, lg, xl, fluid (default: lg)
+        inner_html: Optional inner HTML content
+
+    Example:
+        >>> container = Container(size="xl", inner_html="<h1>Welcome</h1>")
+        >>> print(container.render_html())
+        <div class="cn-container cn-container-xl"><h1>Welcome</h1></div>
+    """
 
     SIZES = ("sm", "md", "lg", "xl", "fluid")
 
-    def __init__(self, size: str = "lg"):
-        self.size = size if size in self.SIZES else "lg"
-        self.element = self._render()
+    def __init__(self, size: str = "lg", inner_html: str = ""):
+        if size not in self.SIZES:
+            raise ValueError(f"Invalid size '{size}'. Must be one of {self.SIZES}")
 
-    def _render(self):
-        classes = "cn-container"
+        self.size = size
+        self.inner_html = inner_html
+
+    def render(self) -> LayoutElement:
+        """Render the container as a LayoutElement.
+
+        Returns:
+            LayoutElement representing the container
+        """
+        classes = ["cn-container"]
         if self.size != "lg":
-            classes += f" cn-container-{self.size}"
-        return create_el("div", classes)
+            classes.append(f"cn-container-{self.size}")
+
+        return LayoutElement(
+            classes=classes,
+            inner_html=self.inner_html,
+        )
+
+    def render_html(self) -> str:
+        """Render the container as an HTML string.
+
+        Returns:
+            HTML string representation of the container
+        """
+        return self.render().render_html()
 
 
 class Divider:
-    """Divider component."""
+    """Divider component (horizontal rule).
 
-    def __init__(self):
-        self.element = create_el("div", "cn-divider")
+    Example:
+        >>> divider = Divider()
+        >>> print(divider.render_html())
+        <div class="cn-divider" />
+    """
+
+    def render(self) -> LayoutElement:
+        """Render the divider as a LayoutElement.
+
+        Returns:
+            LayoutElement representing the divider
+        """
+        return LayoutElement(
+            classes=["cn-divider"],
+        )
+
+    def render_html(self) -> str:
+        """Render the divider as an HTML string.
+
+        Returns:
+            HTML string representation of the divider
+        """
+        return self.render().render_html()
 
 
 class Section:
-    """Section spacing component."""
+    """Section spacing component.
+
+    Args:
+        size: Section size - sm, md, lg (default: md)
+        inner_html: Optional inner HTML content
+
+    Example:
+        >>> section = Section(size="lg", inner_html="<p>Section content</p>")
+        >>> print(section.render_html())
+        <section class="cn-section cn-section-lg"><p>Section content</p></section>
+    """
 
     SIZES = ("sm", "md", "lg")
 
-    def __init__(self, size: str = "md"):
-        self.size = size if size in self.SIZES else "md"
-        self.element = self._render()
+    def __init__(self, size: str = "md", inner_html: str = ""):
+        if size not in self.SIZES:
+            raise ValueError(f"Invalid size '{size}'. Must be one of {self.SIZES}")
 
-    def _render(self):
-        classes = "cn-section"
+        self.size = size
+        self.inner_html = inner_html
+
+    def render(self) -> LayoutElement:
+        """Render the section as a LayoutElement.
+
+        Returns:
+            LayoutElement representing the section
+        """
+        classes = ["cn-section"]
         if self.size != "md":
-            classes += f" cn-section-{self.size}"
-        return create_el("section", classes)
+            classes.append(f"cn-section-{self.size}")
+
+        return LayoutElement(
+            tag="section",
+            classes=classes,
+            inner_html=self.inner_html,
+        )
+
+    def render_html(self) -> str:
+        """Render the section as an HTML string.
+
+        Returns:
+            HTML string representation of the section
+        """
+        return self.render().render_html()

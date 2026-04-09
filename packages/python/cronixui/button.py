@@ -1,12 +1,44 @@
 """CronixUI Button Component"""
 
-from typing import Optional, Callable
-from .core import create_el
-from .tokens import ACCENT, SURFACE_2, SURFACE_3, ERROR, SUCCESS, TEXT
+from typing import Optional, Callable, Dict, Any, List
+from dataclasses import dataclass, field
+
+
+@dataclass
+class ButtonElement:
+    """Represents a rendered button element."""
+
+    tag: str = "button"
+    classes: List[str] = field(default_factory=list)
+    attributes: Dict[str, str] = field(default_factory=dict)
+    text: str = ""
+    onclick: Optional[Callable] = field(default=None, repr=False)
+
+    def render(self) -> str:
+        """Render the button as HTML string."""
+        class_str = " ".join(self.classes)
+        attrs_str = " ".join(f'{k}="{v}"' for k, v in self.attributes.items())
+        attrs_str = f" {attrs_str}" if attrs_str else ""
+
+        return f'<{self.tag} class="{class_str}"{attrs_str}>{self.text}</{self.tag}>'
 
 
 class Button:
-    """Button component with variants."""
+    """Button component with variants.
+
+    Args:
+        text: Button text
+        variant: Button variant (default, primary, ghost, outline, danger, success)
+        size: Button size (sm, md, lg)
+        icon: Whether button is icon-only
+        disabled: Whether button is disabled
+        onclick: Click handler callback (for documentation purposes)
+
+    Example:
+        >>> btn = Button("Click me", variant="primary")
+        >>> print(btn.render())
+        <button class="cn-btn cn-btn-primary">Click me</button>
+    """
 
     VARIANTS = ("default", "primary", "ghost", "outline", "danger", "success")
     SIZES = ("sm", "md", "lg")
@@ -20,45 +52,82 @@ class Button:
         disabled: bool = False,
         onclick: Optional[Callable] = None,
     ):
+        if variant not in self.VARIANTS:
+            raise ValueError(
+                f"Invalid variant '{variant}'. Must be one of {self.VARIANTS}"
+            )
+        if size not in self.SIZES:
+            raise ValueError(f"Invalid size '{size}'. Must be one of {self.SIZES}")
+
         self.text = text
-        self.variant = variant if variant in self.VARIANTS else "default"
-        self.size = size if size in self.SIZES else "md"
+        self.variant = variant
+        self.size = size
         self.icon = icon
         self.disabled = disabled
         self.onclick = onclick
-        self.element = self._render()
 
-    def _render(self):
-        el = create_el("button", f"cn-btn cn-btn-{self.variant}")
+    def render(self) -> ButtonElement:
+        """Render the button as a ButtonElement.
+
+        Returns:
+            ButtonElement object representing the rendered button
+        """
+        classes = ["cn-btn", f"cn-btn-{self.variant}"]
+
         if self.size != "md":
-            el.classList.add(f"cn-btn-{self.size}")
+            classes.append(f"cn-btn-{self.size}")
+
         if self.icon:
-            el.classList.add("cn-btn-icon")
+            classes.append("cn-btn-icon")
+
+        attributes: Dict[str, str] = {}
         if self.disabled:
-            el.setAttribute("disabled", "")
-        el.textContent = self.text
-        if self.onclick:
-            el.addEventListener("click", self.onclick)
-        return el
+            attributes["disabled"] = ""
 
-    def disable(self):
+        return ButtonElement(
+            classes=classes,
+            attributes=attributes,
+            text=self.text,
+            onclick=self.onclick,
+        )
+
+    def render_html(self) -> str:
+        """Render the button as HTML string.
+
+        Returns:
+            HTML string representation of the button
+        """
+        return self.render().render()
+
+    def disable(self) -> None:
+        """Disable the button."""
         self.disabled = True
-        self.element.setAttribute("disabled", "")
 
-    def enable(self):
+    def enable(self) -> None:
+        """Enable the button."""
         self.disabled = False
-        self.element.removeAttribute("disabled")
 
 
 class ButtonGroup:
-    """Button group component."""
+    """Button group component.
+
+    Args:
+        *buttons: Button instances to include in the group
+
+    Example:
+        >>> group = ButtonGroup(Button("Left"), Button("Right"))
+        >>> print(group.render_html())
+    """
 
     def __init__(self, *buttons: Button):
         self.buttons = buttons
-        self.element = self._render()
 
-    def _render(self):
-        el = create_el("div", "cn-btn-group")
-        for btn in self.buttons:
-            el.appendChild(btn.element)
-        return el
+    def render_html(self) -> str:
+        """Render the button group as HTML string.
+
+        Returns:
+            HTML string representation of the button group
+        """
+        buttons_html = "".join(btn.render_html() for btn in self.buttons)
+        return f'<div class="cn-btn-group">{buttons_html}</div>'
+

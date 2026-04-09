@@ -1,0 +1,28 @@
+# Include license and readme
+include LICENSE
+include README.md
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt
+
+# Include test files
+recursive-include tests *.py
+
+# Include example files
+recursive-include examples *.py *.md
+
+# Include configuration files
+include pyproject.toml
+include .python-version
+
+# Exclude compiled files and caches
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .eggs
+global-exclude *.egg-info
+global-exclude .mypy_cache
+global-exclude .pytest_cache
+global-exclude .ruff_cache
+global-exclude dist
+global-exclude build

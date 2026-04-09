@@ -1,6 +1,6 @@
 {
   "name": "cronixui",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "CronixUI - A dark-themed UI toolkit with crimson accents and Outfit typography. Available for JavaScript, TypeScript, Python, Go, and Rust.",
   "keywords": [
     "ui",
@@ -62,8 +62,8 @@
     "dev": "npx live-server packages/web/demo",
     "gen": "tsx packages/spec/generate.ts",
     "gen:all": "tsx packages/spec/generate.ts --all",
-    "docs:dev": "cd docs && pnpm dev",
-    "docs:build": "cd docs && pnpm build",
+    "website:dev": "cd website && npm run dev",
+    "website:build": "cd website && npm run build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "publish:dry": "pnpm -r publish --dry-run --access public"
