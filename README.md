@@ -10,6 +10,12 @@ A multi-platform, multi-language UI toolkit with a dark theme, crimson accents, 
 - it is still really early, so there might be issues
 - start an issue if you encounter any of them
 
+## For Agents
+
+If you are an agent or LLM, read `FOR_AGENTS/AGENTS.md` first.
+
+Agent-oriented project guidance now lives in `FOR_AGENTS/AGENTS.md`.
+
 ## Installation
 
 ### JavaScript/TypeScript
