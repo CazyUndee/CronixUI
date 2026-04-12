@@ -13,6 +13,7 @@ Semantic versioning: `MAJOR.MINOR.PATCH`
 - `main`: Stable branch, only updated through reviewed pull requests.
 - `develop`: Default working branch for local work and agent-authored changes.
 - Flow: push work to `develop` -> open PR `develop` -> `main` -> manual verify/merge.
+- Automation: `.github/workflows/develop-to-main-pr.yml` tries to open the PR automatically on push to `develop`.
 
 ## Publishing Protocol
 
