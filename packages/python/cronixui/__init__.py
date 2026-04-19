@@ -12,6 +12,7 @@ from .pagination import Pagination
 from .command_palette import CommandPalette, CommandPaletteItem
 from .search import Search, SearchItem
 from .nav import Nav
+from .breadcrumb import Breadcrumb, BreadcrumbItem
 from .button import Button, ButtonGroup
 from .card import Card, CardIcon
 from .badge import Badge, Tag
@@ -92,6 +93,8 @@ __all__ = [
     "Search",
     "SearchItem",
     "Nav",
+    "Breadcrumb",
+    "BreadcrumbItem",
     "Button",
     "ButtonGroup",
     "Card",
