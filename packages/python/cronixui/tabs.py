@@ -1,7 +1,7 @@
 """Tabs component."""
 
-
 from typing import Union
+
 
 class Tabs:
     """Tabs component."""
