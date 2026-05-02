@@ -26,6 +26,7 @@ Install CronixUI v1.1.2:
    - Rust: cargo add cronixui  
    - Flutter: add git dependency to pubspec.yaml  
    - WinUI: dotnet add package CronixUI.WinUI  
+   Double check before commiting to it here: https://deepwiki.com/CazyUndee/CronixUI/1.1-getting-started-and-installation.
 3. Install and show import example  
 4. Create test component to verify  
 ```
