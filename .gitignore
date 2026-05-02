@@ -1,6 +1,6 @@
-```
 # Compiled and build artifacts
 *.pyc
+*.py[cod]
 __pycache__/
 *.o
 *.obj
@@ -10,18 +10,26 @@ __pycache__/
 *.so
 *.a
 *.out
+*.pdb
+*.appx
+*.msix
 
 # Dependencies
 .venv/
 venv/
-# Compiled and build artifacts
+*.egg-info/
 
+# Build output
 dist/
 build/
 target/
+bin/
+obj/
+.vs/
 .gradle/
 .mypy_cache/
 .pytest_cache/
+.ruff_cache/
 
 # Logs and temp files
 *.log
@@ -70,4 +78,3 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-```
