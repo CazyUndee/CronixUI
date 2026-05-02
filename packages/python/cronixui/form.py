@@ -8,7 +8,6 @@ No browser DOM APIs are used - all output is HTML strings or data structures.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union
 
 
 @dataclass
@@ -16,8 +15,8 @@ class FormElement:
     """Represents a rendered form element."""
 
     tag: str = "div"
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
+    classes: list[str] = field(default_factory=list)
+    attributes: dict[str, str] = field(default_factory=dict)
     inner_html: str = ""
 
     def render_html(self) -> str:
@@ -31,7 +30,7 @@ class FormElement:
         attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
         return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
 
-    def render(self) -> "FormElement":
+    def render(self) -> FormElement:
         """Return self for API compatibility."""
         return self
 
@@ -56,7 +55,10 @@ class Input:
 
         >>> with_icon = Input(placeholder="Search...", icon="<svg>...</svg>")
         >>> print(with_icon.render_html())
-        <div class="cn-input-icon-wrapper"><span class="cn-input-icon">...</span><input class="cn-input" placeholder="Search..." /></div>
+        <div class="cn-input-icon-wrapper">
+            <span class="cn-input-icon">...</span>
+            <input class="cn-input" placeholder="Search..." />
+        </div>
     """
 
     SIZES = ("sm", "md", "lg")
@@ -67,9 +69,9 @@ class Input:
         size: str = "md",
         error: bool = False,
         disabled: bool = False,
-        icon: Optional[str] = None,
-        name: Optional[str] = None,
-        value: Optional[str] = None,
+        icon: str | None = None,
+        name: str | None = None,
+        value: str | None = None,
         input_type: str = "text",
     ):
         if size not in self.SIZES:
@@ -96,7 +98,7 @@ class Input:
         if self.error:
             classes.append("cn-input-error")
 
-        attrs: Dict[str, str] = {
+        attrs: dict[str, str] = {
             "type": self.input_type,
             "placeholder": self.placeholder,
         }
@@ -138,14 +140,15 @@ class Textarea:
     Example:
         >>> ta = Textarea(placeholder="Write your message...", rows=6)
         >>> print(ta.render_html())
-        <textarea class="cn-input cn-textarea" placeholder="Write your message..." rows="6"></textarea>
+        <textarea class="cn-input cn-textarea" placeholder="Write your message..." rows="6">
+        </textarea>
     """
 
     def __init__(
         self,
         placeholder: str = "",
         rows: int = 4,
-        name: Optional[str] = None,
+        name: str | None = None,
         disabled: bool = False,
     ):
         if rows < 1:
@@ -162,7 +165,7 @@ class Textarea:
         Returns:
             FormElement representing the textarea
         """
-        attrs: Dict[str, str] = {
+        attrs: dict[str, str] = {
             "placeholder": self.placeholder,
             "rows": str(self.rows),
         }
@@ -212,9 +215,9 @@ class FormField:
     def __init__(
         self,
         label: str,
-        input_component: Union[Input, Textarea, Checkbox, Radio, Select, Slider, "HasRenderHtml"],
-        error: Optional[str] = None,
-        help_text: Optional[str] = None,
+        input_component: Input | Textarea | Checkbox | Radio | Select | Slider | HasRenderHtml,
+        error: str | None = None,
+        help_text: str | None = None,
         required: bool = False,
     ):
         if not label:
@@ -288,7 +291,11 @@ class Checkbox:
     Example:
         >>> cb = Checkbox("Accept terms", checked=True)
         >>> print(cb.render_html())
-        <label class="cn-checkbox"><input type="checkbox" checked="" /><span class="cn-checkbox-box"></span><span class="cn-checkbox-label">Accept terms</span></label>
+        <label class="cn-checkbox">
+            <input type="checkbox" checked="" />
+            <span class="cn-checkbox-box"></span>
+            <span class="cn-checkbox-label">Accept terms</span>
+        </label>
     """
 
     def __init__(
@@ -296,7 +303,7 @@ class Checkbox:
         label: str,
         checked: bool = False,
         disabled: bool = False,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         if not label:
             raise ValueError("label cannot be empty")
@@ -312,7 +319,7 @@ class Checkbox:
         Returns:
             FormElement representing the checkbox
         """
-        attrs: Dict[str, str] = {"type": "checkbox"}
+        attrs: dict[str, str] = {"type": "checkbox"}
         if self.name is not None:
             attrs["name"] = self.name
         if self.checked:
@@ -373,8 +380,8 @@ class Radio:
     def __init__(
         self,
         name: str,
-        options: List[Union[Tuple[str, str], str]],
-        selected: Optional[str] = None,
+        options: list[tuple[str, str] | str],
+        selected: str | None = None,
         disabled: bool = False,
     ):
         if not name:
@@ -400,7 +407,7 @@ class Radio:
             else:
                 value = label = option
 
-            input_attrs: Dict[str, str] = {
+            input_attrs: dict[str, str] = {
                 "type": "radio",
                 "name": self.name,
                 "value": value,
@@ -461,9 +468,9 @@ class Select:
 
     def __init__(
         self,
-        options: List[Union[Tuple[str, str], str]],
+        options: list[tuple[str, str] | str],
         placeholder: str = "",
-        name: Optional[str] = None,
+        name: str | None = None,
         disabled: bool = False,
     ):
         if not options:
@@ -482,7 +489,7 @@ class Select:
         """
         parts = []
 
-        select_attrs: Dict[str, str] = {}
+        select_attrs: dict[str, str] = {}
         if self.name is not None:
             select_attrs["name"] = self.name
         if self.disabled:
@@ -552,8 +559,8 @@ class Slider:
         min: float = 0,
         max: float = 100,
         value: float = 50,
-        name: Optional[str] = None,
-        step: Optional[float] = None,
+        name: str | None = None,
+        step: float | None = None,
     ):
         if min >= max:
             raise ValueError("min must be less than max")
@@ -572,7 +579,7 @@ class Slider:
         Returns:
             FormElement representing the range input
         """
-        attrs: Dict[str, str] = {
+        attrs: dict[str, str] = {
             "type": "range",
             "min": str(self.min),
             "max": str(self.max),
@@ -610,13 +617,19 @@ class FileInput:
         >>> print(file.render_html())
     """
 
-    _UPLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'
+    _UPLOAD_ICON = (
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">'
+        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>'
+        '<polyline points="17 8 12 3 7 8"/>'
+        '<line x1="12" y1="3" x2="12" y2="15"/>'
+        '</svg>'
+    )
 
     def __init__(
         self,
         accept: str = "",
         multiple: bool = False,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.accept = accept
         self.multiple = multiple
@@ -628,7 +641,7 @@ class FileInput:
         Returns:
             FormElement representing the file input with label
         """
-        input_attrs: Dict[str, str] = {"type": "file"}
+        input_attrs: dict[str, str] = {"type": "file"}
         if self.name is not None:
             input_attrs["name"] = self.name
         if self.accept:

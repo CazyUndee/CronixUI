@@ -7,7 +7,6 @@ No browser DOM APIs are used - all output is HTML strings or data structures.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 
 @dataclass
@@ -15,8 +14,8 @@ class TooltipElement:
     """Represents a rendered tooltip element."""
 
     tag: str = "div"
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
+    classes: list[str] = field(default_factory=list)
+    attributes: dict[str, str] = field(default_factory=dict)
     inner_html: str = ""
 
     def render_html(self) -> str:
@@ -30,7 +29,7 @@ class TooltipElement:
         attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
         return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
 
-    def render(self) -> "TooltipElement":
+    def render(self) -> TooltipElement:
         """Return self for API compatibility."""
         return self
 
@@ -48,12 +47,16 @@ class Tooltip:
     Example:
         >>> tooltip = Tooltip("Click to edit", position="top")
         >>> print(tooltip.render_html())
-        <div class="cn-tooltip cn-tooltip-top"><div class="cn-tooltip-content">Click to edit</div></div>
+        <div class="cn-tooltip cn-tooltip-top">
+            <div class="cn-tooltip-content">Click to edit</div>
+        </div>
 
         >>> # Wrap an element with tooltip
         >>> wrapped = tooltip.wrap_html("<button>Edit</button>")
         >>> print(wrapped)
-        <span class="cn-tooltip-wrapper" data-tooltip="Click to edit" data-position="top"><button>Edit</button></span>
+        <span class="cn-tooltip-wrapper" data-tooltip="Click to edit" data-position="top">
+            <button>Edit</button>
+        </span>
     """
 
     POSITIONS = ("top", "bottom", "left", "right")
@@ -108,7 +111,9 @@ class Tooltip:
             >>> tooltip = Tooltip("Click to save")
             >>> wrapped = tooltip.wrap_html("<button>Save</button>")
             >>> print(wrapped)
-            <span class="cn-tooltip-wrapper" data-tooltip="Click to save" data-position="top"><button>Save</button></span>
+            <span class="cn-tooltip-wrapper" data-tooltip="Click to save" data-position="top">
+                <button>Save</button>
+            </span>
         """
         return (
             f'<span class="cn-tooltip-wrapper"'

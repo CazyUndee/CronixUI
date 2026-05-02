@@ -7,7 +7,6 @@ No browser DOM APIs are used - all output is HTML strings or data structures.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional
 
 
 @dataclass
@@ -15,8 +14,8 @@ class BadgeElement:
     """Represents a rendered badge or tag element."""
 
     tag: str = "span"
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
+    classes: list[str] = field(default_factory=list)
+    attributes: dict[str, str] = field(default_factory=dict)
     inner_html: str = ""
 
     def render_html(self) -> str:
@@ -30,7 +29,7 @@ class BadgeElement:
         attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
         return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
 
-    def render(self) -> "BadgeElement":
+    def render(self) -> BadgeElement:
         """Return self for API compatibility."""
         return self
 
@@ -122,16 +121,22 @@ class Tag:
 
         >>> removable = Tag("JavaScript", removable=True, on_remove="handleRemove")
         >>> print(removable.render_html())
-        <span class="cn-tag" data-on-remove="handleRemove">JavaScript<span class="cn-tag-remove">...</span></span>
+        <span class="cn-tag" data-on-remove="handleRemove">
+            JavaScript<span class="cn-tag-remove">...</span>
+        </span>
     """
 
-    _REMOVE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+    _REMOVE_ICON = (
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">'
+        '<path d="M18 6L6 18M6 6l12 12"/>'
+        '</svg>'
+    )
 
     def __init__(
         self,
         text: str,
         removable: bool = False,
-        on_remove: Optional[str] = None,
+        on_remove: str | None = None,
     ):
         if not text:
             raise ValueError("text cannot be empty")
@@ -146,7 +151,7 @@ class Tag:
         Returns:
             BadgeElement representing the tag
         """
-        attrs: Dict[str, str] = {}
+        attrs: dict[str, str] = {}
         if self.removable and self.on_remove:
             attrs["data-on-remove"] = self.on_remove
 

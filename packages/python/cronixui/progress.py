@@ -7,7 +7,6 @@ No browser DOM APIs are used - all output is HTML strings or data structures.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 
 @dataclass
@@ -15,8 +14,8 @@ class ProgressElement:
     """Represents a rendered progress/stat element."""
 
     tag: str = "div"
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
+    classes: list[str] = field(default_factory=list)
+    attributes: dict[str, str] = field(default_factory=dict)
     inner_html: str = ""
 
     def render_html(self) -> str:
@@ -30,7 +29,7 @@ class ProgressElement:
         attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
         return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
 
-    def render(self) -> "ProgressElement":
+    def render(self) -> ProgressElement:
         """Return self for API compatibility."""
         return self
 
@@ -131,7 +130,7 @@ class Progress:
         """
         return self.render().render_html()
 
-    def with_value(self, value: float) -> "Progress":
+    def with_value(self, value: float) -> Progress:
         """Return a new Progress with updated value (immutable pattern).
 
         Since components generate strings, we can't update in place after rendering.
@@ -175,8 +174,8 @@ class Stat:
         self,
         value: str,
         label: str,
-        delta: Optional[str] = None,
-        delta_type: Optional[str] = None,
+        delta: str | None = None,
+        delta_type: str | None = None,
     ):
         if not value:
             raise ValueError("value cannot be empty")
