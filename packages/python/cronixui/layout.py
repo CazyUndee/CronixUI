@@ -99,7 +99,7 @@ class Header:
         # Navigation
         nav_items_html = "".join(
             f'<a class="cn-btn cn-btn-ghost" href="{self._esc(item.href)}">'
-            f'{self._esc(item.text)}</a>'
+            f"{self._esc(item.text)}</a>"
             for item in self.nav_items
         )
         parts.append(f'<nav class="cn-header-nav">{nav_items_html}</nav>')
