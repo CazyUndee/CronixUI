@@ -1,6 +1,6 @@
 """Accordion component."""
 
-from typing import Union
+from typing import List, Union
 
 
 class Accordion:
@@ -9,7 +9,7 @@ class Accordion:
     def __init__(self, element: Union[str, None] = None) -> None:
         """Initialize accordion on element."""
         self._element = element
-        self._open_indices: list[int] = []
+        self._open_indices: List[int] = []
 
     def toggle(self, index: int) -> None:
         """Toggle accordion item by index."""
