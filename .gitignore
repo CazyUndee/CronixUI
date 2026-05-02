@@ -15,9 +15,11 @@ __pycache__/
 *.msix
 
 # Dependencies
+node_modules/
 .venv/
 venv/
 *.egg-info/
+/package-lock.json
 
 # Build output
 dist/
@@ -36,6 +38,7 @@ obj/
 *.tmp
 *.swp
 *.swo
+nul
 
 # Environment
 .env

@@ -10,11 +10,15 @@ A multi-platform, multi-language UI toolkit with a dark theme, crimson accents, 
 - it is still really early, so there might be issues
 - start an issue if you encounter any of them
 
-## For Agents
+## IMPORTANT FOR ALL LLMS AND AGENTS
 
-If you are an agent or LLM, read `FOR_AGENTS/AGENTS.md` first.
+**ALL LLMs AND AGENTS MUST READ `FOR_AGENTS/AGENTS.md` BEFORE PROCEEDING WITH ANY TASK.**
 
-Agent-oriented project guidance now lives in `FOR_AGENTS/AGENTS.md`.
+This is **mandatory**. The `FOR_AGENTS/AGENTS.md` file contains critical instructions, guidelines, and context that all AI agents and language models must follow when working with this project.
+
+**DO NOT SKIP THIS STEP.**
+
+If you are an agent or LLM, your first action must be to read and understand `FOR_AGENTS/AGENTS.md`.
 
 ## Branch Strategy
 
