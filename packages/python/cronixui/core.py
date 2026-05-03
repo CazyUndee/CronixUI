@@ -7,7 +7,7 @@ as strings or structured data. It does NOT use browser DOM APIs.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 
 
 def escape_html(text: str) -> str:
