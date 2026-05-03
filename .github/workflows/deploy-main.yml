@@ -82,6 +82,6 @@ jobs:
         run: twine check packages/python/dist/*
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: packages/python/dist/
+        run: |
+          cd packages/python
+          python -m twine upload dist/cronixui-1.1.4* --skip-existing
