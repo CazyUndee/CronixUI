@@ -143,7 +143,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'\n          cache-dependency-path: packages/web/package-lock.json
           
       - name: Install dependencies
         working-directory: packages/web
@@ -172,7 +172,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'\n          cache-dependency-path: packages/solid/package-lock.json
           
       - name: Install dependencies
         working-directory: packages/solid
@@ -196,7 +196,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'\n          cache-dependency-path: packages/svelte/package-lock.json
           
       - name: Install dependencies
         working-directory: packages/svelte
@@ -220,7 +220,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'\n          cache-dependency-path: packages/vue/package-lock.json
           
       - name: Install dependencies
         working-directory: packages/vue
@@ -244,7 +244,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'npm'\n          cache-dependency-path: packages/typescript/package-lock.json
           
       - name: Install dependencies
         working-directory: packages/typescript
