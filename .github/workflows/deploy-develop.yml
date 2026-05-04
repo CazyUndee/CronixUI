@@ -354,8 +354,7 @@ jobs:
                   "- ✅ Windows .NET tests and build",
                   "",
                   "Please review and merge to deploy to production."
-                ].join("
-")
+                ].join("\n")
               });
 
               core.info(`Created deployment PR #${pr.data.number}`);
