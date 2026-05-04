@@ -50,8 +50,8 @@ jobs:
       - name: Generate coverage
         working-directory: packages/go/cronixui
         run: |
-          go test -coverprofile=coverage ./...
-          go tool cover -html=coverage.out ./...
+          go test -coverprofile=coverage.out ./...
+          go tool cover -html=coverage.out -o coverage.html
         
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
