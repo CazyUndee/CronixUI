@@ -9,6 +9,7 @@ on:
     branches: [main, develop]
     paths:
       - 'packages/web/**'
+  workflow_call:
 
 jobs:
   test:

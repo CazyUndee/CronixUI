@@ -1,0 +1,49 @@
+name: Python CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/python/**'
+      - 'tests/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/python/**'
+      - 'tests/**'
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd packages/python && pip install -e .[dev]
+
+      - name: Run tests
+        working-directory: packages/python
+        run: pytest ../../tests -v
+
+      - name: Install linting tools
+        run: |
+          pip install black ruff mypy
+          cd packages/python && pip install -e .
+
+      - name: Check formatting with Black
+        run: black --check packages/python/cronixui tests
+
+      - name: Lint with Ruff
+        run: ruff check packages/python/cronixui tests
+
+      - name: Type check with MyPy
+        run: mypy packages/python/cronixui

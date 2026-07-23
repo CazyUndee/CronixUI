@@ -1,0 +1,34 @@
+name: Solid CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/solid/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/solid/**'
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: packages/solid/package.json
+
+      - name: Install dependencies
+        working-directory: packages/solid
+        run: npm install
+
+      - name: Run ESLint
+        working-directory: packages/solid
+        run: npm run lint

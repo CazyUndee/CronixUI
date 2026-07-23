@@ -9,6 +9,7 @@ on:
     branches: [main, develop]
     paths:
       - 'packages/rust/**'
+  workflow_call:
 
 jobs:
   test:

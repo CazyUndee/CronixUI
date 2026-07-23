@@ -13,6 +13,13 @@
     }
   },
   "files": ["src"],
+  "scripts": {
+    "check": "svelte-check"
+  },
+  "devDependencies": {
+    "svelte": "^4.0.0",
+    "svelte-check": "^3.0.0"
+  },
   "keywords": ["svelte", "ui", "dark-mode", "components"],
   "license": "GPL-3.0",
   "repository": {
