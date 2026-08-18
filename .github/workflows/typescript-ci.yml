@@ -46,9 +46,9 @@ jobs:
 
       - name: Test import
         run: |
-          node -e "
-          const tokens = require('./packages/typescript/dist/tokens.js');
-          console.log('Colors:', Object.keys(tokens.COLORS).length, 'tokens');
-          console.log('Version:', tokens.VERSION);
+          node --input-type=module -e "
+          import { COLORS, VERSION } from './packages/typescript/dist/tokens.js';
+          console.log('Colors:', Object.keys(COLORS).length, 'tokens');
+          console.log('Version:', VERSION);
           console.log('TypeScript package builds and imports correctly!');
           "

@@ -1,3 +1,4 @@
+<script></script>
 <label class="cn-label"><slot /></label>
 
 <style>
