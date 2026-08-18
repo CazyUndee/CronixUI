@@ -84,10 +84,10 @@ class _CnTableState<T> extends State<CnTable<T>> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          headingRowColor: WidgetStateProperty.all(CronixColors.surfaceLight),
-          dataRowColor: WidgetStateProperty.resolveWith((states) {
+          headingRowColor: MaterialStateProperty.all(CronixColors.surfaceLight),
+          dataRowColor: MaterialStateProperty.resolveWith((states) {
             if (widget.striped) {
-              final index = states.contains(WidgetState.selected) ? -1 : 0;
+              final index = states.contains(MaterialState.selected) ? -1 : 0;
               return index % 2 == 0
                   ? CronixColors.surface
                   : CronixColors.surfaceLight;
