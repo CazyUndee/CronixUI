@@ -232,8 +232,6 @@ func (t *Theme) Size(name fyne.ThemeSizeName) float32 {
 	switch name {
 	case theme.SizeNamePadding:
 		return t.spacing.Space2
-	case theme.SizeNamePadding:
-		return t.spacing.Space2
 	case theme.SizeNameScrollBar:
 		return 8
 	case theme.SizeNameScrollBarSmall:
