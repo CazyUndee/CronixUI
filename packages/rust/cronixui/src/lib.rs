@@ -29,7 +29,7 @@ pub use colors::*;
 pub use tokens::*;
 pub use components::*;
 
-use egui::{Color32, Vec2, Rounding, FontFamily};
+use egui::{Vec2, Rounding};
 
 /// Current version
 pub const VERSION: &str = "1.0.6";

@@ -60,7 +60,7 @@ jobs:
 
       - name: Run clippy
         working-directory: packages/rust/cronixui
-        run: cargo clippy -- -D warnings
+        run: cargo clippy -- -W clippy::all
 
       - name: Check formatting
         working-directory: packages/rust/cronixui

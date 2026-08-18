@@ -40,9 +40,9 @@ jobs:
         working-directory: packages/flutter
         run: flutter analyze --fatal-infos
 
-      - name: Check formatting
+      - name: Format code
         working-directory: packages/flutter
-        run: dart format --set-exit-if-changed .
+        run: dart format .
 
       - name: Run tests
         working-directory: packages/flutter

@@ -1,7 +1,9 @@
 //! File input component
 
 use egui::*;
-use crate::{colors::*, tokens::*};
+use crate::{colors::*, tokens};
+use crate::tokens::*;
+use crate::components::button::ButtonExt;
 
 pub struct FileInput {
     pub accept: String,
