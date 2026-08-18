@@ -1,6 +1,7 @@
 """Tests for CronixUI native tkinter card component."""
 
 import sys
+import pytest
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent.parent / 'packages' / 'python'))
 
 
