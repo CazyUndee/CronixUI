@@ -50,13 +50,13 @@ impl Skeleton {
 
         let rounding = match self.variant {
             SkeletonVariant::Avatar => Rounding::same(self.width / 2.0),
-            SkeletonVariant::Block => Rounding::same(tokens::RADIUS),
-            _ => Rounding::same(tokens::RADIUS_SM),
+            SkeletonVariant::Block => Rounding::same(RADIUS),
+            _ => Rounding::same(RADIUS_SM),
         };
 
         let (rect, response) = ui.allocate_at_least(vec2(self.width, self.height), Sense::hover());
         ui.painter().rect_filled(rect, rounding, colors.surface_3);
-        ui.painter().rect_stroke(rect, rounding, Stroke::new(1.0, colors.border));
+        ui.painter().rect_stroke(rect, rounding, Stroke::new(1.0_f32, colors.border));
 
         response
     }

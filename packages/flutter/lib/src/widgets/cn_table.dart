@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
-import '../tokens/spacing.dart';
 
 class CnTableColumn<T> {
   final String label;
@@ -104,7 +103,7 @@ class _CnTableState<T> extends State<CnTable<T>> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              onSort: col.sortable ? (_) => _sort(widget.columns.indexOf(col)) : null,
+              onSort: col.sortable ? (columnIndex, ascending) { _sort(columnIndex); } : null,
             );
           }).toList(),
           rows: widget.data.map((item) {

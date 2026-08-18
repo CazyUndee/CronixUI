@@ -29,7 +29,7 @@ pub use colors::*;
 pub use tokens::*;
 pub use components::*;
 
-use egui::{Color32, Vec2, Rounding};
+use egui::{Color32, Vec2, Rounding, FontFamily};
 
 /// Current version
 pub const VERSION: &str = "1.0.6";
@@ -48,8 +48,6 @@ pub fn apply_theme(ctx: &egui::Context) {
     style.visuals.code_bg_color = colors.surface_3;
     
     // Text colors
-    style.visuals.strong_text_color = colors.text;
-    style.visuals.weak_text_color = colors.text_muted;
     style.visuals.text_color = colors.text;
     
     // Widget colors
@@ -79,16 +77,13 @@ pub fn apply_theme(ctx: &egui::Context) {
     // Hyperlink
     style.visuals.hyperlink_color = colors.accent_text;
     
-    // Button rounding
-    style.visuals.button_rounding = Rounding::same(tokens::RADIUS);
-    
     // Window rounding
-    style.visuals.window_rounding = Rounding::same(tokens::RADIUS_LG);
+    style.visuals.window_rounding = Rounding::same(RADIUS_LG);
     
     // Spacing
-    style.spacing.button_padding = Vec2::new(tokens::SPACE_4, tokens::SPACE_2);
-    style.spacing.item_spacing = Vec2::new(tokens::SPACE_2, tokens::SPACE_2);
-    style.spacing.indent = tokens::SPACE_4;
+    style.spacing.button_padding = Vec2::new(SPACE_4, SPACE_2);
+    style.spacing.item_spacing = Vec2::new(SPACE_2, SPACE_2);
+    style.spacing.indent = SPACE_4;
     
     ctx.set_style(style);
 }
@@ -126,6 +121,6 @@ impl CronixButton for egui::Ui {
         let colors = Colors::default();
         self.add(egui::Button::new(text)
             .fill(Color32::TRANSPARENT)
-            .stroke(egui::Stroke::new(1.0, colors.border)))
+            .stroke(egui::Stroke::new(1.0_f32, colors.border)))
     }
 }

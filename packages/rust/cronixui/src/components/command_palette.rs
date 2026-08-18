@@ -109,14 +109,8 @@ impl CommandPalette {
 
                 egui::Frame::none()
                     .fill(colors.surface)
-                    .stroke(egui::Stroke::new(1.0, colors.border))
-                    .rounding(Rounding::same(tokens::RADIUS_LG))
-                    .shadow(egui::Shadow {
-                        offset: [0.0, 8.0].into(),
-                        blur: 24.0,
-                        spread: 0.0,
-                        color: Color32::from_black_alpha(100),
-                    })
+                    .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                    .rounding(Rounding::same(RADIUS_LG))
                     .show(ui, |ui| {
                         ui.set_min_size(vec2(panel_width, panel_height));
 
@@ -127,7 +121,7 @@ impl CommandPalette {
                                 TextEdit::singleline(&mut self.query)
                                     .hint_text("Type a command...")
                                     .desired_width(f32::INFINITY)
-                                    .font(FontId::new(tokens::FONT_SIZE_BASE, FontFamily::Proportional)),
+                                    .font(FontId::new(FONT_SIZE_BASE, FontFamily::Proportional)),
                             );
 
                             if response.has_focus() {
@@ -182,7 +176,7 @@ impl CommandPalette {
                                             if is_selected {
                                                 ui.label(
                                                     RichText::new("→")
-                                                        .size(tokens::FONT_SIZE_BASE)
+                                                        .size(FONT_SIZE_BASE)
                                                         .color(colors.accent_text),
                                                 );
                                             } else {
@@ -191,14 +185,14 @@ impl CommandPalette {
 
                                             ui.label(
                                                 RichText::new(&item.title)
-                                                    .size(tokens::FONT_SIZE_BASE)
+                                                    .size(FONT_SIZE_BASE)
                                                     .color(if is_selected { colors.accent_text } else { colors.text }),
                                             );
 
                                             if let Some(subtitle) = &item.subtitle {
                                                 ui.label(
                                                     RichText::new(subtitle)
-                                                        .size(tokens::FONT_SIZE_SM)
+                                                        .size(FONT_SIZE_SM)
                                                         .color(colors.text_muted),
                                                 );
                                             }
@@ -207,15 +201,15 @@ impl CommandPalette {
                                                 ui.with_layout(egui::Layout::right_to_left(Align::Center), |ui| {
                                                     egui::Frame::none()
                                                         .fill(colors.surface_3)
-                                                        .stroke(egui::Stroke::new(1.0, colors.border))
-                                                        .rounding(Rounding::same(tokens::RADIUS_SM))
+                                                        .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                                                        .rounding(Rounding::same(RADIUS_SM))
                                                         .inner_margin(vec2(SPACE_2, SPACE_1))
                                                         .show(ui, |ui| {
                                                             ui.label(
                                                                 RichText::new(kbd)
-                                                                    .size(tokens::FONT_SIZE_XS)
+                                                                    .size(FONT_SIZE_XS)
                                                                     .color(colors.text_muted)
-                                                                    .font(FontFamily::Monospace),
+                                                                    .font(FontId::new(FONT_SIZE_XS, FontFamily::Monospace)),
                                                             );
                                                         });
                                                 });
@@ -231,7 +225,7 @@ impl CommandPalette {
                             ui.centered_and_justified(|ui| {
                                 ui.label(
                                     RichText::new("No commands found")
-                                        .size(tokens::FONT_SIZE_SM)
+                                        .size(FONT_SIZE_SM)
                                         .color(colors.text_muted),
                                 );
                             });

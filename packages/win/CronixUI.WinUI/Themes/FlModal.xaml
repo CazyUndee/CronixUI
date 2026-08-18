@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnModal">
+    <Style TargetType="local:FlModal">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
@@ -12,7 +12,7 @@
         <Setter Property="MaxWidth" Value="500"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnModal">
+                <ControlTemplate TargetType="local:FlModal">
                     <Grid x:Name="LayoutRoot"
                           Background="#B3000000"
                           Visibility="Collapsed">

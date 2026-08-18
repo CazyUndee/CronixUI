@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
-import '../tokens/spacing.dart';
 
 class CnSelectOption<T> {
   final T value;
@@ -51,7 +50,7 @@ class _CnSelectState<T> extends State<CnSelect<T>> {
     if (widget.value == null) return widget.placeholder ?? 'Select...';
     final option = widget.options.firstWhere(
       (o) => o.value == widget.value,
-      orElse: () => CnSelectOption(value: widget.value, label: widget.placeholder ?? 'Select...'),
+      orElse: () => CnSelectOption(value: widget.value as T, label: widget.placeholder ?? 'Select...'),
     );
     return option.label;
   }

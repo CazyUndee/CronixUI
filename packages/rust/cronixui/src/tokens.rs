@@ -1,6 +1,6 @@
 //! Design tokens for CronixUI
 
-use egui::{vec2, Rounding};
+use egui::{Vec2, Rounding};
 
 // =============================================================================
 // TYPOGRAPHY TOKENS
@@ -102,6 +102,6 @@ pub const CONTAINER_LG: f32 = 1200.0;
 pub const CONTAINER_XL: f32 = 1400.0;
 
 /// Get container padding
-pub fn container_padding() -> vec2 {
-    vec2(SPACE_6, SPACE_6)
+pub fn container_padding() -> Vec2 {
+    Vec2::new(SPACE_6, SPACE_6)
 }

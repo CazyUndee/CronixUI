@@ -107,8 +107,8 @@ pub const SURFACE_4: Color32 = Color32::from_rgb(42, 42, 42);
 
 // Text color constants
 pub const TEXT: Color32 = Color32::from_rgb(240, 237, 232);
-pub const TEXT_MUTED: Color32 = Color32::from_rgba_unmultiplied(240, 237, 232, 128);
-pub const TEXT_DIM: Color32 = Color32::from_rgba_unmultiplied(240, 237, 232, 64);
+pub const TEXT_MUTED: Color32 = Color32(240, 237, 232, 128);
+pub const TEXT_DIM: Color32 = Color32(240, 237, 232, 64);
 
 // Accent color constants
 pub const ACCENT: Color32 = Color32::from_rgb(107, 35, 35);
@@ -130,6 +130,6 @@ pub const INFO: Color32 = Color32::from_rgb(20, 53, 80);
 pub const INFO_TEXT: Color32 = Color32::from_rgb(107, 168, 196);
 
 // Border color constants
-pub const BORDER: Color32 = Color32::from_rgba_unmultiplied(255, 255, 255, 20);
-pub const BORDER_HOVER: Color32 = Color32::from_rgba_unmultiplied(255, 255, 255, 38);
-pub const BORDER_FOCUS: Color32 = Color32::from_rgba_unmultiplied(255, 255, 255, 64);
+pub const BORDER: Color32 = Color32(255, 255, 255, 20);
+pub const BORDER_HOVER: Color32 = Color32(255, 255, 255, 38);
+pub const BORDER_FOCUS: Color32 = Color32(255, 255, 255, 64);

@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnAvatar">
+    <Style TargetType="local:FlAvatar">
         <Setter Property="Width" Value="40"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
@@ -13,7 +13,7 @@
         <Setter Property="Background" Value="{StaticResource CnAccentBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnAvatar">
+                <ControlTemplate TargetType="local:FlAvatar">
                     <Grid>
                         <Ellipse Fill="{TemplateBinding Background}"
                                  Width="{TemplateBinding Width}"

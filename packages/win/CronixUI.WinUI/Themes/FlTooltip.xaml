@@ -3,13 +3,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnTooltip">
+    <Style TargetType="local:FlTooltip">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource CnTextXs}"/>
         <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnTooltip">
+                <ControlTemplate TargetType="local:FlTooltip">
                     <Grid>
                         <ContentPresenter x:Name="ContentPresenter"/>
                         <Popup x:Name="TooltipPopup"

@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnComboBox">
+    <Style TargetType="local:FlComboBox">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource CnTextBase}"/>
         <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
@@ -14,7 +14,7 @@
         <Setter Property="Padding" Value="12,8"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnComboBox">
+                <ControlTemplate TargetType="local:FlComboBox">
                     <Grid>
                         <Border x:Name="Background"
                                 Background="{TemplateBinding Background}"

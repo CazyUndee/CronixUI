@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnBadge">
+    <Style TargetType="local:FlBadge">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource CnTextXs}"/>
         <Setter Property="FontWeight" Value="Medium"/>
@@ -13,7 +13,7 @@
         <Setter Property="CornerRadius" Value="999"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnBadge">
+                <ControlTemplate TargetType="local:FlBadge">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{StaticResource CnBorderBrush}"
                             BorderThickness="1"

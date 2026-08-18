@@ -61,7 +61,7 @@ impl Search {
                 TextEdit::singleline(&mut self.query)
                     .hint_text("Search...")
                     .desired_width(f32::INFINITY)
-                    .font(FontId::new(tokens::FONT_SIZE_BASE, FontFamily::Proportional)),
+                    .font(FontId::new(FONT_SIZE_BASE, FontFamily::Proportional)),
             );
 
             if response.has_focus() {
@@ -74,21 +74,21 @@ impl Search {
         if !results.is_empty() {
             egui::Frame::none()
                 .fill(colors.surface)
-                .stroke(egui::Stroke::new(1.0, colors.border))
-                .rounding(Rounding::same(tokens::RADIUS))
+                .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                .rounding(Rounding::same(RADIUS))
                 .inner_margin(SPACE_2)
                 .show(ui, |ui| {
                     for (idx, item) in results.iter().enumerate() {
                         let response = ui.horizontal(|ui| {
                             ui.label(
                                 RichText::new(&item.title)
-                                    .size(tokens::FONT_SIZE_BASE)
+                                    .size(FONT_SIZE_BASE)
                                     .color(colors.text),
                             );
                             if let Some(subtitle) = &item.subtitle {
                                 ui.label(
                                     RichText::new(subtitle)
-                                        .size(tokens::FONT_SIZE_SM)
+                                        .size(FONT_SIZE_SM)
                                         .color(colors.text_muted),
                                 );
                             }
@@ -105,7 +105,7 @@ impl Search {
         } else if !self.query.is_empty() {
             ui.label(
                 RichText::new("No results found")
-                    .size(tokens::FONT_SIZE_SM)
+                    .size(FONT_SIZE_SM)
                     .color(colors.text_muted),
             );
         }
@@ -121,7 +121,7 @@ impl Default for Search {
 }
 
 /// Functional search helper
-pub fn search(ui: &mut Ui, query: &mut String, items: &[SearchItem]) -> Vec<&SearchItem> {
+pub fn search<'a>(ui: &mut Ui, query: &mut String, items: &'a [SearchItem]) -> Vec<&'a SearchItem> {
     let colors = Colors::default();
 
     ui.add(
@@ -148,21 +148,21 @@ pub fn search_results(ui: &mut Ui, results: &[&SearchItem]) -> Option<usize> {
     if !results.is_empty() {
         egui::Frame::none()
             .fill(colors.surface)
-            .stroke(egui::Stroke::new(1.0, colors.border))
-            .rounding(Rounding::same(tokens::RADIUS))
+            .stroke(egui::Stroke::new(1.0_f32, colors.border))
+            .rounding(Rounding::same(RADIUS))
             .inner_margin(SPACE_2)
             .show(ui, |ui| {
                 for (idx, item) in results.iter().enumerate() {
                     let response = ui.horizontal(|ui| {
                         ui.label(
                             RichText::new(&item.title)
-                                .size(tokens::FONT_SIZE_BASE)
+                                .size(FONT_SIZE_BASE)
                                 .color(colors.text),
                         );
                         if let Some(subtitle) = &item.subtitle {
                             ui.label(
                                 RichText::new(subtitle)
-                                    .size(tokens::FONT_SIZE_SM)
+                                    .size(FONT_SIZE_SM)
                                     .color(colors.text_muted),
                             );
                         }
@@ -176,7 +176,7 @@ pub fn search_results(ui: &mut Ui, results: &[&SearchItem]) -> Option<usize> {
     } else {
         ui.label(
             RichText::new("No results found")
-                .size(tokens::FONT_SIZE_SM)
+                .size(FONT_SIZE_SM)
                 .color(colors.text_muted),
         );
     }

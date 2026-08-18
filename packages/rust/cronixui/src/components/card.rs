@@ -1,7 +1,8 @@
 //! Card component
 
 use egui::*;
-use crate::{colors::*, tokens::*};
+use crate::{colors::*, tokens};
+use crate::tokens::*;
 
 /// Icon component for Card header
 pub struct CardIcon {
@@ -11,7 +12,7 @@ pub struct CardIcon {
 
 impl CardIcon {
     pub fn new(icon: impl Into<String>) -> Self {
-        Self { icon: icon.into(), size: tokens::FONT_SIZE_LG }
+        Self { icon: icon.into(), size: crate::FONT_SIZE_LG }
     }
 
     pub fn size(mut self, size: f32) -> Self {
@@ -37,7 +38,7 @@ pub struct CardTitle {
 
 impl CardTitle {
     pub fn new(text: impl Into<String>) -> Self {
-        Self { text: text.into(), size: tokens::FONT_SIZE_MD }
+        Self { text: text.into(), size: crate::FONT_SIZE_MD }
     }
 
     pub fn size(mut self, size: f32) -> Self {
@@ -64,7 +65,7 @@ pub struct CardSubtitle {
 
 impl CardSubtitle {
     pub fn new(text: impl Into<String>) -> Self {
-        Self { text: text.into(), size: tokens::FONT_SIZE_SM }
+        Self { text: text.into(), size: crate::FONT_SIZE_SM }
     }
 
     pub fn size(mut self, size: f32) -> Self {
@@ -113,7 +114,7 @@ impl CardHeader {
         ui.horizontal(|ui| {
             if let Some(icon) = &self.icon {
                 icon.show(ui);
-                ui.add_space(tokens::SPACE_2);
+                ui.add_space(SPACE_2);
             }
 
             ui.vertical(|ui| {
@@ -171,7 +172,7 @@ impl CardFooter {
     pub fn show<R>(&self, ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) {
         if self.separator {
             ui.separator();
-            ui.add_space(tokens::SPACE_2);
+            ui.add_space(SPACE_2);
         }
         add_contents(ui);
     }
@@ -233,7 +234,7 @@ impl Card {
 
         let frame = egui::Frame::none()
             .fill(colors.surface)
-            .stroke(Stroke::new(1.0, colors.border))
+            .stroke(Stroke::new(1.0_f32, colors.border))
             .rounding(Rounding::same(RADIUS_LG))
             .inner_margin(SPACE_5);
 

@@ -56,8 +56,8 @@ impl Dropdown {
             [ui.available_width(), 28.0],
             egui::Button::new(label)
                 .fill(colors.surface_2)
-                .stroke(egui::Stroke::new(1.0, colors.border))
-                .rounding(Rounding::same(tokens::RADIUS)),
+                .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                .rounding(Rounding::same(RADIUS)),
         );
 
         if response.clicked() {
@@ -138,8 +138,8 @@ pub fn dropdown(ui: &mut Ui, id: impl Into<Id>, items: &[String], selected: &mut
         [ui.available_width(), 28.0],
         egui::Button::new(label)
             .fill(colors.surface_2)
-            .stroke(egui::Stroke::new(1.0, colors.border))
-            .rounding(Rounding::same(tokens::RADIUS)),
+            .stroke(egui::Stroke::new(1.0_f32, colors.border))
+            .rounding(Rounding::same(RADIUS)),
     );
 
     if response.clicked() {

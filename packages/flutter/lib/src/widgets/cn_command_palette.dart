@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../tokens/colors.dart';
 import '../tokens/spacing.dart';
 
@@ -87,22 +88,21 @@ class _CnCommandPaletteState extends State<CnCommandPalette> {
   }
 
   void _handleKeyEvent(KeyEvent event) {
-    if (event is KeyDownEvent || event is RawKeyDownEvent) {
-      final rawEvent = event as RawKeyEvent;
-      if (rawEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         setState(() {
           _selectedIndex = (_selectedIndex + 1).clamp(0, _filteredCommands.length - 1);
         });
-      } else if (rawEvent.logicalKey == LogicalKeyboardKey.arrowUp) {
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
           _selectedIndex = (_selectedIndex - 1).clamp(0, _filteredCommands.length - 1);
         });
-      } else if (rawEvent.logicalKey == LogicalKeyboardKey.enter) {
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
         if (_filteredCommands.isNotEmpty && _selectedIndex < _filteredCommands.length) {
           _filteredCommands[_selectedIndex].onTap?.call();
           Navigator.of(context).pop();
         }
-      } else if (rawEvent.logicalKey == LogicalKeyboardKey.escape) {
+      } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.of(context).pop();
       }
     }
@@ -110,9 +110,9 @@ class _CnCommandPaletteState extends State<CnCommandPalette> {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return KeyboardListener(
       focusNode: FocusNode(),
-      onKey: _handleKeyEvent,
+      onKeyEvent: _handleKeyEvent,
       child: Dialog(
         backgroundColor: Colors.transparent,
         child: Container(

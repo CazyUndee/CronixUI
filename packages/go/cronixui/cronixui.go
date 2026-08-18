@@ -8,7 +8,6 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
@@ -233,8 +232,8 @@ func (t *Theme) Size(name fyne.ThemeSizeName) float32 {
 	switch name {
 	case theme.SizeNamePadding:
 		return t.spacing.Space2
-	case theme.SizeNameInlinePadding:
-		return t.spacing.Space3
+	case theme.SizeNamePadding:
+		return t.spacing.Space2
 	case theme.SizeNameScrollBar:
 		return 8
 	case theme.SizeNameScrollBarSmall:
@@ -293,7 +292,11 @@ func NewButton(text string, variant ButtonVariant, onTap func()) *widget.Button 
 }
 
 func NewButtonGroup(buttons ...*widget.Button) *fyne.Container {
-	return container.NewHBox(buttons...)
+	objs := make([]fyne.CanvasObject, len(buttons))
+	for i, b := range buttons {
+		objs[i] = b
+	}
+	return container.NewHBox(objs...)
 }
 
 // =============================================================================
@@ -451,16 +454,51 @@ func NewProgressInfinite() *widget.ProgressBarInfinite {
 // TOGGLE
 // =============================================================================
 
+type ToggleRenderer struct {
+	toggle *Toggle
+}
+
+func (r *ToggleRenderer) Destroy() {}
+func (r *ToggleRenderer) Layout(size fyne.Size) {
+	if bg, ok := r.toggle.bg.(*canvas.Rectangle); ok {
+		bg.Resize(size)
+	}
+	if r.toggle.bg != nil {
+		r.toggle.bg.Resize(size)
+	}
+}
+func (r *ToggleRenderer) MinSize() fyne.Size { return fyne.NewSize(44, 24) }
+func (r *ToggleRenderer) Objects() []fyne.CanvasObject {
+	return []fyne.CanvasObject{r.toggle.bg}
+}
+func (r *ToggleRenderer) Refresh() {
+	if bg, ok := r.toggle.bg.(*canvas.Rectangle); ok {
+		if r.toggle.on {
+			bg.FillColor = DefaultColors().Accent
+		} else {
+			bg.FillColor = DefaultColors().Surface3
+		}
+	}
+}
+
 type Toggle struct {
 	widget.BaseWidget
 	on       bool
 	onToggle func(bool)
+	bg       fyne.CanvasObject
 }
 
 func NewToggle(onToggle func(bool)) *Toggle {
-	t := &Toggle{onToggle: onToggle}
+	c := DefaultColors()
+	bg := canvas.NewRectangle(c.Surface3)
+	bg.CornerRadius = 12
+	t := &Toggle{onToggle: onToggle, bg: bg}
 	t.ExtendBaseWidget(t)
 	return t
+}
+
+func (t *Toggle) CreateRenderer() fyne.WidgetRenderer {
+	return &ToggleRenderer{toggle: t}
 }
 
 func (t *Toggle) Toggle() {
@@ -478,6 +516,25 @@ func (t *Toggle) SetOn(value bool) { t.on = value; t.Refresh() }
 // MODAL
 // =============================================================================
 
+type ModalRenderer struct {
+	modal *Modal
+}
+
+func (r *ModalRenderer) Destroy() {}
+func (r *ModalRenderer) Layout(size fyne.Size) {
+	if r.modal.content != nil {
+		r.modal.content.Resize(size)
+	}
+}
+func (r *ModalRenderer) MinSize() fyne.Size { return fyne.NewSize(400, 300) }
+func (r *ModalRenderer) Objects() []fyne.CanvasObject {
+	if r.modal.open && r.modal.content != nil {
+		return []fyne.CanvasObject{r.modal.content}
+	}
+	return nil
+}
+func (r *ModalRenderer) Refresh() {}
+
 type Modal struct {
 	widget.BaseWidget
 	content fyne.CanvasObject
@@ -489,6 +546,10 @@ func NewModal(content fyne.CanvasObject) *Modal {
 	m := &Modal{content: content}
 	m.ExtendBaseWidget(m)
 	return m
+}
+
+func (m *Modal) CreateRenderer() fyne.WidgetRenderer {
+	return &ModalRenderer{modal: m}
 }
 
 func (m *Modal) Open(window fyne.Window) {
@@ -521,7 +582,7 @@ func NewDropdown(items []string, onSelect func(string)) *widget.Select {
 // TABS
 // =============================================================================
 
-func NewTabs(items ...*widget.TabItem) *container.AppTabs {
+func NewTabs(items ...*container.TabItem) *container.AppTabs {
 	return container.NewAppTabs(items...)
 }
 
@@ -534,6 +595,16 @@ type AccordionItem struct {
 	Content fyne.CanvasObject
 }
 
+type AccordionRenderer struct {
+	accordion *Accordion
+}
+
+func (r *AccordionRenderer) Destroy() {}
+func (r *AccordionRenderer) Layout(size fyne.Size) {}
+func (r *AccordionRenderer) MinSize() fyne.Size { return fyne.NewSize(200, 40) }
+func (r *AccordionRenderer) Objects() []fyne.CanvasObject { return nil }
+func (r *AccordionRenderer) Refresh() {}
+
 type Accordion struct {
 	widget.BaseWidget
 	items       []AccordionItem
@@ -544,6 +615,10 @@ func NewAccordion(items ...AccordionItem) *Accordion {
 	a := &Accordion{items: items, openIndices: make(map[int]bool)}
 	a.ExtendBaseWidget(a)
 	return a
+}
+
+func (a *Accordion) CreateRenderer() fyne.WidgetRenderer {
+	return &AccordionRenderer{accordion: a}
 }
 
 func (a *Accordion) Toggle(index int) { a.openIndices[index] = !a.openIndices[index]; a.Refresh() }
@@ -562,6 +637,16 @@ func (a *Accordion) IsOpen(index int) bool { return a.openIndices[index] }
 // PAGINATION
 // =============================================================================
 
+type PaginationRenderer struct {
+	pagination *Pagination
+}
+
+func (r *PaginationRenderer) Destroy() {}
+func (r *PaginationRenderer) Layout(size fyne.Size) {}
+func (r *PaginationRenderer) MinSize() fyne.Size { return fyne.NewSize(200, 36) }
+func (r *PaginationRenderer) Objects() []fyne.CanvasObject { return nil }
+func (r *PaginationRenderer) Refresh() {}
+
 type Pagination struct {
 	widget.BaseWidget
 	total    int
@@ -573,6 +658,10 @@ func NewPagination(total, current int, onChange func(int)) *Pagination {
 	p := &Pagination{total: total, current: current, onChange: onChange}
 	p.ExtendBaseWidget(p)
 	return p
+}
+
+func (p *Pagination) CreateRenderer() fyne.WidgetRenderer {
+	return &PaginationRenderer{pagination: p}
 }
 
 func (p *Pagination) GoTo(page int) {
@@ -750,6 +839,8 @@ func NewSearch(items []SearchItem, onSelect func(SearchItem)) *fyne.Container {
 		searchEntry,
 		container.NewScroll(resultsList),
 	)
+
+	_ = c // used above for styling
 
 	return content
 }

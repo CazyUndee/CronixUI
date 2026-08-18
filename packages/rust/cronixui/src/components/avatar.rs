@@ -68,7 +68,7 @@ impl Avatar {
         ui.painter().circle_stroke(
             rect.center(),
             radius,
-            Stroke::new(1.0, colors.border),
+            Stroke::new(1.0_f32, colors.border),
         );
 
         // Draw initials text

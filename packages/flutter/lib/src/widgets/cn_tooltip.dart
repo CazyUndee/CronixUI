@@ -86,20 +86,19 @@ class _CnRichTooltipWrapper extends StatefulWidget {
 
 class _CnRichTooltipWrapperState extends State<_CnRichTooltipWrapper> {
   OverlayEntry? _overlayEntry;
-  bool _isVisible = false;
 
   void _showTooltip() {
     _overlayEntry = OverlayEntry(
       builder: widget.builder,
     );
     Overlay.of(context).insert(_overlayEntry!);
-    setState(() => _isVisible = true);
+    setState(() {});
   }
 
   void _hideTooltip() {
     _overlayEntry?.remove();
     _overlayEntry = null;
-    setState(() => _isVisible = false);
+    setState(() {});
   }
 
   @override

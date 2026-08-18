@@ -35,7 +35,6 @@ class CnSearch extends StatefulWidget {
 class _CnSearchState extends State<CnSearch> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
-  bool _showSuggestions = false;
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 

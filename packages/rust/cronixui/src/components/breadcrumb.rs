@@ -25,7 +25,7 @@ impl Breadcrumb {
                 if i > 0 {
                     ui.label(
                         RichText::new("/")
-                            .size(tokens::FONT_SIZE_SM)
+                            .size(FONT_SIZE_SM)
                             .color(colors.text_muted),
                     );
                 }
@@ -34,14 +34,14 @@ impl Breadcrumb {
                 if is_last {
                     ui.label(
                         RichText::new(item)
-                            .size(tokens::FONT_SIZE_BASE)
+                            .size(FONT_SIZE_BASE)
                             .color(colors.text)
                             .strong(),
                     );
                 } else {
                     ui.hyperlink_to(
                         RichText::new(item)
-                            .size(tokens::FONT_SIZE_BASE)
+                            .size(FONT_SIZE_BASE)
                             .color(colors.accent_text),
                         format!("#{}", item.to_lowercase().replace(" ", "-")),
                     );

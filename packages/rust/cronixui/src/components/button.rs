@@ -41,7 +41,7 @@ impl ButtonExt for Ui {
     fn button_outline(&mut self, text: &str) -> egui::Response {
         self.add(egui::Button::new(text)
             .fill(Color32::TRANSPARENT)
-            .stroke(egui::Stroke::new(1.0, BORDER)))
+            .stroke(egui::Stroke::new(1.0_f32, BORDER)))
     }
 }
 

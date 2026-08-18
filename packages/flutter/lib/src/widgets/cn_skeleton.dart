@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
-import '../tokens/spacing.dart';
 
 enum CnSkeletonVariant { text, circular, rectangular }
 
@@ -69,12 +68,8 @@ class _CnSkeletonState extends State<CnSkeleton>
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            color: CronixColors.shimmerBase,
             borderRadius: _getBorderRadius(),
-          ),
-          child: ClipRRect(
-            borderRadius: _getBorderRadius(),
-            child: LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: const [
@@ -83,12 +78,10 @@ class _CnSkeletonState extends State<CnSkeleton>
                 CronixColors.shimmerBase,
               ],
               stops: [
-                _animation.value - 0.3,
-                _animation.value,
-                _animation.value + 0.3,
-              ].map((e) => e.clamp(0.0, 1.0)).toList(),
-            ).createShader(
-              Rect.fromLTWH(0, 0, widget.width ?? 100, widget.height ?? 14),
+                (_animation.value - 0.3).clamp(0.0, 1.0),
+                _animation.value.clamp(0.0, 1.0),
+                (_animation.value + 0.3).clamp(0.0, 1.0),
+              ],
             ),
           ),
         );

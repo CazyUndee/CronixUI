@@ -3,13 +3,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnSlider">
+    <Style TargetType="local:FlSlider">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="Background" Value="{StaticResource CnSurface3Brush}"/>
         <Setter Property="Foreground" Value="{StaticResource CnAccentBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnSlider">
+                <ControlTemplate TargetType="local:FlSlider">
                     <Grid>
                         <Rectangle x:Name="Track"
                                    Fill="{TemplateBinding Background}"

@@ -3,14 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnProgressBar">
+    <Style TargetType="local:FlProgressBar">
         <Setter Property="Height" Value="4"/>
         <Setter Property="Background" Value="{StaticResource CnSurface3Brush}"/>
         <Setter Property="Foreground" Value="{StaticResource CnAccentBrush}"/>
         <Setter Property="CornerRadius" Value="2"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnProgressBar">
+                <ControlTemplate TargetType="local:FlProgressBar">
                     <Border x:Name="LayoutRoot"
                             Background="{TemplateBinding Background}"
                             CornerRadius="{TemplateBinding CornerRadius}">

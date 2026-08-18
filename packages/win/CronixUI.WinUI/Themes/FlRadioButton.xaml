@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CronixUI.Controls">
 
-    <Style TargetType="local:CnRadioButton">
+    <Style TargetType="local:FlRadioButton">
         <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
         <Setter Property="FontSize" Value="{StaticResource CnTextBase}"/>
         <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
@@ -12,7 +12,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:CnRadioButton">
+                <ControlTemplate TargetType="local:FlRadioButton">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

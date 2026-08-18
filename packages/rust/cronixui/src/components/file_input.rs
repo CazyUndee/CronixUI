@@ -29,14 +29,14 @@ impl FileInput {
 
         egui::Frame::none()
             .fill(colors.surface)
-            .stroke(egui::Stroke::new(1.0, colors.border))
-            .rounding(Rounding::same(tokens::RADIUS))
-            .inner_margin(tokens::SPACE_4)
+            .stroke(egui::Stroke::new(1.0_f32, colors.border))
+            .rounding(Rounding::same(RADIUS))
+            .inner_margin(SPACE_4)
             .show(ui, |ui| {
                 ui.vertical(|ui| {
                     ui.label(
                         RichText::new("📁 Drop files here or click to browse")
-                            .size(tokens::FONT_SIZE_BASE)
+                            .size(FONT_SIZE_BASE)
                             .color(colors.text_muted),
                     );
 
@@ -46,16 +46,16 @@ impl FileInput {
                     }
 
                     if !self.files.is_empty() {
-                        ui.add_space(tokens::SPACE_2);
+                        ui.add_space(SPACE_2);
                         ui.separator();
-                        ui.add_space(tokens::SPACE_2);
+                        ui.add_space(SPACE_2);
 
                         for file in &self.files {
                             ui.horizontal(|ui| {
                                 ui.label("📄");
                                 ui.label(
                                     RichText::new(file)
-                                        .size(tokens::FONT_SIZE_SM)
+                                        .size(FONT_SIZE_SM)
                                         .color(colors.text),
                                 );
                             });

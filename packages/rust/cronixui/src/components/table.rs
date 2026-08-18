@@ -26,16 +26,16 @@ impl<'a> Table<'a> {
             for header in &self.headers {
                 egui::Frame::none()
                     .fill(colors.surface_2)
-                    .stroke(egui::Stroke::new(1.0, colors.border))
-                    .rounding(Rounding::same(tokens::RADIUS_SM))
-                    .inner_margin(vec2(tokens::SPACE_2, tokens::SPACE_1))
+                    .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                    .rounding(Rounding::same(RADIUS_SM))
+                    .inner_margin(vec2(SPACE_2, SPACE_1))
                     .show(ui, |ui| {
                         ui.strong(*header);
                     });
             }
         });
 
-        ui.add_space(tokens::SPACE_2);
+        ui.add_space(SPACE_2);
 
         // Render rows
         for row in &self.rows {
@@ -43,9 +43,9 @@ impl<'a> Table<'a> {
                 for cell in row {
                     egui::Frame::none()
                         .fill(colors.surface)
-                        .stroke(egui::Stroke::new(1.0, colors.border))
-                        .rounding(Rounding::same(tokens::RADIUS_SM))
-                        .inner_margin(vec2(tokens::SPACE_2, tokens::SPACE_1))
+                        .stroke(egui::Stroke::new(1.0_f32, colors.border))
+                        .rounding(Rounding::same(RADIUS_SM))
+                        .inner_margin(vec2(SPACE_2, SPACE_1))
                         .show(ui, |ui| {
                             ui.label(cell);
                         });

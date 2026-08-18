@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
-import '../tokens/spacing.dart';
 
 class CnFooter extends StatelessWidget {
   final List<Widget>? leading;
