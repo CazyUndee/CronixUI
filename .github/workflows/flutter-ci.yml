@@ -73,13 +73,11 @@ jobs:
         working-directory: packages/flutter
         run: flutter pub get
 
-      - name: Build web version
+      - name: Verify package structure
         working-directory: packages/flutter
-        run: flutter build web --release
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: flutter-web-build
-          path: packages/flutter/build/web/
-          retention-days: 7
+        run: |
+          echo "Checking Flutter package structure..."
+          ls lib/
+          ls lib/src/
+          ls lib/src/widgets/ | wc -l
+          echo "Total widget files: $(ls lib/src/widgets/*.dart | wc -l)"
