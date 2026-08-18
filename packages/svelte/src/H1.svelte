@@ -1,3 +1,4 @@
+<script></script>
 <h1 class="cn-h1"><slot /></h1>
 
 <style>
