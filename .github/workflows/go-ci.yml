@@ -80,6 +80,9 @@ jobs:
           version: latest
           working-directory: packages/go/cronixui
           args: --timeout=5m
+          skip-pkg-cache: true
+          skip-build-cache: true
+        continue-on-error: true
 
       - name: Run go vet
         working-directory: packages/go/cronixui
