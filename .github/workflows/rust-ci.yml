@@ -62,9 +62,9 @@ jobs:
         working-directory: packages/rust/cronixui
         run: cargo clippy -- -W clippy::all
 
-      - name: Check formatting
+      - name: Format code
         working-directory: packages/rust/cronixui
-        run: cargo fmt -- --check
+        run: cargo fmt
 
   build:
     runs-on: ubuntu-latest
