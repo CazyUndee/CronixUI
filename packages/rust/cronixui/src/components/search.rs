@@ -78,7 +78,7 @@ impl Search {
                 .rounding(Rounding::same(RADIUS))
                 .inner_margin(SPACE_2)
                 .show(ui, |ui| {
-                    for (idx, item) in results.iter().enumerate() {
+                    for (_idx, item) in results.iter().enumerate() {
                         let response = ui.horizontal(|ui| {
                             ui.label(
                                 RichText::new(&item.title)
@@ -122,8 +122,6 @@ impl Default for Search {
 
 /// Functional search helper
 pub fn search<'a>(ui: &mut Ui, query: &mut String, items: &'a [SearchItem]) -> Vec<&'a SearchItem> {
-    let colors = Colors::default();
-
     ui.add(
         TextEdit::singleline(query)
             .hint_text("Search...")

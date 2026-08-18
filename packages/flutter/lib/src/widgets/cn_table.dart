@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../tokens/colors.dart';
+import '../tokens/spacing.dart';
 
 class CnTableColumn<T> {
   final String label;

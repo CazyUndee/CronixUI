@@ -47,9 +47,6 @@ pub fn apply_theme(ctx: &egui::Context) {
     style.visuals.faint_bg_color = colors.surface_2;
     style.visuals.code_bg_color = colors.surface_3;
     
-    // Text colors
-    style.visuals.text_color = colors.text;
-    
     // Widget colors
     style.visuals.widgets.noninteractive.bg_fill = colors.surface;
     style.visuals.widgets.noninteractive.bg_stroke.color = colors.border;
@@ -88,39 +85,4 @@ pub fn apply_theme(ctx: &egui::Context) {
     ctx.set_style(style);
 }
 
-/// Helper trait for CronixUI button variants
-pub trait CronixButton {
-    fn button_primary(&mut self, text: &str) -> egui::Response;
-    fn button_danger(&mut self, text: &str) -> egui::Response;
-    fn button_success(&mut self, text: &str) -> egui::Response;
-    fn button_ghost(&mut self, text: &str) -> egui::Response;
-    fn button_outline(&mut self, text: &str) -> egui::Response;
-}
-
-impl CronixButton for egui::Ui {
-    fn button_primary(&mut self, text: &str) -> egui::Response {
-        let colors = Colors::default();
-        self.add(egui::Button::new(text).fill(colors.accent))
-    }
-    
-    fn button_danger(&mut self, text: &str) -> egui::Response {
-        let colors = Colors::default();
-        self.add(egui::Button::new(text).fill(colors.error))
-    }
-    
-    fn button_success(&mut self, text: &str) -> egui::Response {
-        let colors = Colors::default();
-        self.add(egui::Button::new(text).fill(colors.success))
-    }
-    
-    fn button_ghost(&mut self, text: &str) -> egui::Response {
-        self.add(egui::Button::new(text).fill(Color32::TRANSPARENT))
-    }
-    
-    fn button_outline(&mut self, text: &str) -> egui::Response {
-        let colors = Colors::default();
-        self.add(egui::Button::new(text)
-            .fill(Color32::TRANSPARENT)
-            .stroke(egui::Stroke::new(1.0_f32, colors.border)))
-    }
-}
+// ButtonExt trait is defined in components::button and re-exported via components::*

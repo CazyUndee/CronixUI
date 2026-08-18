@@ -159,18 +159,28 @@ impl CommandPalette {
                         ui.add_space(SPACE_2);
 
                         // Command list
-                        let filtered = self.filter();
-                        if !filtered.is_empty() {
+                        let filtered: Vec<usize> = if self.query.is_empty() {
+                            (0..self.items.len()).collect()
+                        } else {
+                            self.items.iter().enumerate()
+                                .filter(|(_, item)| item.title.to_lowercase().contains(&self.query.to_lowercase()))
+                                .map(|(i, _)| i)
+                                .collect()
+                        };
+                        let filtered_len = filtered.len();
+                        if filtered_len > 0 {
                             // Ensure selected_index is valid
-                            if self.selected_index >= filtered.len() {
+                            if self.selected_index >= filtered_len {
                                 self.selected_index = 0;
                             }
+                            let selected_index = self.selected_index;
 
                             egui::ScrollArea::vertical()
                                 .max_height(280.0)
                                 .show(ui, |ui| {
-                                    for (idx, item) in filtered.iter().enumerate() {
-                                        let is_selected = idx == self.selected_index;
+                                    for (idx, &item_idx) in filtered.iter().enumerate() {
+                                        let item = &self.items[item_idx];
+                                        let is_selected = idx == selected_index;
 
                                         let response = ui.horizontal(|ui| {
                                             if is_selected {
@@ -217,7 +227,7 @@ impl CommandPalette {
                                         });
 
                                         if response.response.clicked() {
-                                            result = Some(idx);
+                                            result = Some(item_idx);
                                         }
                                     }
                                 });
