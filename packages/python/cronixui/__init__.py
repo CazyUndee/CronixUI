@@ -29,7 +29,7 @@ from .tokens import (
     typography, spacing, radius, shadow, transition, z_index, layout,
 )
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
 
 __all__ = [
     # Widgets
