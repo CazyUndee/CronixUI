@@ -81,7 +81,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <button
             key={idx}
             className={`cn-pagination-item ${p === activePage ? 'cn-pagination-active' : ''}`.trim()}
-            onClick={() => goTo(p)}
+            onClick={() => goTo(p as number)}
             aria-current={p === activePage ? 'page' : undefined}
           >
             {p}

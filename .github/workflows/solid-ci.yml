@@ -1,0 +1,53 @@
+name: Solid CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/solid/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/solid/**'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Verify Solid component structure
+        run: |
+          echo "Checking Solid component files..."
+          ls packages/solid/src/components/*.jsx | head -5
+          echo "Total Solid components:"
+          ls packages/solid/src/components/*.jsx | wc -l
+
+      - name: Verify Solid exports
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/solid/src/index.js', 'utf8');
+          const exports = indexContent.match(/export \{ default as \w+/g) || indexContent.match(/export \{ \w+/g);
+          console.log('Exported components:', exports ? exports.length : 0);
+          console.log('Solid package structure verified!');
+          "
+
+      - name: Validate Solid JSX syntax
+        run: |
+          for f in packages/solid/src/components/*.jsx; do
+            echo "Checking: $f"
+            # Check that each .jsx file has proper exports
+            grep -q 'export' "$f" || { echo "Missing exports in $f"; exit 1; }
+          done
+          echo "All Solid components have valid structure!"

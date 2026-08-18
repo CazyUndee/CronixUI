@@ -1,680 +1,464 @@
-"""CronixUI Form Components.
+"""CronixUI Form Components - Native tkinter implementation.
 
-Generates HTML for form inputs, textareas, checkboxes, radios, selects, sliders,
-file inputs, and form field wrappers.
-No browser DOM APIs are used - all output is HTML strings or data structures.
+This module provides native form widgets (Input, Textarea, Checkbox, Radio, Select, Slider).
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import tkinter as tk
+from tkinter import ttk
+from typing import Callable, List, Optional
+
+from .core import Frame, Label, Entry, get_theme
 
 
-@dataclass
-class FormElement:
-    """Represents a rendered form element."""
-
-    tag: str = "div"
-    classes: list[str] = field(default_factory=list)
-    attributes: dict[str, str] = field(default_factory=dict)
-    inner_html: str = ""
-
-    def render_html(self) -> str:
-        """Render as HTML string.
-
-        Returns:
-            Complete HTML for the form element
-        """
-        class_str = " ".join(self.classes)
-        class_attr = f' class="{class_str}"' if class_str else ""
-        attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
-        return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
-
-    def render(self) -> FormElement:
-        """Return self for API compatibility."""
-        return self
-
-
-class Input:
-    """Input component for text and other input types.
-
+class Input(Entry):
+    """Native text input field.
+    
     Args:
+        parent: Parent widget
         placeholder: Placeholder text
-        size: Input size - sm, md, lg (default: md)
-        error: Whether input has an error state (default: False)
-        disabled: Whether input is disabled (default: False)
-        icon: Optional SVG icon markup
-        name: Optional input name attribute
-        value: Optional initial value
-        input_type: HTML input type (text, email, password, etc.) (default: text)
-
+        **kwargs: Additional entry options
+        
     Example:
-        >>> inp = Input(placeholder="Enter your name", size="lg")
-        >>> print(inp.render_html())
-        <input class="cn-input cn-input-lg" placeholder="Enter your name" />
-
-        >>> with_icon = Input(placeholder="Search...", icon="<svg>...</svg>")
-        >>> print(with_icon.render_html())
-        <div class="cn-input-icon-wrapper">
-            <span class="cn-input-icon">...</span>
-            <input class="cn-input" placeholder="Search..." />
-        </div>
+        >>> root = tk.Tk()
+        >>> entry = Input(root, placeholder="Enter your name...")
+        >>> entry.pack()
     """
-
-    SIZES = ("sm", "md", "lg")
-
-    def __init__(
-        self,
-        placeholder: str = "",
-        size: str = "md",
-        error: bool = False,
-        disabled: bool = False,
-        icon: str | None = None,
-        name: str | None = None,
-        value: str | None = None,
-        input_type: str = "text",
-    ):
-        if size not in self.SIZES:
-            raise ValueError(f"Invalid size '{size}'. Must be one of {self.SIZES}")
-
+    
+    def __init__(self, master: tk.Misc, placeholder: str = "", **kwargs):
+        theme = get_theme()
         self.placeholder = placeholder
-        self.size = size
-        self.error = error
-        self.disabled = disabled
-        self.icon = icon
-        self.name = name
-        self.value = value
-        self.input_type = input_type
-
-    def render(self) -> FormElement:
-        """Render the input as a FormElement.
-
-        Returns:
-            FormElement representing the input
-        """
-        classes = ["cn-input"]
-        if self.size != "md":
-            classes.append(f"cn-input-{self.size}")
-        if self.error:
-            classes.append("cn-input-error")
-
-        attrs: dict[str, str] = {
-            "type": self.input_type,
-            "placeholder": self.placeholder,
-        }
-        if self.name is not None:
-            attrs["name"] = self.name
-        if self.value is not None:
-            attrs["value"] = self.value
-        if self.disabled:
-            attrs["disabled"] = ""
-
-        attrs_str = "".join(f' {k}="{v}"' for k, v in attrs.items())
-        inner = f"<input{attrs_str} />"
-
-        if self.icon:
-            wrapper_classes = "cn-input-icon-wrapper"
-            icon_html = f'<span class="cn-input-icon">{self.icon}</span>'
-            inner = f'<div class="{wrapper_classes}">{icon_html}{inner}</div>'
-
-        return FormElement(inner_html=inner)
-
-    def render_html(self) -> str:
-        """Render the input as an HTML string.
-
-        Returns:
-            HTML string representation of the input
-        """
-        return self.render().render_html()
+        self.placeholder_active = False
+        
+        # Configure entry
+        kwargs.setdefault('bg', theme.surface_2)
+        kwargs.setdefault('fg', theme.text)
+        kwargs.setdefault('insertbackground', theme.text)
+        kwargs.setdefault('font', (theme.font_family, 12))
+        kwargs.setdefault('relief', 'flat')
+        kwargs.setdefault('borderwidth', 1)
+        kwargs.setdefault('highlightbackground', theme.surface_3)
+        kwargs.setdefault('highlightthickness', 1)
+        
+        super().__init__(master, **kwargs)
+        
+        # Show placeholder if empty
+        if placeholder:
+            self._show_placeholder()
+            self.bind('<FocusIn>', self._on_focus_in)
+            self.bind('<FocusOut>', self._on_focus_out)
+    
+    def _show_placeholder(self) -> None:
+        """Show placeholder text."""
+        if not self.get():
+            self.placeholder_active = True
+            self.configure(fg='#666666')
+            self.insert(0, self.placeholder)
+            self.icursor(0)
+    
+    def _hide_placeholder(self) -> None:
+        """Hide placeholder text."""
+        if self.placeholder_active:
+            self.placeholder_active = False
+            self.delete(0, 'end')
+            self.configure(fg=get_theme().text)
+    
+    def _on_focus_in(self, event) -> None:
+        self._hide_placeholder()
+    
+    def _on_focus_out(self, event) -> None:
+        self._show_placeholder()
+    
+    def get_value(self) -> str:
+        """Get current value (excluding placeholder)."""
+        if self.placeholder_active:
+            return ""
+        return self.get()
 
 
-class Textarea:
-    """Textarea component for multi-line text input.
-
+class Textarea(Frame):
+    """Native multiline text input.
+    
     Args:
+        parent: Parent widget
         placeholder: Placeholder text
-        rows: Number of visible rows (default: 4)
-        name: Optional name attribute
-        disabled: Whether textarea is disabled (default: False)
-
+        height: Number of lines high
+        **kwargs: Additional options
+        
     Example:
-        >>> ta = Textarea(placeholder="Write your message...", rows=6)
-        >>> print(ta.render_html())
-        <textarea class="cn-input cn-textarea" placeholder="Write your message..." rows="6">
-        </textarea>
+        >>> root = tk.Tk()
+        >>> textarea = Textarea(root, placeholder="Enter text...", height=5)
+        >>> textarea.pack()
     """
-
+    
     def __init__(
         self,
+        master: tk.Misc,
         placeholder: str = "",
-        rows: int = 4,
-        name: str | None = None,
-        disabled: bool = False,
+        height: int = 4,
+        **kwargs
     ):
-        if rows < 1:
-            raise ValueError("rows must be at least 1")
-
+        super().__init__(master, **kwargs)
+        
+        theme = get_theme()
         self.placeholder = placeholder
-        self.rows = rows
-        self.name = name
-        self.disabled = disabled
+        self.placeholder_active = False
+        
+        # Text widget with scrollbar
+        self.text = tk.Text(
+            self,
+            bg=theme.surface_2,
+            fg=theme.text,
+            insertbackground=theme.text,
+            font=(theme.font_family, 12),
+            relief='flat',
+            borderwidth=1,
+            highlightbackground=theme.surface_3,
+            highlightthickness=1,
+            height=height,
+            wrap='word'
+        )
+        
+        self.scrollbar = tk.Scrollbar(self, command=self.text.yview)
+        self.text.configure(yscrollcommand=self.scrollbar.set)
+        
+        self.text.pack(side='left', fill='both', expand=True)
+        self.scrollbar.pack(side='right', fill='y')
+        
+        # Show placeholder
+        if placeholder:
+            self._show_placeholder()
+            self.text.bind('<FocusIn>', self._on_focus_in)
+            self.text.bind('<FocusOut>', self._on_focus_out)
+    
+    def _show_placeholder(self) -> None:
+        """Show placeholder text."""
+        if not self.text.get('1.0', 'end-1c').strip():
+            self.placeholder_active = True
+            self.text.configure(fg='#666666')
+            self.text.insert('1.0', self.placeholder)
+            self.text.tag_add('placeholder', '1.0', 'end')
+    
+    def _hide_placeholder(self) -> None:
+        """Hide placeholder text."""
+        if self.placeholder_active:
+            self.placeholder_active = False
+            self.text.delete('1.0', 'end')
+            self.text.configure(fg=get_theme().text)
+    
+    def _on_focus_in(self, event) -> None:
+        self._hide_placeholder()
+    
+    def _on_focus_out(self, event) -> None:
+        self._show_placeholder()
+    
+    def get_value(self) -> str:
+        """Get current value."""
+        if self.placeholder_active:
+            return ""
+        return self.text.get('1.0', 'end-1c')
 
-    def render(self) -> FormElement:
-        """Render the textarea as a FormElement.
 
-        Returns:
-            FormElement representing the textarea
-        """
-        attrs: dict[str, str] = {
-            "placeholder": self.placeholder,
-            "rows": str(self.rows),
-        }
-        if self.name is not None:
-            attrs["name"] = self.name
-        if self.disabled:
-            attrs["disabled"] = ""
-
-        attrs_str = "".join(f' {k}="{v}"' for k, v in attrs.items())
-        inner = f'<textarea class="cn-input cn-textarea"{attrs_str}></textarea>'
-
-        return FormElement(inner_html=inner)
-
-    def render_html(self) -> str:
-        """Render the textarea as an HTML string.
-
-        Returns:
-            HTML string representation of the textarea
-        """
-        return self.render().render_html()
-
-
-class FormField:
-    """Form field wrapper with label, error message, and help text.
-
+class Checkbox(Frame):
+    """Native checkbox widget.
+    
     Args:
-        label: Field label text
-        input_component: An Input, Textarea, or any component with render_html()
-        error: Optional error message text
-        help_text: Optional help/description text
-        required: Whether to mark the field as required (default: False)
-
+        parent: Parent widget
+        label: Checkbox label
+        initial_state: Initial state (True/False)
+        on_change: Callback when state changes
+        
     Example:
-        >>> field = FormField(
-        ...     label="Email",
-        ...     input_component=Input(placeholder="you@example.com"),
-        ...     help_text="We'll never share your email.",
-        ... )
-        >>> print(field.render_html())
-        <div class="cn-form-group">
-            <label class="cn-form-label">Email</label>
-            <input class="cn-input" placeholder="you@example.com" />
-            <span class="cn-form-help">We'll never share your email.</span>
-        </div>
+        >>> root = tk.Tk()
+        >>> cb = Checkbox(root, label="Accept terms", on_change=lambda s: print(s))
+        >>> cb.pack()
     """
-
+    
     def __init__(
         self,
-        label: str,
-        input_component: Input | Textarea | Checkbox | Radio | Select | Slider | HasRenderHtml,
-        error: str | None = None,
-        help_text: str | None = None,
-        required: bool = False,
+        master: tk.Misc,
+        label: str = "",
+        initial_state: bool = False,
+        on_change: Optional[Callable[[bool], None]] = None,
+        **kwargs
     ):
-        if not label:
-            raise ValueError("label cannot be empty")
-
-        self.label = label
-        self.input = input_component
-        self.error = error
-        self.help_text = help_text
-        self.required = required
-
-    def render(self) -> FormElement:
-        """Render the form field as a FormElement.
-
-        Returns:
-            FormElement wrapping the label, input, and optional messages
-        """
-        required_mark = ' <span class="cn-form-required">*</span>' if self.required else ""
-        label_text = f"{self._esc(self.label)}{required_mark}"
-
-        if hasattr(self.input, "render_html"):
-            input_html = self.input.render_html()
-        else:
-            input_html = str(self.input)
-
-        parts = [
-            f'<label class="cn-form-label">{label_text}</label>',
-            input_html,
-        ]
-
-        if self.error:
-            parts.append(f'<span class="cn-form-error">{self._esc(self.error)}</span>')
-
-        if self.help_text:
-            parts.append(f'<span class="cn-form-help">{self._esc(self.help_text)}</span>')
-
-        return FormElement(
-            classes=["cn-form-group"],
-            inner_html="".join(parts),
+        super().__init__(master, **kwargs)
+        
+        self.var = tk.BooleanVar(value=initial_state)
+        self.on_change = on_change
+        
+        theme = get_theme()
+        
+        self.checkbutton = tk.Checkbutton(
+            self,
+            text=label,
+            variable=self.var,
+            command=self._on_change,
+            bg=theme.surface,
+            fg=theme.text,
+            selectcolor=theme.surface_3,
+            activebackground=theme.surface,
+            activeforeground=theme.text,
+            font=(theme.font_family, 12),
+            relief='flat',
+            highlightthickness=0
         )
-
-    def render_html(self) -> str:
-        """Render the form field as an HTML string.
-
-        Returns:
-            HTML string representation of the form field
-        """
-        return self.render().render_html()
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
+        self.checkbutton.pack(anchor='w')
+    
+    def _on_change(self) -> None:
+        if self.on_change:
+            self.on_change(self.var.get())
+    
+    def get_state(self) -> bool:
+        return self.var.get()
+    
+    def set_state(self, state: bool) -> None:
+        self.var.set(state)
 
 
-class Checkbox:
-    """Checkbox component with label.
-
+class Radio(Frame):
+    """Native radio button group.
+    
     Args:
-        label: Checkbox label text
-        checked: Whether checkbox is initially checked (default: False)
-        disabled: Whether checkbox is disabled (default: False)
-        name: Optional name attribute
-
+        parent: Parent widget
+        options: List of option strings
+        initial: Initial selection
+        on_change: Callback when selection changes
+        
     Example:
-        >>> cb = Checkbox("Accept terms", checked=True)
-        >>> print(cb.render_html())
-        <label class="cn-checkbox">
-            <input type="checkbox" checked="" />
-            <span class="cn-checkbox-box"></span>
-            <span class="cn-checkbox-label">Accept terms</span>
-        </label>
+        >>> root = tk.Tk()
+        >>> radio = Radio(root, options=["A", "B", "C"], on_change=lambda s: print(s))
+        >>> radio.pack()
     """
-
+    
     def __init__(
         self,
-        label: str,
-        checked: bool = False,
-        disabled: bool = False,
-        name: str | None = None,
+        master: tk.Misc,
+        options: List[str] = None,
+        initial: str = "",
+        on_change: Optional[Callable[[str], None]] = None,
+        **kwargs
     ):
-        if not label:
-            raise ValueError("label cannot be empty")
-
-        self.label = label
-        self.checked = checked
-        self.disabled = disabled
-        self.name = name
-
-    def render(self) -> FormElement:
-        """Render the checkbox as a FormElement.
-
-        Returns:
-            FormElement representing the checkbox
-        """
-        attrs: dict[str, str] = {"type": "checkbox"}
-        if self.name is not None:
-            attrs["name"] = self.name
-        if self.checked:
-            attrs["checked"] = ""
-        if self.disabled:
-            attrs["disabled"] = ""
-
-        attrs_str = "".join(f' {k}="{v}"' for k, v in attrs.items())
-
-        label_classes = "cn-checkbox"
-        if self.disabled:
-            label_classes += " disabled"
-
-        inner = (
-            f'<label class="{label_classes}">'
-            f"<input{attrs_str} />"
-            f'<span class="cn-checkbox-box"></span>'
-            f'<span class="cn-checkbox-label">{self._esc(self.label)}</span>'
-            f"</label>"
-        )
-
-        return FormElement(inner_html=inner)
-
-    def render_html(self) -> str:
-        """Render the checkbox as an HTML string.
-
-        Returns:
-            HTML string representation of the checkbox
-        """
-        return self.render().render_html()
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
-
-
-class Radio:
-    """Radio button group component.
-
-    Args:
-        name: Radio group name (shared name attribute)
-        options: List of (value, label) tuples or plain strings
-        selected: Currently selected value
-        disabled: Whether entire group is disabled (default: False)
-
-    Example:
-        >>> radio = Radio("color", [("red", "Red"), ("blue", "Blue")], selected="red")
-        >>> print(radio.render_html())
-    """
-
-    def __init__(
-        self,
-        name: str,
-        options: list[tuple[str, str] | str],
-        selected: str | None = None,
-        disabled: bool = False,
-    ):
-        if not name:
-            raise ValueError("name cannot be empty")
-        if not options:
-            raise ValueError("options cannot be empty")
-
-        self.name = name
-        self.options = options
-        self.selected = selected
-        self.disabled = disabled
-
-    def render(self) -> FormElement:
-        """Render the radio group as a FormElement.
-
-        Returns:
-            FormElement containing all radio options
-        """
-        parts = []
+        super().__init__(master, **kwargs)
+        
+        self.options = options or []
+        self.var = tk.StringVar(value=initial)
+        self.on_change = on_change
+        
+        theme = get_theme()
+        
         for option in self.options:
-            if isinstance(option, tuple):
-                value, label = option
-            else:
-                value = label = option
-
-            input_attrs: dict[str, str] = {
-                "type": "radio",
-                "name": self.name,
-                "value": value,
-            }
-            if value == self.selected:
-                input_attrs["checked"] = ""
-            if self.disabled:
-                input_attrs["disabled"] = ""
-
-            attrs_str = "".join(f' {k}="{v}"' for k, v in input_attrs.items())
-
-            parts.append(
-                f'<label class="cn-radio">'
-                f"<input{attrs_str} />"
-                f'<span class="cn-radio-box"></span>'
-                f'<span class="cn-radio-label">{self._esc(label)}</span>'
-                f"</label>"
+            rb = tk.Radiobutton(
+                self,
+                text=option,
+                variable=self.var,
+                value=option,
+                command=self._on_change,
+                bg=theme.surface,
+                fg=theme.text,
+                selectcolor=theme.surface_3,
+                activebackground=theme.surface,
+                activeforeground=theme.text,
+                font=(theme.font_family, 12),
+                relief='flat',
+                highlightthickness=0
             )
-
-        return FormElement(inner_html="".join(parts))
-
-    def render_html(self) -> str:
-        """Render the radio group as an HTML string.
-
-        Returns:
-            HTML string representation of the radio group
-        """
-        return self.render().render_html()
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
+            rb.pack(anchor='w')
+    
+    def _on_change(self) -> None:
+        if self.on_change:
+            self.on_change(self.var.get())
+    
+    def get_value(self) -> str:
+        return self.var.get()
+    
+    def set_value(self, value: str) -> None:
+        self.var.set(value)
 
 
-class Select:
-    """Select dropdown component.
-
+class Select(Frame):
+    """Native dropdown select.
+    
     Args:
-        options: List of (value, label) tuples or plain strings
-        placeholder: Optional placeholder/disabled first option
-        name: Optional name attribute
-        disabled: Whether select is disabled (default: False)
-
+        parent: Parent widget
+        options: List of option strings
+        placeholder: Placeholder text
+        on_change: Callback when selection changes
+        
     Example:
-        >>> sel = Select(
-        ...     options=[("1", "One"), ("2", "Two")],
-        ...     placeholder="Choose...",
-        ... )
-        >>> print(sel.render_html())
+        >>> root = tk.Tk()
+        >>> select = Select(root, options=["Option 1", "Option 2"], on_change=lambda s: print(s))
+        >>> select.pack()
     """
-
+    
     def __init__(
         self,
-        options: list[tuple[str, str] | str],
-        placeholder: str = "",
-        name: str | None = None,
-        disabled: bool = False,
+        master: tk.Misc,
+        options: List[str] = None,
+        placeholder: str = "Select...",
+        on_change: Optional[Callable[[str], None]] = None,
+        **kwargs
     ):
-        if not options:
-            raise ValueError("options cannot be empty")
-
-        self.options = options
+        super().__init__(master, **kwargs)
+        
+        self.options = options or []
         self.placeholder = placeholder
-        self.name = name
-        self.disabled = disabled
-
-    def render(self) -> FormElement:
-        """Render the select as a FormElement.
-
-        Returns:
-            FormElement representing the select dropdown
-        """
-        parts = []
-
-        select_attrs: dict[str, str] = {}
-        if self.name is not None:
-            select_attrs["name"] = self.name
-        if self.disabled:
-            select_attrs["disabled"] = ""
-
-        attrs_str = "".join(f' {k}="{v}"' for k, v in select_attrs.items())
-        attrs_str = f' class="cn-select"{attrs_str}' if attrs_str else ' class="cn-select"'
-
-        if self.placeholder:
-            parts.append(
-                f'<option value="" disabled selected>{self._esc(self.placeholder)}</option>'
-            )
-
-        for option in self.options:
-            if isinstance(option, tuple):
-                value, label = option
-            else:
-                value = label = option
-
-            parts.append(f'<option value="{self._esc(value)}">{self._esc(label)}</option>')
-
-        inner = f"<select{attrs_str}>{''.join(parts)}</select>"
-
-        return FormElement(
-            classes=["cn-select-wrapper"],
-            inner_html=inner,
+        self.on_change = on_change
+        
+        theme = get_theme()
+        
+        self.var = tk.StringVar()
+        self.combobox = ttk.Combobox(
+            self,
+            textvariable=self.var,
+            values=self.options,
+            state='readonly',
+            font=(theme.font_family, 12)
         )
+        self.combobox.pack(fill='x')
+        
+        # Set placeholder
+        if placeholder:
+            self.var.set(placeholder)
+        
+        # Bind selection
+        self.combobox.bind('<<ComboboxSelected>>', self._on_change)
+    
+    def _on_change(self, event) -> None:
+        if self.on_change:
+            value = self.var.get()
+            if value != self.placeholder:
+                self.on_change(value)
+    
+    def get_value(self) -> str:
+        value = self.var.get()
+        if value == self.placeholder:
+            return ""
+        return value
+    
+    def set_value(self, value: str) -> None:
+        self.var.set(value)
 
-    def render_html(self) -> str:
-        """Render the select as an HTML string.
 
-        Returns:
-            HTML string representation of the select dropdown
-        """
-        return self.render().render_html()
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
-
-
-class Slider:
-    """Slider (range input) component.
-
+class Slider(Frame):
+    """Native slider widget.
+    
     Args:
-        min: Minimum value (default: 0)
-        max: Maximum value (default: 100)
-        value: Initial value (default: 50)
-        name: Optional name attribute
-        step: Optional step value
-
+        parent: Parent widget
+        min_value: Minimum value
+        max_value: Maximum value
+        initial: Initial value
+        on_change: Callback when value changes
+        
     Example:
-        >>> slider = Slider(min=0, max=100, value=50)
-        >>> print(slider.render_html())
-        <input class="cn-slider" type="range" min="0" max="100" value="50" />
+        >>> root = tk.Tk()
+        >>> slider = Slider(root, min_value=0, max_value=100, on_change=lambda v: print(v))
+        >>> slider.pack()
     """
-
+    
     def __init__(
         self,
-        min: float = 0,
-        max: float = 100,
-        value: float = 50,
-        name: str | None = None,
-        step: float | None = None,
+        master: tk.Misc,
+        min_value: float = 0,
+        max_value: float = 100,
+        initial: float = 50,
+        on_change: Optional[Callable[[float], None]] = None,
+        **kwargs
     ):
-        if min >= max:
-            raise ValueError("min must be less than max")
-        if value < min or value > max:
-            raise ValueError("value must be between min and max")
-
-        self.min = min
-        self.max = max
-        self.value = value
-        self.name = name
-        self.step = step
-
-    def render(self) -> FormElement:
-        """Render the slider as a FormElement.
-
-        Returns:
-            FormElement representing the range input
-        """
-        attrs: dict[str, str] = {
-            "type": "range",
-            "min": str(self.min),
-            "max": str(self.max),
-            "value": str(self.value),
-        }
-        if self.name is not None:
-            attrs["name"] = self.name
-        if self.step is not None:
-            attrs["step"] = str(self.step)
-
-        attrs_str = "".join(f' {k}="{v}"' for k, v in attrs.items())
-        inner = f'<input class="cn-slider"{attrs_str} />'
-
-        return FormElement(inner_html=inner)
-
-    def render_html(self) -> str:
-        """Render the slider as an HTML string.
-
-        Returns:
-            HTML string representation of the slider
-        """
-        return self.render().render_html()
+        super().__init__(master, **kwargs)
+        
+        self.min_value = min_value
+        self.max_value = max_value
+        self.on_change = on_change
+        
+        theme = get_theme()
+        
+        self.var = tk.DoubleVar(value=initial)
+        
+        self.scale = tk.Scale(
+            self,
+            from_=min_value,
+            to=max_value,
+            variable=self.var,
+            orient='horizontal',
+            command=self._on_change,
+            bg=theme.surface,
+            fg=theme.text,
+            troughcolor=theme.surface_3,
+            highlightthickness=0,
+            font=(theme.font_family, 10)
+        )
+        self.scale.pack(fill='x')
+    
+    def _on_change(self, value) -> None:
+        if self.on_change:
+            self.on_change(float(value))
+    
+    def get_value(self) -> float:
+        return self.var.get()
+    
+    def set_value(self, value: float) -> None:
+        self.var.set(value)
 
 
-class FileInput:
-    """File input component with drag-and-drop styling.
-
+class FileInput(Frame):
+    """Native file input widget.
+    
     Args:
-        accept: Accepted file types (e.g. ".png,.jpg")
-        multiple: Whether multiple files can be selected (default: False)
-        name: Optional name attribute
-
+        parent: Parent widget
+        on_select: Callback when file is selected
+        
     Example:
-        >>> file = FileInput(accept=".png,.jpg", multiple=True)
-        >>> print(file.render_html())
+        >>> root = tk.Tk()
+        >>> file_input = FileInput(root, on_select=lambda p: print(p))
+        >>> file_input.pack()
     """
-
-    _UPLOAD_ICON = (
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">'
-        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>'
-        '<polyline points="17 8 12 3 7 8"/>'
-        '<line x1="12" y1="3" x2="12" y2="15"/>'
-        "</svg>"
-    )
-
+    
     def __init__(
         self,
-        accept: str = "",
-        multiple: bool = False,
-        name: str | None = None,
+        master: tk.Misc,
+        on_select: Optional[Callable[[str], None]] = None,
+        **kwargs
     ):
-        self.accept = accept
-        self.multiple = multiple
-        self.name = name
-
-    def render(self) -> FormElement:
-        """Render the file input as a FormElement.
-
-        Returns:
-            FormElement representing the file input with label
-        """
-        input_attrs: dict[str, str] = {"type": "file"}
-        if self.name is not None:
-            input_attrs["name"] = self.name
-        if self.accept:
-            input_attrs["accept"] = self.accept
-        if self.multiple:
-            input_attrs["multiple"] = ""
-
-        input_attrs_str = "".join(f' {k}="{v}"' for k, v in input_attrs.items())
-
-        inner = (
-            f'<div class="cn-file-input">'
-            f"<input{input_attrs_str} />"
-            f'<div class="cn-file-input-label">'
-            f'<div class="cn-file-input-icon">{self._UPLOAD_ICON}</div>'
-            f'<div class="cn-file-input-text">Drag and drop or <span>browse</span></div>'
-            f"</div>"
-            f"</div>"
+        super().__init__(master, **kwargs)
+        
+        self.on_select = on_select
+        self.file_path = ""
+        
+        theme = get_theme()
+        
+        # Path display
+        self.path_var = tk.StringVar(value="No file selected")
+        self.path_label = Label(
+            self,
+            textvariable=self.path_var,
+            font=(theme.font_family, 11),
+            bg=theme.surface,
+            fg=theme.text_muted if hasattr(theme, 'text_muted') else theme.text,
+            anchor='w'
         )
-
-        return FormElement(inner_html=inner)
-
-    def render_html(self) -> str:
-        """Render the file input as an HTML string.
-
-        Returns:
-            HTML string representation of the file input
-        """
-        return self.render().render_html()
-
-
-class HasRenderHtml:
-    """Protocol-like base for type hints: any object with render_html()."""
-
-    def render_html(self) -> str:
-        """Render as HTML string."""
-        return ""
+        self.path_label.pack(side='left', fill='x', expand=True)
+        
+        # Browse button
+        from .button import Button
+        self.browse_btn = Button(
+            self,
+            text="Browse",
+            command=self._browse,
+            variant="default"
+        )
+        self.browse_btn.pack(side='right')
+    
+    def _browse(self) -> None:
+        """Open file dialog."""
+        from tkinter import filedialog
+        path = filedialog.askopenfilename()
+        if path:
+            self.file_path = path
+            self.path_var.set(path)
+            if self.on_select:
+                self.on_select(path)
+    
+    def get_value(self) -> str:
+        return self.file_path

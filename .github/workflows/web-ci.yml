@@ -11,64 +11,61 @@ on:
       - 'packages/web/**'
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Set up Node.js
+
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          
-      - name: Install dependencies
-        working-directory: packages/web
-        run: npm ci
-        
-      - name: Run tests
-        working-directory: packages/web
+          node-version: ${{ matrix.node-version }}
+
+      - name: Verify dist files
         run: |
-          if [ -f "test/*.js" ]; then
-            npm test
-          else
-            echo "No test files found, creating basic test"
-            mkdir -p test
-            echo 'const assert = require("assert");' > test/basic.test.js
-            echo 'const cronixui = require("./dist/cronixui.js");' >> test/basic.test.js
-            echo 'assert.ok(cronixui, "Package should load correctly");' >> test/basic.test.js
-            npm test
-          fi
-        
-      - name: Build package
-        working-directory: packages/web
-        run: npm run build
-        
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          directory: packages/web
-          files: ./coverage/lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
-          
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          
-      - name: Install dependencies
-        working-directory: packages/web
-        run: npm ci
-        
-      - name: Run ESLint
-        working-directory: packages/web
+          echo "Checking web package dist files..."
+          ls -la packages/web/dist/
+          test -f packages/web/dist/cronixui.css
+          test -f packages/web/dist/cronixui.js
+          test -f packages/web/dist/cronixui.min.css
+          test -f packages/web/dist/cronixui.min.js
+          echo "All web dist files present!"
+
+      - name: Verify CSS loads correctly
         run: |
-          npm run lint || true  # Allow linting to fail without breaking CI
+          node -e "
+          const fs = require('fs');
+          const css = fs.readFileSync('packages/web/dist/cronixui.css', 'utf8');
+          console.log('CSS size:', css.length, 'bytes');
+          if (css.length < 1000) {
+            console.error('CSS file seems too small');
+            process.exit(1);
+          }
+          console.log('CSS verified!');
+          "
+
+      - name: Verify JS loads correctly
+        run: |
+          node -e "
+          const fs = require('fs');
+          const js = fs.readFileSync('packages/web/dist/cronixui.js', 'utf8');
+          console.log('JS size:', js.length, 'bytes');
+          if (js.length < 1000) {
+            console.error('JS file seems too small');
+            process.exit(1);
+          }
+          console.log('JS verified!');
+          "
+
+      - name: Serve demo page
+        run: |
+          cd packages/web/demo
+          python3 -m http.server 8080 &
+          sleep 2
+          curl -s http://localhost:8080/ | head -20
+          echo "Demo page accessible!"

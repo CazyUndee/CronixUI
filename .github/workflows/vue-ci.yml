@@ -1,0 +1,58 @@
+name: Vue CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/vue/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/vue/**'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Verify Vue component structure
+        run: |
+          echo "Checking Vue component files..."
+          ls packages/vue/src/components/*.vue | head -5
+          echo "Total Vue components:"
+          ls packages/vue/src/components/*.vue | wc -l
+
+      - name: Verify Vue exports
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/vue/src/index.js', 'utf8');
+          const exports = indexContent.match(/export \{ default as \w+/g);
+          console.log('Exported components:', exports.length);
+          if (exports.length < 10) {
+            console.error('Expected at least 10 exports');
+            process.exit(1);
+          }
+          console.log('Vue package structure verified!');
+          "
+
+      - name: Validate Vue SFC syntax
+        run: |
+          for f in packages/vue/src/components/*.vue; do
+            echo "Checking: $f"
+            # Check that each .vue file has <template> and <script>
+            grep -q '<template>' "$f" || { echo "Missing <template> in $f"; exit 1; }
+            grep -q '<script' "$f" || { echo "Missing <script> in $f"; exit 1; }
+          done
+          echo "All Vue SFCs have valid structure!"

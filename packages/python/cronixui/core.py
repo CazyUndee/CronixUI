@@ -1,229 +1,254 @@
-"""Core CronixUI functions - HTML string generation utilities.
+"""Core CronixUI functions - Native tkinter GUI utilities.
 
-This module provides helper functions and dataclasses for generating HTML
-as strings or structured data. It does NOT use browser DOM APIs.
+This module provides the foundation for native GUI components using tkinter.
+All components render actual native widgets, not HTML.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Union
+import tkinter as tk
+from tkinter import ttk, font
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+
+from .tokens import (
+    BG, SURFACE, SURFACE_2, SURFACE_3, SURFACE_4,
+    TEXT, TEXT_MUTED, ACCENT, ACCENT_HOVER, SUCCESS, ERROR, WARNING, INFO,
+)
 
 
-def escape_html(text: str) -> str:
-    """Escape HTML special characters in text.
-
-    Args:
-        text: Raw text that may contain HTML special characters
-
-    Returns:
-        Text with HTML special characters escaped
-
-    Example:
-        >>> escape_html("<script>alert('xss')</script>")
-        '&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;'
-    """
-    return (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-        .replace("'", "&#x27;")
-    )
+def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
+    """Convert hex color string to RGB tuple."""
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
 
-def classes(*names: Union[str, None], **flags: bool) -> str:
-    """Build a CSS class string from names and conditional flags.
-
-    Args:
-        *names: Always-included class names (None values are skipped)
-        **flags: Conditional class names (key is class suffix, value is boolean)
-
-    Returns:
-        Space-separated class string
-
-    Example:
-        >>> classes("cn-btn", "cn-btn-primary", active=True, disabled=False)
-        'cn-btn cn-btn-primary cn-btn-active'
-        >>> classes("cn-btn", size="lg")  # size is truthy string, adds nothing
-        'cn-btn'
-    """
-    parts = [n for n in names if n]
-    parts.extend(f"cn-{k}" for k, v in flags.items() if v)
-    return " ".join(parts)
+def rgb_to_hex(r: int, g: int, b: int) -> str:
+    """Convert RGB values to hex color string."""
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 
-def attrs(**kwargs: Union[str, None]) -> str:
-    """Build an HTML attribute string from keyword arguments.
-
-    Args:
-        **kwargs: Attribute name-value pairs (None values are skipped)
-
-    Returns:
-        Space-separated attribute string, each as name="value"
-
-    Example:
-        >>> attrs(type="text", placeholder="Enter name", disabled="")
-        'type="text" placeholder="Enter name" disabled=""'
-    """
-    parts = []
-    for name, value in kwargs.items():
-        if value is not None:
-            attr_name = name.replace("_", "-")
-            parts.append(f'{attr_name}="{value}"')
-    result = " ".join(parts)
-    return f" {result}" if result else ""
+def blend_colors(color1: str, color2: str, factor: float) -> str:
+    """Blend two hex colors together."""
+    r1, g1, b1 = hex_to_rgb(color1)
+    r2, g2, b2 = hex_to_rgb(color2)
+    r = int(r1 + (r2 - r1) * factor)
+    g = int(g1 + (g2 - g1) * factor)
+    b = int(b1 + (b2 - b1) * factor)
+    return rgb_to_hex(r, g, b)
 
 
-@dataclass
-class HtmlElement:
-    """Represents a rendered HTML element as a data structure.
+class Theme:
+    """CronixUI theme configuration for tkinter."""
+    
+    def __init__(self):
+        # Colors from tokens
+        self.bg = BG.hex
+        self.surface = SURFACE.hex
+        self.surface_2 = SURFACE_2.hex
+        self.surface_3 = SURFACE_3.hex
+        self.surface_4 = SURFACE_4.hex
+        self.text = TEXT.hex
+        self.accent = ACCENT.hex
+        self.accent_hover = ACCENT_HOVER.hex
+        self.success = SUCCESS.hex
+        self.error = ERROR.hex
+        self.warning = WARNING.hex
+        self.info = INFO.hex
+        
+        # Typography
+        self.font_family = "Segoe UI"
+        self.font_size = 12
+        self.font_bold = (self.font_family, self.font_size, "bold")
+        self.font_normal = (self.font_family, self.font_size)
+        self.font_small = (self.font_family, 10)
+        
+        # Spacing
+        self.padding = 8
+        self.padding_large = 16
+        
+        # Border radius (approximated for tkinter)
+        self.border_width = 1
+        self.border_radius = 10
 
-    This is the core building block for component rendering. Components
-    return HtmlElement instances from their render() method.
 
-    Attributes:
-        tag: HTML tag name (e.g. "div", "span", "button")
-        classes: List of CSS class names
-        attributes: Dictionary of HTML attributes
-        text: Text content (escaped automatically in render_html)
-        inner_html: Raw HTML content (NOT escaped, use carefully)
-        children: Nested child HtmlElement instances
+# Global theme instance
+_theme = Theme()
 
-    Example:
-        >>> el = HtmlElement(
-        ...     tag="div",
-        ...     classes=["cn-card"],
-        ...     attributes={"data-id": "123"},
-        ...     text="Hello"
-        ... )
-        >>> print(el.render_html())
-        <div class="cn-card" data-id="123">Hello</div>
-    """
 
-    tag: str
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
-    text: str = ""
-    inner_html: str = ""
-    children: List[HtmlElement] = field(default_factory=list)
+def get_theme() -> Theme:
+    """Get the current theme."""
+    return _theme
 
-    def render_html(self) -> str:
-        """Render this element and all children as an HTML string.
 
-        Returns:
-            Complete HTML string for this element tree
-        """
-        class_str = " ".join(self.classes)
-        class_attr = f' class="{class_str}"' if class_str else ""
-        attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
+def set_theme(theme: Theme) -> None:
+    """Set a custom theme."""
+    global _theme
+    _theme = theme
 
-        if self.inner_html:
-            content = self.inner_html
-        elif self.text:
-            content = escape_html(self.text)
-        elif self.children:
-            content = "".join(child.render_html() for child in self.children)
+
+class CronixWidget:
+    """Base class for all CronixUI widgets."""
+    
+    def __init__(self, master: tk.Misc, **kwargs):
+        self.master = master
+        self.theme = get_theme()
+        self._widget: Optional[tk.Widget] = None
+        
+    def pack(self, **kwargs):
+        """Pack the widget."""
+        if self._widget:
+            self._widget.pack(**kwargs)
+            
+    def grid(self, **kwargs):
+        """Grid the widget."""
+        if self._widget:
+            self._widget.grid(**kwargs)
+            
+    def place(self, **kwargs):
+        """Place the widget."""
+        if self._widget:
+            self._widget.place(**kwargs)
+            
+    def destroy(self):
+        """Destroy the widget."""
+        if self._widget:
+            self._widget.destroy()
+
+
+class Frame(tk.Frame):
+    """Themed frame widget."""
+    
+    def __init__(self, master=None, **kwargs):
+        theme = get_theme()
+        kwargs.setdefault('bg', theme.surface)
+        kwargs.setdefault('highlightthickness', 0)
+        super().__init__(master, **kwargs)
+
+
+class Label(tk.Label):
+    """Themed label widget."""
+    
+    def __init__(self, master=None, **kwargs):
+        theme = get_theme()
+        kwargs.setdefault('bg', theme.surface)
+        kwargs.setdefault('fg', theme.text)
+        kwargs.setdefault('font', theme.font_normal)
+        super().__init__(master, **kwargs)
+
+
+class Button(tk.Button):
+    """Themed button widget."""
+    
+    def __init__(self, master=None, variant: str = "default", **kwargs):
+        theme = get_theme()
+        
+        # Set colors based on variant
+        if variant == "primary":
+            bg = theme.accent
+            fg = theme.text
+        elif variant == "danger":
+            bg = theme.error
+            fg = theme.text
+        elif variant == "success":
+            bg = theme.success
+            fg = theme.text
+        elif variant == "ghost":
+            bg = theme.surface
+            fg = theme.text
         else:
-            return f"<{self.tag}{class_attr}{attrs_str} />"
-
-        return f"<{self.tag}{class_attr}{attrs_str}>{content}</{self.tag}>"
-
-    def render(self) -> HtmlElement:
-        """Return self (for API compatibility with components).
-
-        Returns:
-            This HtmlElement instance
-        """
-        return self
-
-
-@dataclass
-class ComponentGroup:
-    """Represents a group of components wrapped in a container.
-
-    Useful for rendering multiple components together.
-
-    Attributes:
-        tag: Container tag name (default: "div")
-        classes: CSS classes for the container
-        children: List of components or HtmlElements
-
-    Example:
-        >>> group = ComponentGroup(
-        ...     classes="cn-stack",
-        ...     children=[Button("A"), Button("B")]
-        ... )
-        >>> print(group.render_html())
-    """
-
-    tag: str = "div"
-    classes: List[str] = field(default_factory=list)
-    attributes: Dict[str, str] = field(default_factory=dict)
-    children: List[Union[HtmlElement, ComponentGroup]] = field(default_factory=list)
-
-    def render_html(self) -> str:
-        """Render all children as HTML inside the container.
-
-        Returns:
-            HTML string with container wrapping all children
-        """
-        class_str = " ".join(self.classes)
-        class_attr = f' class="{class_str}"' if class_str else ""
-        attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
-        children_html = "".join(
-            child.render_html() if hasattr(child, "render_html") else str(child)
-            for child in self.children
-        )
-        return f"<{self.tag}{class_attr}{attrs_str}>{children_html}</{self.tag}>"
-
-    def render(self) -> ComponentGroup:
-        """Return self (for API compatibility).
-
-        Returns:
-            This ComponentGroup instance
-        """
-        return self
+            bg = theme.surface_2
+            fg = theme.text
+            
+        kwargs.setdefault('bg', bg)
+        kwargs.setdefault('fg', fg)
+        kwargs.setdefault('activebackground', theme.accent_hover)
+        kwargs.setdefault('activeforeground', theme.text)
+        kwargs.setdefault('font', theme.font_normal)
+        kwargs.setdefault('relief', 'flat')
+        kwargs.setdefault('borderwidth', 0)
+        kwargs.setdefault('padx', theme.padding)
+        kwargs.setdefault('pady', theme.padding // 2)
+        
+        super().__init__(master, **kwargs)
+        self.variant = variant
+        
+        # Bind hover effects
+        self.bind('<Enter>', self._on_enter)
+        self.bind('<Leave>', self._on_leave)
+        
+    def _on_enter(self, e):
+        theme = get_theme()
+        if self.variant == "primary":
+            self.configure(bg=theme.accent_hover)
+        elif self.variant == "ghost":
+            self.configure(bg=theme.surface_3)
+        else:
+            self.configure(bg=theme.surface_3)
+            
+    def _on_leave(self, e):
+        theme = get_theme()
+        if self.variant == "primary":
+            self.configure(bg=theme.accent)
+        elif self.variant == "danger":
+            self.configure(bg=theme.error)
+        elif self.variant == "success":
+            self.configure(bg=theme.success)
+        elif self.variant == "ghost":
+            self.configure(bg=theme.surface)
+        else:
+            self.configure(bg=theme.surface_2)
 
 
-def el(
-    tag: str,
-    class_name: Union[str, None] = None,
-    attrs: Union[Dict[str, str], None] = None,
-    text: str = "",
-    inner_html: str = "",
-    children: Union[List[HtmlElement], None] = None,
-) -> HtmlElement:
-    """Create an HtmlElement with a convenient builder API.
+class Entry(tk.Entry):
+    """Themed entry widget."""
+    
+    def __init__(self, master=None, **kwargs):
+        theme = get_theme()
+        kwargs.setdefault('bg', theme.surface_2)
+        kwargs.setdefault('fg', theme.text)
+        kwargs.setdefault('insertbackground', theme.text)
+        kwargs.setdefault('font', theme.font_normal)
+        kwargs.setdefault('relief', 'flat')
+        kwargs.setdefault('borderwidth', 1)
+        super().__init__(master, **kwargs)
 
-    This is the primary replacement for the old create_el() function.
-    Instead of returning DOM-like objects, it returns data structures
-    that can generate HTML strings.
 
-    Args:
-        tag: HTML tag name
-        class_name: Space-separated CSS class string (auto-split)
-        attrs: HTML attributes dictionary
-        text: Text content (will be escaped)
-        inner_html: Raw HTML content (not escaped)
-        children: List of child HtmlElement instances
+class Text(tk.Text):
+    """Themed text widget."""
+    
+    def __init__(self, master=None, **kwargs):
+        theme = get_theme()
+        kwargs.setdefault('bg', theme.surface_2)
+        kwargs.setdefault('fg', theme.text)
+        kwargs.setdefault('insertbackground', theme.text)
+        kwargs.setdefault('font', theme.font_normal)
+        kwargs.setdefault('relief', 'flat')
+        kwargs.setdefault('borderwidth', 1)
+        super().__init__(master, **kwargs)
 
-    Returns:
-        HtmlElement instance
 
-    Example:
-        >>> card = el("div", "cn-card", {"data-id": "1"})
-        >>> title = el("h3", "cn-card-title", text="My Card")
-        >>> card.children.append(title)
-        >>> print(card.render_html())
-        <div class="cn-card" data-id="1"><h3 class="cn-card-title">My Card</h3></div>
-    """
-    classes_list = class_name.split() if class_name else []
-    return HtmlElement(
-        tag=tag,
-        classes=classes_list,
-        attributes=attrs or {},
-        text=text,
-        inner_html=inner_html,
-        children=children or [],
-    )
+class Scrollbar(tk.Scrollbar):
+    """Themed scrollbar widget."""
+    
+    def __init__(self, master=None, **kwargs):
+        theme = get_theme()
+        kwargs.setdefault('bg', theme.surface_3)
+        kwargs.setdefault('troughcolor', theme.surface)
+        super().__init__(master, **kwargs)
+
+
+__all__ = [
+    'CronixWidget',
+    'Frame',
+    'Label',
+    'Button',
+    'Entry',
+    'Text',
+    'Scrollbar',
+    'get_theme',
+    'set_theme',
+    'Theme',
+    'hex_to_rgb',
+    'rgb_to_hex',
+    'blend_colors',
+]

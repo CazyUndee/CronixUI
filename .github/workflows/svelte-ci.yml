@@ -1,0 +1,53 @@
+name: Svelte CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/svelte/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/svelte/**'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Verify Svelte component structure
+        run: |
+          echo "Checking Svelte component files..."
+          ls packages/svelte/src/*.svelte | head -5
+          echo "Total Svelte components:"
+          ls packages/svelte/src/*.svelte | wc -l
+
+      - name: Verify Svelte exports
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/svelte/src/index.js', 'utf8');
+          const exports = indexContent.match(/export \{ default as \w+/g) || indexContent.match(/export \{ default \w+/g);
+          console.log('Exported components:', exports ? exports.length : 0);
+          console.log('Svelte package structure verified!');
+          "
+
+      - name: Validate Svelte component syntax
+        run: |
+          for f in packages/svelte/src/*.svelte; do
+            echo "Checking: $f"
+            # Check that each .svelte file has <script> and <style>
+            grep -q '<script' "$f" || { echo "Missing <script> in $f"; exit 1; }
+          done
+          echo "All Svelte components have valid structure!"

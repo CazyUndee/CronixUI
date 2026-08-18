@@ -2,12 +2,13 @@ import * as React from 'react';
 
 export type ToggleSize = 'sm' | 'md' | 'lg';
 
-export interface ToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ToggleProps {
   on?: boolean;
   onChange?: (on: boolean) => void;
   disabled?: boolean;
   size?: ToggleSize;
   label?: React.ReactNode;
+  className?: string;
 }
 
 export const Toggle: React.FC<ToggleProps> = ({
@@ -17,7 +18,6 @@ export const Toggle: React.FC<ToggleProps> = ({
   size = 'md',
   label,
   className = '',
-  ...props
 }) => {
   const [internalOn, setInternalOn] = React.useState(false);
   const isOn = controlledOn !== undefined ? controlledOn : internalOn;
@@ -34,7 +34,7 @@ export const Toggle: React.FC<ToggleProps> = ({
   const sizeClass = size === 'sm' ? 'cn-toggle-sm' : size === 'lg' ? 'cn-toggle-lg' : '';
 
   return (
-    <label className={`cn-toggle-wrapper ${className}`.trim()} {...props}>
+    <label className={`cn-toggle-wrapper ${className}`.trim()}>
       <div
         className={`cn-toggle ${isOn ? 'on' : ''} ${sizeClass} ${disabled ? 'disabled' : ''}`.trim()}
         onClick={handleToggle}

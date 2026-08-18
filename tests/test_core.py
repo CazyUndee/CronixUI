@@ -1,105 +1,140 @@
-"""Tests for CronixUI core module."""
+"""Tests for CronixUI core tkinter utilities."""
 
-from cronixui.core import (
-    ComponentGroup,
-    HtmlElement,
-    attrs,
-    classes,
-    el,
-    escape_html,
-)
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent.parent / 'packages' / 'python'))
 
 
-class TestHtmlElement:
-    """Test HtmlElement dataclass."""
+class TestColorUtilities:
+    """Test color utility functions."""
 
-    def test_basic_element(self):
-        el = HtmlElement(tag="div", text="Hello")
-        html = el.render_html()
-        assert "<div>Hello</div>" == html
+    def test_hex_to_rgb(self):
+        from cronixui.core import hex_to_rgb
+        assert hex_to_rgb("#ff0000") == (255, 0, 0)
+        assert hex_to_rgb("#00ff00") == (0, 255, 0)
+        assert hex_to_rgb("#0000ff") == (0, 0, 255)
+        assert hex_to_rgb("ff0000") == (255, 0, 0)
 
-    def test_element_with_classes(self):
-        el = HtmlElement(tag="div", classes=["container", "main"])
-        html = el.render_html()
-        assert 'class="container main"' in html
+    def test_rgb_to_hex(self):
+        from cronixui.core import rgb_to_hex
+        assert rgb_to_hex(255, 0, 0) == "#ff0000"
+        assert rgb_to_hex(0, 255, 0) == "#00ff00"
+        assert rgb_to_hex(0, 0, 255) == "#0000ff"
 
-    def test_element_with_attributes(self):
-        el = HtmlElement(tag="input", attributes={"type": "text", "placeholder": "Enter"})
-        html = el.render_html()
-        assert 'type="text"' in html
-        assert 'placeholder="Enter"' in html
+    def test_blend_colors(self):
+        from cronixui.core import blend_colors
+        result = blend_colors("#000000", "#ffffff", 0.5)
+        assert result == "#7f7f7f"
 
-    def test_element_with_nested_html(self):
-        inner = HtmlElement(tag="span", text="inner")
-        outer = HtmlElement(tag="div", children=[inner])
-        html = outer.render_html()
-        assert "<div><span>inner</span></div>" == html
-
-    def test_self_closing_element(self):
-        el = HtmlElement(tag="br")
-        html = el.render_html()
-        assert "<br />" == html
-
-    def test_escape_html_content(self):
-        el = HtmlElement(tag="div", text="<script>alert('xss')</script>")
-        html = el.render_html()
-        assert "&lt;script&gt;" in html
+    def test_blend_colors_edges(self):
+        from cronixui.core import blend_colors
+        assert blend_colors("#000000", "#ffffff", 0.0) == "#000000"
+        assert blend_colors("#000000", "#ffffff", 1.0) == "#ffffff"
 
 
-class TestHelperFunctions:
-    """Test core helper functions."""
+class TestTheme:
+    """Test Theme class."""
 
-    def test_el_function(self):
-        result = el("div", "container")
-        assert isinstance(result, HtmlElement)
-        assert result.tag == "div"
-        assert "container" in result.classes
+    def test_theme_creation(self):
+        from cronixui.core import Theme
+        theme = Theme()
+        assert theme.bg == "#0a0a0a"
+        assert theme.surface == "#111111"
+        assert theme.accent == "#6b2323"
 
-    def test_el_with_attributes(self):
-        result = el("input", attrs={"type": "text", "placeholder": "Search"})
-        assert result.attributes.get("type") == "text"
-        assert result.attributes.get("placeholder") == "Search"
+    def test_get_theme(self):
+        from cronixui.core import get_theme
+        theme = get_theme()
+        assert theme is not None
+        assert hasattr(theme, 'bg')
+        assert hasattr(theme, 'surface')
+        assert hasattr(theme, 'accent')
 
-    def test_classes_function(self):
-        result = classes("btn", "btn-primary", "btn-lg")
-        assert "btn btn-primary btn-lg" == result
+    def test_set_theme(self):
+        from cronixui.core import Theme, get_theme, set_theme
+        original_theme = get_theme()
+        new_theme = Theme()
+        new_theme.bg = "#ffffff"
+        set_theme(new_theme)
 
-    def test_classes_function_with_empty(self):
-        result = classes()
-        assert result == ""
+        assert get_theme().bg == "#ffffff"
 
-    def test_attrs_function(self):
-        result = attrs(id="main", class_name="container")
-        assert 'id="main"' in result
-        assert 'class-name="container"' in result
-
-    def test_attrs_function_with_empty(self):
-        result = attrs()
-        assert result == ""
-
-    def test_escape_html_function(self):
-        assert escape_html("<div>") == "&lt;div&gt;"
-        assert escape_html("&") == "&amp;"
-        assert escape_html('"') == "&quot;"
-        assert escape_html("'") == "&#x27;"
-
-    def test_escape_html_with_safe_string(self):
-        # Should not escape already safe strings
-        safe = "Hello World"
-        assert escape_html(safe) == safe
+        # Restore original
+        set_theme(original_theme)
 
 
-class TestComponentGroup:
-    """Test ComponentGroup."""
+class TestTkinterWidgets:
+    """Test tkinter widget wrappers."""
 
-    def test_component_group_render(self):
-        group = ComponentGroup()
-        html = group.render_html()
-        assert "<div></div>" == html
+    def test_frame_import(self):
+        from cronixui.core import Frame
+        assert Frame is not None
 
-    def test_component_group_with_elements(self):
-        el1 = HtmlElement(tag="div", text="One")
-        el2 = HtmlElement(tag="div", text="Two")
-        group = ComponentGroup(children=[el1, el2])
-        html = group.render_html()
-        assert "<div>One</div><div>Two</div>" in html
+    def test_label_import(self):
+        from cronixui.core import Label
+        assert Label is not None
+
+    def test_button_import(self):
+        from cronixui.core import Button
+        assert Button is not None
+
+    def test_entry_import(self):
+        from cronixui.core import Entry
+        assert Entry is not None
+
+    def test_text_import(self):
+        from cronixui.core import Text
+        assert Text is not None
+
+    def test_scrollbar_import(self):
+        from cronixui.core import Scrollbar
+        assert Scrollbar is not None
+
+
+class TestFrameCreation:
+    """Test Frame creation."""
+
+    def test_frame_creation(self, xdisplay):
+        import tkinter as tk
+        from cronixui.core import Frame
+
+        root = tk.Tk()
+        root.withdraw()
+
+        frame = Frame(root)
+        assert frame is not None
+
+        root.destroy()
+
+
+class TestLabelCreation:
+    """Test Label creation."""
+
+    def test_label_creation(self, xdisplay):
+        import tkinter as tk
+        from cronixui.core import Label
+
+        root = tk.Tk()
+        root.withdraw()
+
+        label = Label(root, text="Hello")
+        assert label is not None
+        assert label.cget('text') == 'Hello'
+
+        root.destroy()
+
+
+class TestButtonCreation:
+    """Test Button creation."""
+
+    def test_button_creation(self, xdisplay):
+        import tkinter as tk
+        from cronixui.core import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
+        btn = Button(root, text="Click")
+        assert btn is not None
+        assert btn.cget('text') == 'Click'
+
+        root.destroy()

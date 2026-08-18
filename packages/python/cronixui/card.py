@@ -1,228 +1,226 @@
-"""CronixUI Card Component.
+"""CronixUI Card Component - Native tkinter implementation.
 
-Generates HTML for cards with header, body, footer, and optional icon variants.
-No browser DOM APIs are used - all output is HTML strings or data structures.
+This module provides native card widgets that render as actual OS frames.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import tkinter as tk
+from tkinter import ttk
+from typing import Optional
+
+from .core import Frame, Label, get_theme
 
 
-@dataclass
-class CardElement:
-    """Represents a rendered card element."""
-
-    tag: str = "div"
-    classes: list[str] = field(default_factory=list)
-    attributes: dict[str, str] = field(default_factory=dict)
-    inner_html: str = ""
-
-    def render_html(self) -> str:
-        """Render the card as HTML string.
-
-        Returns:
-            Complete HTML for the card element
-        """
-        class_str = " ".join(self.classes)
-        class_attr = f' class="{class_str}"' if class_str else ""
-        attrs_str = "".join(f' {k}="{v}"' for k, v in self.attributes.items())
-        return f"<{self.tag}{class_attr}{attrs_str}>{self.inner_html}</{self.tag}>"
-
-    def render(self) -> CardElement:
-        """Return self for API compatibility."""
-        return self
-
-
-class Card:
-    """Card container component with optional header, body, and footer sections.
-
+class Card(Frame):
+    """Native card component with optional header, body, and footer sections.
+    
     Args:
+        parent: Parent widget
         title: Optional card title
         subtitle: Optional card subtitle
-        clickable: Whether card should appear clickable (default: False)
-        body: Optional card body content (HTML string)
-        footer: Optional card footer content (HTML string)
-
+        clickable: Whether card should appear clickable
+        body: Optional card body content (string)
+        footer: Optional card footer content (string)
+        
     Example:
-        >>> card = Card(
-        ...     title="Welcome",
-        ...     subtitle="Getting started guide",
-        ...     body="<p>Card body content here.</p>",
-        ...     footer="<a href='#'>Learn more</a>",
-        ... )
-        >>> print(card.render_html())
-        <div class="cn-card">
-            <div class="cn-card-header">
-                <h3 class="cn-card-title">Welcome</h3>
-                <p class="cn-card-subtitle">Getting started guide</p>
-            </div>
-            <div class="cn-card-body"><p>Card body content here.</p></div>
-            <div class="cn-card-footer"><a href='#'>Learn more</a></div>
-        </div>
+        >>> root = tk.Tk()
+        >>> card = Card(root, title="Welcome", subtitle="Getting started")
+        >>> card.pack(padx=10, pady=10)
     """
-
+    
     def __init__(
         self,
-        title: str | None = None,
-        subtitle: str | None = None,
+        master: tk.Misc,
+        title: Optional[str] = None,
+        subtitle: Optional[str] = None,
         clickable: bool = False,
-        body: str | None = None,
-        footer: str | None = None,
+        body: Optional[str] = None,
+        footer: Optional[str] = None,
+        **kwargs
     ):
+        theme = get_theme()
+        
+        # Configure frame
+        kwargs.setdefault('bg', theme.surface)
+        kwargs.setdefault('highlightbackground', theme.surface_3)
+        kwargs.setdefault('highlightthickness', 1)
+        super().__init__(master, **kwargs)
+        
         self.title = title
         self.subtitle = subtitle
         self.clickable = clickable
-        self._body = body
-        self._footer = footer
-
-    def render(self) -> CardElement:
-        """Render the card as a CardElement data structure.
-
-        Returns:
-            CardElement representing the complete card
-        """
-        classes = ["cn-card"]
-        if self.clickable:
-            classes.append("cn-card-clickable")
-
-        parts = []
-
+        self._on_click_callback = None
+        
+        # Build card layout
+        self._build_layout(body, footer)
+        
+        # Bind click events if clickable
+        if clickable:
+            self.bind('<Button-1>', self._on_click)
+            self.bind('<Enter>', self._on_enter)
+            self.bind('<Leave>', self._on_leave)
+            self.configure(cursor='hand2')
+    
+    def _build_layout(self, body: Optional[str], footer: Optional[str]) -> None:
+        """Build the card layout."""
         # Header
         if self.title or self.subtitle:
-            header_parts = []
+            header = Frame(self, bg=self.cget('bg'))
+            header.pack(fill='x', padx=12, pady=(12, 0))
+            
             if self.title:
-                header_parts.append(f'<h3 class="cn-card-title">{self._esc(self.title)}</h3>')
+                title_label = Label(
+                    header,
+                    text=self.title,
+                    font=(get_theme().font_family, 14, 'bold'),
+                    bg=self.cget('bg'),
+                    fg=get_theme().text
+                )
+                title_label.pack(anchor='w')
+            
             if self.subtitle:
-                header_parts.append(f'<p class="cn-card-subtitle">{self._esc(self.subtitle)}</p>')
-            parts.append(f'<div class="cn-card-header">{"".join(header_parts)}</div>')
-
+                subtitle_label = Label(
+                    header,
+                    text=self.subtitle,
+                    font=(get_theme().font_family, 11),
+                    bg=self.cget('bg'),
+                    fg=get_theme().text_muted if hasattr(get_theme(), 'text_muted') else get_theme().text
+                )
+                subtitle_label.pack(anchor='w')
+        
         # Body
-        if self._body is not None:
-            parts.append(f'<div class="cn-card-body">{self._body}</div>')
-
+        if body:
+            body_frame = Frame(self, bg=self.cget('bg'))
+            body_frame.pack(fill='both', expand=True, padx=12, pady=8)
+            
+            body_label = Label(
+                body_frame,
+                text=body,
+                font=(get_theme().font_family, 12),
+                bg=self.cget('bg'),
+                fg=get_theme().text,
+                wraplength=280,
+                justify='left'
+            )
+            body_label.pack(fill='both', expand=True)
+        
         # Footer
-        if self._footer is not None:
-            parts.append(f'<div class="cn-card-footer">{self._footer}</div>')
-
-        return CardElement(
-            classes=classes,
-            inner_html="".join(parts),
-        )
-
-    def render_html(self) -> str:
-        """Render the card as an HTML string.
-
-        Returns:
-            HTML string representation of the card
-        """
-        return self.render().render_html()
-
-    def with_body(self, content: str) -> Card:
-        """Set the card body content and return self for chaining.
-
-        Args:
-            content: HTML string for the card body
-
-        Returns:
-            Self for method chaining
-
-        Example:
-            >>> card = Card(title="Title").with_body("<p>Body content</p>")
-        """
-        self._body = content
-        return self
-
-    def with_footer(self, content: str) -> Card:
-        """Set the card footer content and return self for chaining.
-
-        Args:
-            content: HTML string for the card footer
-
-        Returns:
-            Self for method chaining
-
-        Example:
-            >>> card = Card(title="Title").with_footer("<a href='#'>Link</a>")
-        """
-        self._footer = content
-        return self
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
+        if footer:
+            footer_frame = Frame(self, bg=self.cget('bg'))
+            footer_frame.pack(fill='x', padx=12, pady=(0, 12))
+            
+            footer_label = Label(
+                footer_frame,
+                text=footer,
+                font=(get_theme().font_family, 11),
+                bg=self.cget('bg'),
+                fg=get_theme().text_muted if hasattr(get_theme(), 'text_muted') else get_theme().text
+            )
+            footer_label.pack(anchor='e')
+    
+    def on_click(self, callback) -> None:
+        """Set click handler for clickable cards."""
+        self._on_click_callback = callback
+    
+    def _on_click(self, event) -> None:
+        if self._on_click_callback:
+            self._on_click_callback()
+    
+    def _on_enter(self, event) -> None:
+        if self.clickable:
+            theme = get_theme()
+            self.configure(highlightbackground=theme.accent)
+    
+    def _on_leave(self, event) -> None:
+        if self.clickable:
+            theme = get_theme()
+            self.configure(highlightbackground=theme.surface_3)
+    
+    def set_title(self, title: str) -> None:
+        """Update card title."""
+        self.title = title
+        # Would need to rebuild layout for dynamic updates
+    
+    def set_subtitle(self, subtitle: str) -> None:
+        """Update card subtitle."""
+        self.subtitle = subtitle
+    
+    def set_body(self, body: str) -> None:
+        """Update card body."""
+        # Would need to rebuild layout for dynamic updates
+        pass
 
 
-class CardIcon:
+class CardIcon(Frame):
     """Card variant with an icon display.
-
+    
     Args:
-        icon_svg: SVG markup string for the icon
+        parent: Parent widget
+        icon_text: Icon text/emoji (for now)
         title: Optional card title
         subtitle: Optional card subtitle
-
+        
     Example:
-        >>> icon_card = CardIcon(
-        ...     icon_svg='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-        ...     title="Settings",
-        ... )
-        >>> print(icon_card.render_html())
+        >>> root = tk.Tk()
+        >>> card = CardIcon(root, icon_text="⚙️", title="Settings")
+        >>> card.pack()
     """
-
+    
     def __init__(
         self,
-        icon_svg: str,
-        title: str | None = None,
-        subtitle: str | None = None,
+        master: tk.Misc,
+        icon_text: str,
+        title: Optional[str] = None,
+        subtitle: Optional[str] = None,
+        **kwargs
     ):
-        if not icon_svg:
-            raise ValueError("icon_svg cannot be empty")
-        self.icon_svg = icon_svg
+        theme = get_theme()
+        
+        kwargs.setdefault('bg', theme.surface)
+        kwargs.setdefault('highlightbackground', theme.surface_3)
+        kwargs.setdefault('highlightthickness', 1)
+        super().__init__(master, **kwargs)
+        
+        if not icon_text:
+            raise ValueError("icon_text cannot be empty")
+        
+        self.icon_text = icon_text
         self.title = title
         self.subtitle = subtitle
-
-    def render(self) -> CardElement:
-        """Render the icon card as a CardElement.
-
-        Returns:
-            CardElement representing the icon card
-        """
-        classes = ["cn-card", "cn-card-icon"]
-
-        parts = [f'<div class="cn-card-icon-inner">{self.icon_svg}</div>']
-
+        
+        self._build_layout()
+    
+    def _build_layout(self) -> None:
+        """Build the icon card layout."""
+        # Icon
+        icon_label = Label(
+            self,
+            text=self.icon_text,
+            font=(get_theme().font_family, 24),
+            bg=self.cget('bg'),
+            fg=get_theme().accent
+        )
+        icon_label.pack(pady=(16, 8))
+        
+        # Title
         if self.title:
-            parts.append(f'<h3 class="cn-card-title">{self._esc(self.title)}</h3>')
+            title_label = Label(
+                self,
+                text=self.title,
+                font=(get_theme().font_family, 14, 'bold'),
+                bg=self.cget('bg'),
+                fg=get_theme().text
+            )
+            title_label.pack()
+        
+        # Subtitle
         if self.subtitle:
-            parts.append(f'<p class="cn-card-subtitle">{self._esc(self.subtitle)}</p>')
-
-        return CardElement(
-            classes=classes,
-            inner_html="".join(parts),
-        )
-
-    def render_html(self) -> str:
-        """Render the icon card as an HTML string.
-
-        Returns:
-            HTML string representation of the icon card
-        """
-        return self.render().render_html()
-
-    @staticmethod
-    def _esc(text: str) -> str:
-        """Escape HTML special characters."""
-        return (
-            text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
+            subtitle_label = Label(
+                self,
+                text=self.subtitle,
+                font=(get_theme().font_family, 11),
+                bg=self.cget('bg'),
+                fg=get_theme().text_muted if hasattr(get_theme(), 'text_muted') else get_theme().text
+            )
+            subtitle_label.pack(pady=(0, 16))

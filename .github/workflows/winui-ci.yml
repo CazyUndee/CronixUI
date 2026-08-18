@@ -1,0 +1,45 @@
+name: WinUI CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/win/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/win/**'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Verify project structure
+        run: |
+          echo "Checking WinUI project files..."
+          dir packages\win\CronixUI.WinUI\
+          echo "Total controls:"
+          dir packages\win\CronixUI.WinUI\Controls\ | find /c ".cs"
+
+      - name: Restore NuGet packages
+        working-directory: packages/win/CronixUI.WinUI
+        run: dotnet restore CronixUI.WinUI.sln
+
+      - name: Build WinUI project
+        working-directory: packages/win/CronixUI.WinUI
+        run: |
+          dotnet build CronixUI.WinUI.sln --configuration Release --no-restore
+
+      - name: Verify build output
+        run: |
+          echo "Build completed successfully!"
+          dir packages\win\CronixUI.WinUI\bin\Release\

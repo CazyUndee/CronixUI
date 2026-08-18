@@ -1,144 +1,149 @@
-"""Tests for CronixUI button component."""
+"""Tests for CronixUI native tkinter button component."""
 
+import sys
 import pytest
-from cronixui.button import Button, ButtonElement, ButtonGroup
+
+# Add the python package to the path
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent.parent / 'packages' / 'python'))
 
 
-class TestButtonElement:
-    """Test ButtonElement dataclass."""
+class TestButtonImport:
+    """Test that Button can be imported and has correct attributes."""
 
-    def test_basic_render(self):
-        el = ButtonElement(text="Click me", classes=["cn-btn"])
-        html = el.render()
-        assert '<button class="cn-btn">Click me</button>' == html
+    def test_import_button(self):
+        from cronixui.button import Button
+        assert Button is not None
 
-    def test_render_with_attributes(self):
-        el = ButtonElement(
-            text="Submit",
-            classes=["cn-btn", "cn-btn-primary"],
-            attributes={"disabled": "", "type": "submit"},
-        )
-        html = el.render()
-        assert 'class="cn-btn cn-btn-primary"' in html
-        assert "Submit" in html
-        assert "disabled" in html
-        assert 'type="submit"' in html
+    def test_button_variants(self):
+        from cronixui.button import Button
+        assert hasattr(Button, 'VARIANTS')
+        assert 'primary' in Button.VARIANTS
+        assert 'danger' in Button.VARIANTS
+        assert 'success' in Button.VARIANTS
+        assert 'ghost' in Button.VARIANTS
+        assert 'outline' in Button.VARIANTS
 
-    def test_render_empty_classes(self):
-        el = ButtonElement(text="Test", classes=[])
-        html = el.render()
-        assert '<button class="">Test</button>' == html
+    def test_button_sizes(self):
+        from cronixui.button import Button
+        assert hasattr(Button, 'SIZES')
+        assert 'sm' in Button.SIZES
+        assert 'md' in Button.SIZES
+        assert 'lg' in Button.SIZES
 
 
-class TestButton:
-    """Test Button component."""
+class TestButtonGroupImport:
+    """Test that ButtonGroup can be imported."""
 
-    def test_default_button(self):
-        btn = Button("Click me")
-        assert btn.text == "Click me"
-        assert btn.variant == "default"
-        assert btn.size == "md"
-        assert btn.disabled is False
+    def test_import_button_group(self):
+        from cronixui.button import ButtonGroup
+        assert ButtonGroup is not None
 
-    def test_button_variant(self):
-        btn = Button("Primary", variant="primary")
-        html = btn.render_html()
-        assert "cn-btn-primary" in html
-        assert "cn-btn" in html
 
-    def test_button_size_sm(self):
-        btn = Button("Small", size="sm")
-        html = btn.render_html()
-        assert "cn-btn-sm" in html
+class TestButtonCreation:
+    """Test Button creation (requires display)."""
 
-    def test_button_size_lg(self):
-        btn = Button("Large", size="lg")
-        html = btn.render_html()
-        assert "cn-btn-lg" in html
+    def test_button_creation(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
 
-    def test_button_icon(self):
-        btn = Button("Icon", icon=True)
-        html = btn.render_html()
-        assert "cn-btn-icon" in html
+        root = tk.Tk()
+        root.withdraw()  # Hide window
 
-    def test_button_disabled(self):
-        btn = Button("Disabled", disabled=True)
-        html = btn.render_html()
-        assert "disabled" in html
+        btn = Button(root, text="Click me")
+        assert btn is not None
+        assert btn.cget('text') == 'Click me'
 
-    def test_button_with_onclick(self):
-        def handler():
-            pass
+        root.destroy()
 
-        btn = Button("Click", onclick=handler)
-        assert btn.onclick == handler
+    def test_button_variant(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
 
-    def test_invalid_variant_raises_error(self):
+        root = tk.Tk()
+        root.withdraw()
+
+        btn = Button(root, text="Primary", variant="primary")
+        assert btn.variant == "primary"
+
+        root.destroy()
+
+    def test_button_size(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
+        btn = Button(root, text="Small", size="sm")
+        assert btn.size == "sm"
+
+        root.destroy()
+
+    def test_button_disabled(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
+        btn = Button(root, text="Disabled", disabled=True)
+        assert str(btn.cget('state')) == 'disabled'
+
+        root.destroy()
+
+    def test_button_invalid_variant(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
         with pytest.raises(ValueError, match="Invalid variant"):
-            Button("Test", variant="invalid")
+            Button(root, text="Bad", variant="invalid")
 
-    def test_invalid_size_raises_error(self):
+        root.destroy()
+
+    def test_button_invalid_size(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
         with pytest.raises(ValueError, match="Invalid size"):
-            Button("Test", size="xl")
+            Button(root, text="Bad", size="xl")
 
-    def test_all_variants_work(self):
-        for variant in Button.VARIANTS:
-            btn = Button(f"{variant} button", variant=variant)
-            html = btn.render_html()
-            assert f"cn-btn-{variant}" in html
+        root.destroy()
 
-    def test_all_sizes_work(self):
-        for size in Button.SIZES:
-            btn = Button(f"{size} button", size=size)
-            if size == "md":
-                assert "cn-btn-md" not in btn.render_html()
-            else:
-                assert f"cn-btn-{size}" in btn.render_html()
 
-    def test_enable_disable(self):
-        btn = Button("Toggle")
-        assert btn.disabled is False
+class TestButtonMethods:
+    """Test Button methods."""
 
+    def test_enable_disable(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
+
+        root = tk.Tk()
+        root.withdraw()
+
+        btn = Button(root, text="Test")
         btn.disable()
-        assert btn.disabled is True
+        assert str(btn.cget('state')) == 'disabled'
 
         btn.enable()
-        assert btn.disabled is False
+        assert str(btn.cget('state')) == 'normal'
 
-    def test_render_returns_button_element(self):
-        btn = Button("Test")
-        result = btn.render()
-        assert isinstance(result, ButtonElement)
+        root.destroy()
 
+    def test_set_text(self, xdisplay):
+        import tkinter as tk
+        from cronixui.button import Button
 
-class TestButtonGroup:
-    """Test ButtonGroup component."""
+        root = tk.Tk()
+        root.withdraw()
 
-    def test_button_group_render(self):
-        btn1 = Button("Left")
-        btn2 = Button("Center")
-        btn3 = Button("Right")
+        btn = Button(root, text="Original")
+        btn.set_text("Updated")
+        assert btn.cget('text') == 'Updated'
 
-        group = ButtonGroup(btn1, btn2, btn3)
-        html = group.render_html()
-
-        assert 'class="cn-btn-group"' in html
-        assert "Left" in html
-        assert "Center" in html
-        assert "Right" in html
-
-    def test_empty_button_group(self):
-        group = ButtonGroup()
-        html = group.render_html()
-        assert 'class="cn-btn-group"' in html
-        assert html.count("<button") == 0
-
-    def test_button_group_with_variants(self):
-        btn1 = Button("Primary", variant="primary")
-        btn2 = Button("Danger", variant="danger")
-
-        group = ButtonGroup(btn1, btn2)
-        html = group.render_html()
-
-        assert "cn-btn-primary" in html
-        assert "cn-btn-danger" in html
+        root.destroy()
