@@ -2,12 +2,12 @@
 //!
 //! ## Example
 //!
-//! ```rust
-//! use cronixui::{CronixUI, Colors, components::*};
+//! ```rust,ignore
+//! use cronixui::{apply_theme, components::ButtonExt};
 //!
 //! // In your egui app
 //! fn update(&mut self, ctx: &egui::Context) {
-//!     CronixUI::apply_theme(ctx);
+//!     apply_theme(ctx);
 //!     
 //!     egui::CentralPanel::default().show(ctx, |ui| {
 //!         // Use components

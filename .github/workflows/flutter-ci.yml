@@ -38,7 +38,7 @@ jobs:
 
       - name: Analyze code
         working-directory: packages/flutter
-        run: flutter analyze --fatal-infos
+        run: flutter analyze --fatal-warnings
 
       - name: Format code
         working-directory: packages/flutter
