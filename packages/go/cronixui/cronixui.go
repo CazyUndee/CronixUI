@@ -382,7 +382,7 @@ func NewCard(content fyne.CanvasObject, options ...CardOption) *fyne.Container {
 		if c, ok := body.(*fyne.Container); ok {
 			finalContent = c
 		} else {
-			finalContent = container.NewMax(body)
+			finalContent = container.NewStack(body)
 		}
 	}
 
@@ -886,7 +886,7 @@ func NewList(items []ListItem) *widget.List {
 // =============================================================================
 
 func NewContainer(content fyne.CanvasObject) fyne.CanvasObject {
-	return container.NewMax(content)
+	return container.NewStack(content)
 }
 
 func NewFlex(objects ...fyne.CanvasObject) fyne.CanvasObject {
