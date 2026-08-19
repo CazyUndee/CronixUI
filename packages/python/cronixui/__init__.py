@@ -8,6 +8,7 @@ from .button import Button, ButtonGroup
 from .card import Card, CardIcon
 from .modal import Modal
 from .toggle import Toggle
+from .rating import Rating
 from .form import (
     Input, Textarea, Checkbox, Radio, Select, Slider, FileInput
 )
@@ -39,6 +40,7 @@ __all__ = [
     "CardIcon",
     "Modal",
     "Toggle",
+    "Rating",
     "Input",
     "Textarea",
     "Checkbox",

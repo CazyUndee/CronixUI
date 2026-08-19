@@ -1613,6 +1613,52 @@ body {
 }
 
 /* ========================================
+   RATING
+   ======================================== */
+.cn-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cn-space-1);
+}
+
+.cn-rating-star {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--cn-font);
+  font-size: var(--cn-text-xl);
+  line-height: 1;
+  color: var(--cn-surface-4);
+  cursor: pointer;
+  transition: color var(--cn-transition), transform var(--cn-transition);
+}
+
+.cn-rating-star:hover {
+  transform: scale(1.15);
+}
+
+.cn-rating-star-active {
+  color: var(--cn-accent);
+}
+
+.cn-rating-sm .cn-rating-star {
+  font-size: var(--cn-text-md);
+}
+
+.cn-rating-lg .cn-rating-star {
+  font-size: var(--cn-text-3xl);
+}
+
+.cn-rating-disabled .cn-rating-star {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cn-rating-disabled .cn-rating-star:hover {
+  transform: none;
+}
+
+/* ========================================
    FILE INPUT
    ======================================== */
 .cn-file-input {

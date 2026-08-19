@@ -39,3 +39,4 @@ export 'src/widgets/cn_header.dart';
 export 'src/widgets/cn_sidebar.dart';
 export 'src/widgets/cn_footer.dart';
 export 'src/widgets/cn_tag.dart';
+export 'src/widgets/cn_rating.dart';

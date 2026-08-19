@@ -35,6 +35,7 @@ import Footer from './Footer.svelte';
 import Stat from './Stat.svelte';
 import ButtonGroup from './ButtonGroup.svelte';
 import FormGroup from './FormGroup.svelte';
+import Rating from './Rating.svelte';
 import Stack from './Stack.svelte';
 import HStack from './HStack.svelte';
 import Divider from './Divider.svelte';
@@ -52,7 +53,7 @@ export {
   Toggle, Avatar, Alert, Spinner, Skeleton, Progress, Table, List, Tooltip,
   Modal, Dropdown, Tabs, Accordion, Pagination, Toast, Search, CommandPalette,
   Nav, Breadcrumb, FileInput, Container, Header, Sidebar, Footer, Stat,
-  ButtonGroup, FormGroup, Stack, HStack, Divider,
+  ButtonGroup, FormGroup, Rating, Stack, HStack, Divider,
   H1, H2, H3, H4, H5, H6, Text, Label
 };
 export * from './tokens.js';

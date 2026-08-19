@@ -2,100 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
-:root {
-/* Colors */
---cn-bg: #0a0a0a;
---cn-surface: #111111;
---cn-surface-2: #1a1a1a;
---cn-surface-3: #222222;
---cn-surface-4: #2a2a2a;
---cn-border: rgba(255, 255, 255, 0.08);
---cn-border-hover: rgba(255, 255, 255, 0.15);
---cn-border-focus: rgba(255, 255, 255, 0.25);
---cn-text: #f0ede8;
---cn-text-muted: rgba(240, 237, 232, 0.5);
---cn-text-dim: rgba(240, 237, 232, 0.25);
-
-/* Accent (Crimson) */
---cn-accent: #6b2323;
---cn-accent-hover: #7d2a2a;
---cn-accent-light: #8a3535;
---cn-accent-glow: rgba(107, 35, 35, 0.3);
---cn-accent-text: #c97a7a;
-
-/* Status Colors */
---cn-success: #1e5028;
---cn-success-border: rgba(60, 140, 70, 0.4);
---cn-success-text: #6bc47a;
---cn-warning: #503c14;
---cn-warning-border: rgba(150, 110, 30, 0.4);
---cn-warning-text: #c4a43a;
---cn-error: #501414;
---cn-error-border: rgba(180, 60, 60, 0.4);
---cn-error-text: #c46b6b;
---cn-info: #143550;
---cn-info-border: rgba(60, 140, 200, 0.4);
---cn-info-text: #6ba8c4;
-
-/* Typography */
---cn-font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
---cn-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-
-/* Font Sizes */
---cn-text-xs: 11px;
---cn-text-sm: 12px;
---cn-text-base: 13px;
---cn-text-md: 14px;
---cn-text-lg: 16px;
---cn-text-xl: 20px;
---cn-text-2xl: 28px;
---cn-text-3xl: 36px;
-
-/* Spacing */
---cn-space-1: 4px;
---cn-space-2: 8px;
---cn-space-3: 12px;
---cn-space-4: 16px;
---cn-space-5: 20px;
---cn-space-6: 24px;
---cn-space-8: 32px;
---cn-space-10: 40px;
---cn-space-12: 48px;
-
-/* Border Radius */
---cn-radius-sm: 6px;
---cn-radius: 10px;
---cn-radius-lg: 14px;
---cn-radius-xl: 20px;
---cn-radius-full: 9999px;
-
-/* Shadows */
---cn-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
---cn-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
---cn-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
---cn-shadow-glow: 0 0 20px var(--cn-accent-glow);
-
-/* Transitions */
---cn-transition-fast: 0.1s ease;
---cn-transition: 0.15s ease;
---cn-transition-slow: 0.25s ease;
-
-/* Z-Index */
---cn-z-dropdown: 100;
---cn-z-sticky: 200;
---cn-z-fixed: 300;
---cn-z-modal-backdrop: 400;
---cn-z-modal: 500;
---cn-z-popover: 600;
---cn-z-tooltip: 700;
---cn-z-toast: 800;
-
-/* Layout */
---cn-container-max: 1200px;
---cn-sidebar-width: 260px;
---cn-header-height: 56px;
-}
-
+@import 'variables.css';
 
 /* ========================================
    BASE RESET
@@ -1703,6 +1610,52 @@ body {
 .cn-pagination-item:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ========================================
+   RATING
+   ======================================== */
+.cn-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cn-space-1);
+}
+
+.cn-rating-star {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--cn-font);
+  font-size: var(--cn-text-xl);
+  line-height: 1;
+  color: var(--cn-surface-4);
+  cursor: pointer;
+  transition: color var(--cn-transition), transform var(--cn-transition);
+}
+
+.cn-rating-star:hover {
+  transform: scale(1.15);
+}
+
+.cn-rating-star-active {
+  color: var(--cn-accent);
+}
+
+.cn-rating-sm .cn-rating-star {
+  font-size: var(--cn-text-md);
+}
+
+.cn-rating-lg .cn-rating-star {
+  font-size: var(--cn-text-3xl);
+}
+
+.cn-rating-disabled .cn-rating-star {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cn-rating-disabled .cn-rating-star:hover {
+  transform: none;
 }
 
 /* ========================================

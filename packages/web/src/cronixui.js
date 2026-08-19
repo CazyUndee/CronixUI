@@ -702,6 +702,44 @@
   }
 
   // ========================================
+  // RATING
+  // ========================================
+  class CronixRating {
+    constructor(el) {
+      this.el = el;
+      this.stars = $$('.cn-rating-star', el);
+      this.stars.forEach((star, i) => {
+        star.addEventListener('click', () => this.setValue(i + 1));
+      });
+      el._cnRating = this;
+    }
+
+    getValue() {
+      const v = parseInt(this.el.dataset.value, 10);
+      return isNaN(v) ? 0 : v;
+    }
+
+    setValue(value) {
+      const clamped = Math.max(0, Math.min(Math.round(value), this.stars.length));
+      this.el.dataset.value = clamped;
+      this.stars.forEach((star, i) => {
+        star.classList.toggle('cn-rating-star-active', i < clamped);
+      });
+      this.el.dispatchEvent(new CustomEvent('change', { detail: { value: clamped } }));
+    }
+
+    clear() {
+      this.setValue(0);
+    }
+  }
+
+  function initRatings() {
+    $$('.cn-rating').forEach(el => {
+      if (!el._cnRating) new CronixRating(el);
+    });
+  }
+
+  // ========================================
   // FILE INPUT
   // ========================================
   class CronixFileInput {
@@ -758,6 +796,7 @@
     initSearch();
     initAlerts();
     initTables();
+    initRatings();
     initFileInputs();
   }
 
@@ -787,6 +826,7 @@
     Alert: CronixAlert,
     Table: CronixTable,
     Pagination: CronixPagination,
+    Rating: CronixRating,
     FileInput: CronixFileInput,
     $,
     $$,

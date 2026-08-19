@@ -991,6 +991,71 @@ func NewStat(value string, label string, delta string, deltaType StatDeltaType) 
 }
 
 // =============================================================================
+// RATING
+// =============================================================================
+
+type Rating struct {
+	buttons   []*widget.Button
+	value     int
+	max       int
+	onChanged func(int)
+}
+
+// NewRating creates a star rating widget. Clicking star *n* sets the value to *n*
+// and invokes onChanged. Filled stars render with high importance, empty ones dim.
+func NewRating(value, max int, onChanged func(int)) *Rating {
+	if max <= 0 {
+		max = 5
+	}
+	r := &Rating{value: value, max: max, onChanged: onChanged}
+	for i := 0; i < max; i++ {
+		i := i
+		btn := widget.NewButton("★", func() { r.SetValue(i + 1) })
+		r.buttons = append(r.buttons, btn)
+	}
+	r.Refresh()
+	return r
+}
+
+// SetValue sets the rating value and refreshes the stars.
+func (r *Rating) SetValue(value int) {
+	if value < 0 {
+		value = 0
+	}
+	if value > r.max {
+		value = r.max
+	}
+	r.value = value
+	r.Refresh()
+	if r.onChanged != nil {
+		r.onChanged(value)
+	}
+}
+
+// Value returns the current rating.
+func (r *Rating) Value() int { return r.value }
+
+// Refresh updates star importance based on the current value.
+func (r *Rating) Refresh() {
+	for i, btn := range r.buttons {
+		if i < r.value {
+			btn.Importance = widget.HighImportance
+		} else {
+			btn.Importance = widget.LowImportance
+		}
+	}
+}
+
+// Container returns the stars laid out horizontally for placement in a window.
+func (r *Rating) Container() *fyne.Container {
+	objs := make([]fyne.CanvasObject, len(r.buttons))
+	for i, b := range r.buttons {
+		objs[i] = b
+	}
+	return container.NewHBox(objs...)
+}
+
+// =============================================================================
 // APPLICATION
 // =============================================================================
 

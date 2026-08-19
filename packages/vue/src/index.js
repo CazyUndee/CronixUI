@@ -32,4 +32,5 @@ export { default as CnTabs } from './components/CnTabs.vue';
 export { default as CnAccordion } from './components/CnAccordion.vue';
 export { default as CnToast } from './components/CnToast.vue';
 export { default as CnTextarea } from './components/CnTextarea.vue';
+export { default as CnRating } from './components/CnRating.vue';
 export * from './tokens/index.js';

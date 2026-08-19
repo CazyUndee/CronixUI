@@ -36,5 +36,6 @@ export { default as Sidebar, type SidebarProps, type SidebarItemProps } from './
 export { default as Footer, type FooterProps } from './components/Footer';
 export { default as Tag, type TagProps } from './components/Tag';
 export { default as FormGroup, type FormGroupProps } from './components/FormGroup';
+export { default as Rating, type RatingProps, type RatingSize } from './components/Rating';
 export { default as Stack, HStack, Divider, type StackProps, type DividerProps } from './components/Stack';
 export { H1, H2, H3, H4, H5, H6, Text, Label, type TextProps, type LabelProps } from './components/Typography';
