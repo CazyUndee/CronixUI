@@ -42,5 +42,6 @@ jobs:
       - name: Verify build output
         run: |
           echo "Build completed successfully!"
-          dir packages\win\CronixUI.WinUI\bin\x64\Release\
-          if (-not (Test-Path packages\win\CronixUI.WinUI\bin\x64\Release)) { dir packages\win\CronixUI.WinUI\bin\Release\ }
+          $dll = Get-ChildItem packages\win\CronixUI.WinUI\bin\Release -Recurse -Filter CronixUI.WinUI.dll | Select-Object -First 1
+          if ($null -eq $dll) { throw "CronixUI.WinUI.dll not found in build output" }
+          Write-Host "Found: $($dll.FullName)"
