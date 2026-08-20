@@ -481,15 +481,15 @@ func TestVersion(t *testing.T) {
 
 func TestToastTypes(t *testing.T) {
 	types := []ToastType{
-		ToastTypeInfo,
-		ToastTypeSuccess,
-		ToastTypeWarning,
-		ToastTypeError,
+		ToastSuccess,
+		ToastError,
+		ToastWarning,
+		ToastInfo,
 	}
 
 	for _, toastType := range types {
-		if toastType == "" {
-			t.Error("ToastType should not be empty")
+		if toastType < 0 {
+			t.Error("ToastType should be non-negative")
 		}
 	}
 }
