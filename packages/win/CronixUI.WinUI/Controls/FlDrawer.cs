@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CronixUI.Controls;
+namespace CronixUI.Controls
 {
     /// <summary>
     /// FlDrawer - Slide-in panel.
@@ -40,8 +40,8 @@ namespace CronixUI.Controls;
             DefaultStyleKey = typeof(FlDrawer);
         }
 
-        public void Open() => IsOpen = true;
-        public void Close() => IsOpen = false;
-        public void Toggle() => IsOpen = !IsOpen;
+        public void OpenDrawer() => IsOpen = true;
+        public void CloseDrawer() => IsOpen = false;
+        public void ToggleDrawer() => IsOpen = !IsOpen;
     }
 }

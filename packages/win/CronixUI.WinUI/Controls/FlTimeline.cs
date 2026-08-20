@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CronixUI.Controls;
+namespace CronixUI.Controls
 {
     /// <summary>
     /// FlTimeline - Event timeline display.

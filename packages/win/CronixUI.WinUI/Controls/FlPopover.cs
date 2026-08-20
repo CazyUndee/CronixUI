@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace CronixUI.Controls;
+namespace CronixUI.Controls
 {
     /// <summary>
     /// FlPopover - Floating content box.
@@ -31,8 +31,8 @@ namespace CronixUI.Controls;
             DefaultStyleKey = typeof(FlPopover);
         }
 
-        public void Show() => IsOpen = true;
-        public void Hide() => IsOpen = false;
-        public void Toggle() => IsOpen = !IsOpen;
+        public void ShowPopover() => IsOpen = true;
+        public void HidePopover() => IsOpen = false;
+        public void TogglePopover() => IsOpen = !IsOpen;
     }
 }
