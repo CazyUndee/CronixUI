@@ -1,7 +1,7 @@
 //! Stat component for displaying numeric metrics.
 
 use egui::Ui;
-use crate::tokens::*;
+use crate::colors::*;
 
 /// Delta type for stat change indicators.
 #[derive(Clone, Copy, PartialEq)]
@@ -40,7 +40,7 @@ pub fn stat(ui: &mut Ui, config: &StatConfig) {
             egui::RichText::new(&config.value)
                 .size(28.0)
                 .strong()
-                .color(colors::text()),
+                .color(TEXT),
         );
 
         // Label
@@ -48,16 +48,16 @@ pub fn stat(ui: &mut Ui, config: &StatConfig) {
             ui.label(
                 egui::RichText::new(&config.label)
                     .size(12.0)
-                    .color(colors::text_muted()),
+                    .color(TEXT_MUTED),
             );
         }
 
         // Delta
         if !config.delta.is_empty() {
             let delta_color = match config.delta_type {
-                DeltaType::Positive => colors::success(),
-                DeltaType::Negative => colors::error(),
-                DeltaType::Neutral => colors::text_muted(),
+                DeltaType::Positive => SUCCESS,
+                DeltaType::Negative => ERROR,
+                DeltaType::Neutral => TEXT_MUTED,
             };
             ui.label(
                 egui::RichText::new(&config.delta)

@@ -1,12 +1,12 @@
 //! Header layout component.
 
 use egui::Ui;
-use crate::tokens::*;
+use crate::colors::*;
 
 /// Render a header section.
 pub fn header(ui: &mut Ui, title: &str, add_contents: impl FnOnce(&mut Ui)) {
-    let frame = egui::Frame::new()
-        .fill(colors::surface())
+    let frame = egui::Frame::default()
+        .fill(SURFACE)
         .inner_margin(egui::Margin::symmetric(16.0, 12.0));
 
     frame.show(ui, |ui| {
@@ -15,7 +15,7 @@ pub fn header(ui: &mut Ui, title: &str, add_contents: impl FnOnce(&mut Ui)) {
                 egui::RichText::new(title)
                     .size(16.0)
                     .strong()
-                    .color(colors::text()),
+                    .color(TEXT),
             );
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 add_contents(ui);

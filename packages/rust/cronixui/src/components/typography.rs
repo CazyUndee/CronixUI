@@ -1,7 +1,7 @@
 //! Typography components for headings and styled text.
 
 use egui::Ui;
-use crate::tokens::*;
+use crate::colors::*;
 
 /// Render an H1 heading.
 pub fn h1(ui: &mut Ui, text: &str) {
@@ -9,7 +9,7 @@ pub fn h1(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(32.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -19,7 +19,7 @@ pub fn h2(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(24.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -29,7 +29,7 @@ pub fn h3(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(20.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -39,7 +39,7 @@ pub fn h4(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(16.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -49,7 +49,7 @@ pub fn h5(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(14.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -59,7 +59,7 @@ pub fn h6(ui: &mut Ui, text: &str) {
         egui::RichText::new(text)
             .size(12.0)
             .strong()
-            .color(colors::text()),
+            .color(TEXT),
     );
 }
 
@@ -76,11 +76,11 @@ pub enum TextVariant {
 /// Render styled text.
 pub fn text(ui: &mut Ui, text: &str, variant: TextVariant, size: f32) {
     let color = match variant {
-        TextVariant::Default => colors::text(),
-        TextVariant::Muted => colors::text_muted(),
-        TextVariant::Dim => colors::text_dim(),
-        TextVariant::Accent => colors::accent(),
-        TextVariant::Mono => colors::text(),
+        TextVariant::Default => TEXT,
+        TextVariant::Muted => TEXT_MUTED,
+        TextVariant::Dim => TEXT_DIM,
+        TextVariant::Accent => ACCENT,
+        TextVariant::Mono => TEXT,
     };
 
     let font_id = egui::FontId::new(size, egui::FontFamily::Proportional);
