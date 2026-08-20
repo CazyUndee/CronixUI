@@ -43,17 +43,51 @@ export const Tabs: React.FC<TabsProps> & {
       }
     });
 
+    const tabRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+
+    const handleTabKeyDown = (e: React.KeyboardEvent, idx: number) => {
+      let nextIndex = idx;
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          nextIndex = (idx + 1) % tabs.length;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          nextIndex = (idx - 1 + tabs.length) % tabs.length;
+          break;
+        case 'Home':
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          nextIndex = tabs.length - 1;
+          break;
+        default:
+          return;
+      }
+      handleTabClick(nextIndex);
+      tabRefs.current[nextIndex]?.focus();
+    };
+
     return (
       <div className={className} {...props}>
-        <div className="cn-tabs">
+        <div className="cn-tabs" role="tablist">
           {tabs.map((tab, idx) => (
             <div
               key={idx}
+              ref={(el) => { tabRefs.current[idx] = el; }}
               className={`cn-tab ${activeIndex === idx ? 'cn-tab-active' : ''}`.trim()}
               onClick={() => handleTabClick(idx)}
+              onKeyDown={(e) => handleTabKeyDown(e, idx)}
               role="tab"
               aria-selected={activeIndex === idx}
-              tabIndex={0}
+              tabIndex={activeIndex === idx ? 0 : -1}
+              id={`cn-tab-${idx}`}
+              aria-controls={`cn-tabpanel-${idx}`}
             >
               {tab.props.children}
             </div>
@@ -64,7 +98,10 @@ export const Tabs: React.FC<TabsProps> & {
             key={idx}
             className={`cn-tab-panel ${activeIndex === idx ? 'cn-tab-panel-active' : ''}`.trim()}
             role="tabpanel"
+            id={`cn-tabpanel-${idx}`}
+            aria-labelledby={`cn-tab-${idx}`}
             hidden={activeIndex !== idx}
+            tabIndex={activeIndex === idx ? 0 : -1}
           >
             {panel.props.children}
           </div>

@@ -42,4 +42,25 @@ describe('TreeView Component', () => {
     fireEvent.click(toggles[0]);
     expect(screen.queryByText('Child 1-1')).not.toBeInTheDocument();
   });
+
+  test('has correct ARIA roles', () => {
+    render(<TreeView nodes={sampleNodes} />);
+    expect(screen.getByRole('tree')).toBeInTheDocument();
+    const treeItems = screen.getAllByRole('treeitem');
+    expect(treeItems.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test('selected node has aria-selected', () => {
+    render(<TreeView nodes={sampleNodes} selectedId="1" />);
+    const selected = screen.getByText('Root 1').closest('[role="treeitem"]');
+    expect(selected).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('keyboard Enter selects node', () => {
+    const onSelect = jest.fn();
+    render(<TreeView nodes={sampleNodes} onSelect={onSelect} />);
+    const nodeContent = screen.getByText('Root 1');
+    fireEvent.keyDown(nodeContent, { key: 'Enter' });
+    expect(onSelect).toHaveBeenCalledWith('1');
+  });
 });

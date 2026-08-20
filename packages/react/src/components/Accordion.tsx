@@ -47,7 +47,9 @@ export const Accordion: React.FC<AccordionProps> & {
                   onClick={() => toggleItem(idx)}
                   role="button"
                   tabIndex={0}
+                  id={`accordion-header-${idx}`}
                   aria-expanded={openItems.has(idx)}
+                  aria-controls={`accordion-panel-${idx}`}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
@@ -60,7 +62,7 @@ export const Accordion: React.FC<AccordionProps> & {
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </div>
-                <div className="cn-accordion-content">
+                <div className="cn-accordion-content" id={`accordion-panel-${idx}`} role="region" aria-labelledby={`accordion-header-${idx}`}>
                   {child.props.children}
                 </div>
               </div>

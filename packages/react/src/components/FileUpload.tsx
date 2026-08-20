@@ -27,6 +27,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({ accept, multiple = false
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
       onClick={() => inputRef.current?.click()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="File upload area"
       {...props}
     >
       <div className="cn-fileupload-content">
@@ -40,6 +49,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ accept, multiple = false
         multiple={multiple}
         className="cn-fileupload-input"
         onChange={(e) => handleFiles(e.target.files)}
+        tabIndex={-1}
+        aria-hidden="true"
       />
     </div>
   );

@@ -34,24 +34,35 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level, selectedId, on
   };
 
   return (
-    <div className="cn-tree-node">
+    <div className="cn-tree-node" role="treeitem" aria-expanded={hasChildren ? expanded : undefined} aria-selected={node.id === selectedId}>
       <div
         className={`cn-tree-node-content ${node.id === selectedId ? 'cn-tree-node-selected' : ''}`}
         style={{ paddingLeft: level * 20 }}
         onClick={() => onSelect?.(node.id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect?.(node.id);
+          }
+          if (hasChildren && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+            e.preventDefault();
+            handleToggle();
+          }
+        }}
+        tabIndex={0}
       >
         {hasChildren ? (
-          <span className="cn-tree-toggle" onClick={(e) => { e.stopPropagation(); handleToggle(); }}>
+          <span className="cn-tree-toggle" onClick={(e) => { e.stopPropagation(); handleToggle(); }} aria-hidden="true">
             {expanded ? '▼' : '▶'}
           </span>
         ) : (
           <span className="cn-tree-spacer" />
         )}
-        {node.icon && <span className="cn-tree-icon">{node.icon}</span>}
+        {node.icon && <span className="cn-tree-icon" aria-hidden="true">{node.icon}</span>}
         <span className="cn-tree-label">{node.label}</span>
       </div>
       {hasChildren && expanded && (
-        <div className="cn-tree-children">
+        <div className="cn-tree-children" role="group">
           {node.children!.map((child) => (
             <TreeNodeItem
               key={child.id}

@@ -9,7 +9,7 @@ export interface ColorPickerProps {
 
 const DEFAULT_PRESETS = [
   '#6B2323', '#8B3A3A', '#C97A7A', '#1A1A1A', '#2A2A2A',
-  '#FFFFFF', '#6B2323', '#2A6B23', '#6B5A23', '#23356B',
+  '#FFFFFF', '#3B7A3B', '#2A6B23', '#6B5A23', '#23356B',
 ];
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({
@@ -28,13 +28,15 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   return (
     <div className="cn-colorpicker">
       <div className="cn-colorpicker-preview" style={{ backgroundColor: currentColor }} />
-      <div className="cn-colorpicker-presets">
+      <div className="cn-colorpicker-presets" role="radiogroup" aria-label="Color presets">
         {presets.map((preset) => (
           <button
             key={preset}
             className={`cn-colorpicker-swatch ${preset === currentColor ? 'cn-colorpicker-swatch-active' : ''}`}
             style={{ backgroundColor: preset }}
             onClick={() => handleChange(preset)}
+            role="radio"
+            aria-checked={preset === currentColor}
             aria-label={`Color ${preset}`}
           />
         ))}

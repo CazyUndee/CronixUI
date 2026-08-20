@@ -22,6 +22,9 @@ export const Modal: React.FC<ModalProps> & {
   Footer: React.FC<ModalFooterProps>;
 } = Object.assign(
   ({ isOpen = false, onClose, size = 'md', children, className = '', ...props }: ModalProps) => {
+    const modalRef = React.useRef<HTMLDivElement>(null);
+    const previousFocusRef = React.useRef<HTMLElement | null>(null);
+
     React.useEffect(() => {
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && onClose) {
@@ -30,15 +33,50 @@ export const Modal: React.FC<ModalProps> & {
       };
 
       if (isOpen) {
+        previousFocusRef.current = document.activeElement as HTMLElement;
         document.addEventListener('keydown', handleEscape);
         document.body.style.overflow = 'hidden';
+
+        // Focus the first focusable element in the modal
+        requestAnimationFrame(() => {
+          if (modalRef.current) {
+            const focusable = modalRef.current.querySelector<HTMLElement>(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            focusable?.focus();
+          }
+        });
       }
 
       return () => {
         document.removeEventListener('keydown', handleEscape);
         document.body.style.overflow = '';
+        // Restore focus when modal closes
+        previousFocusRef.current?.focus();
       };
     }, [isOpen, onClose]);
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key !== 'Tab' || !modalRef.current) return;
+
+      const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
 
     if (!isOpen) return null;
 
@@ -50,9 +88,10 @@ export const Modal: React.FC<ModalProps> & {
         onClick={(e) => e.target === e.currentTarget && onClose?.()}
         role="dialog"
         aria-modal="true"
+        onKeyDown={handleKeyDown}
         {...props}
       >
-        <div className={`cn-modal ${sizeClass}`.trim()}>
+        <div className={`cn-modal ${sizeClass}`.trim()} ref={modalRef}>
           {children}
         </div>
       </div>
