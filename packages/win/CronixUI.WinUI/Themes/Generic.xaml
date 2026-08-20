@@ -346,4 +346,16 @@
         <Setter Property="Background" Value="Transparent"/>
     </Style>
 
+    <Style TargetType="local:FlEmptyState">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlNotification">
+        <Setter Property="Background" Value="#1A1A1A"/>
+    </Style>
+
+    <Style TargetType="local:FlFileUpload">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
 </ResourceDictionary>

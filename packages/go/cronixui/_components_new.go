@@ -454,3 +454,44 @@ func NewColorPicker() *ColorPicker {
 	lbl := widget.NewLabel("#6B2323")
 	return &ColorPicker{CanvasObject: container.NewVBox(bg, lbl)}
 }
+
+// =============================================================================
+// EmptyState, Notification, FileUpload
+// =============================================================================
+
+// EmptyState shows a placeholder when no data is available.
+type EmptyState struct {
+	fyne.CanvasObject
+}
+
+func NewEmptyState(title, description string) *EmptyState {
+	titleLbl := widget.NewLabel(title)
+	titleLbl.Wrapping = fyne.TextWrapWord
+	descLbl := widget.NewLabel(description)
+	descLbl.Wrapping = fyne.TextWrapWord
+	return &EmptyState{CanvasObject: container.NewVBox(titleLbl, descLbl)}
+}
+
+// Notification is a toast message.
+type Notification struct {
+	fyne.CanvasObject
+}
+
+func NewNotification(message string) *Notification {
+	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 26, A: 255})
+	bg.CornerRadius = 8
+	lbl := widget.NewLabel(message)
+	return &Notification{CanvasObject: container.NewStack(bg, container.NewPadded(lbl))}
+}
+
+// FileUpload is a drag-and-drop file selector.
+type FileUpload struct {
+	fyne.CanvasObject
+}
+
+func NewFileUpload() *FileUpload {
+	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 42, A: 255})
+	bg.CornerRadius = 8
+	lbl := widget.NewLabel("📁 Click to browse files")
+	return &FileUpload{CanvasObject: container.NewStack(bg, container.NewCenter(lbl))}
+}

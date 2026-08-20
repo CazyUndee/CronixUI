@@ -47,3 +47,6 @@ export { default as Drawer, type DrawerProps } from './components/Drawer';
 export { default as Popover, type PopoverProps } from './components/Popover';
 export { default as TreeView, type TreeViewProps, type TreeNode } from './components/TreeView';
 export { default as ColorPicker, type ColorPickerProps } from './components/ColorPicker';
+export { default as EmptyState, type EmptyStateProps } from './components/EmptyState';
+export { default as Notification, type NotificationProps } from './components/Notification';
+export { default as FileUpload, type FileUploadProps } from './components/FileUpload';

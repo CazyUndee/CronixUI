@@ -24,6 +24,9 @@ from .drawer import Drawer
 from .popover import Popover
 from .treeview import TreeView
 from .colorpicker import ColorPicker
+from .empty_state import EmptyState
+from .notification import Notification
+from .file_upload import FileUpload
 from .core import (
     Frame, Label, Entry, Text, Scrollbar,
     Theme, get_theme, set_theme,
@@ -74,6 +77,9 @@ __all__ = [
     "Popover",
     "TreeView",
     "ColorPicker",
+    "EmptyState",
+    "Notification",
+    "FileUpload",
     
     # Core
     "Frame",

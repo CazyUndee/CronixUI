@@ -45,3 +45,6 @@ export { default as CnPopover } from './components/CnPopover.vue';
 export * from './tokens/index.js';
 export { default as CnTreeView } from './components/CnTreeView.vue';
 export { default as CnColorPicker } from './components/CnColorPicker.vue';
+export { default as CnEmptyState } from './components/CnEmptyState.vue';
+export { default as CnNotification } from './components/CnNotification.vue';
+export { default as CnFileUpload } from './components/CnFileUpload.vue';
