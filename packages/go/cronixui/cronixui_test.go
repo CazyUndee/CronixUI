@@ -116,11 +116,11 @@ func TestDefaultColorsBorder(t *testing.T) {
 func TestDefaultTypography(t *testing.T) {
 	ty := DefaultTypography()
 
-	if ty.PrimaryFont == "" {
-		t.Error("PrimaryFont should not be empty")
+	if ty.FontFamily == "" {
+		t.Error("FontFamily should not be empty")
 	}
-	if ty.MonoFont == "" {
-		t.Error("MonoFont should not be empty")
+	if ty.FontMono == "" {
+		t.Error("FontMono should not be empty")
 	}
 	if ty.FontSizeXS == 0 {
 		t.Error("FontSizeXS should not be zero")
@@ -139,20 +139,20 @@ func TestDefaultTypography(t *testing.T) {
 func TestDefaultSpacing(t *testing.T) {
 	sp := DefaultSpacing()
 
-	if sp.XS == 0 {
-		t.Error("XS should not be zero")
+	if sp.Space1 == 0 {
+		t.Error("Space1 should not be zero")
 	}
-	if sp.MD == 0 {
-		t.Error("MD should not be zero")
+	if sp.Space4 == 0 {
+		t.Error("Space4 should not be zero")
 	}
-	if sp.XL == 0 {
-		t.Error("XL should not be zero")
+	if sp.Space12 == 0 {
+		t.Error("Space12 should not be zero")
 	}
-	if sp.XS >= sp.MD {
-		t.Errorf("XS (%v) should be < MD (%v)", sp.XS, sp.MD)
+	if sp.Space1 >= sp.Space4 {
+		t.Errorf("Space1 (%v) should be < Space4 (%v)", sp.Space1, sp.Space4)
 	}
-	if sp.MD >= sp.XL {
-		t.Errorf("MD (%v) should be < XL (%v)", sp.MD, sp.XL)
+	if sp.Space4 >= sp.Space12 {
+		t.Errorf("Space4 (%v) should be < Space12 (%v)", sp.Space4, sp.Space12)
 	}
 }
 
