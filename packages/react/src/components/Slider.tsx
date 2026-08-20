@@ -21,6 +21,10 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         step={step}
         onChange={(e) => onChange?.(Number(e.target.value))}
         disabled={disabled}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-valuetext={`${value}`}
         {...props}
       />
     );

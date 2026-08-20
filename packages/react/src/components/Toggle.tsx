@@ -40,7 +40,8 @@ export const Toggle: React.FC<ToggleProps> = ({
         onClick={handleToggle}
         role="switch"
         aria-checked={isOn}
-        tabIndex={0}
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();

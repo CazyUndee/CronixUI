@@ -21,4 +21,18 @@ describe('Button Component', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveClass('cn-btn-sm');
   });
+
+  test('loading state disables button and sets aria-busy', () => {
+    render(<Button loading>Loading</Button>);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByText('⏳')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  test('disabled button is disabled', () => {
+    render(<Button disabled>Disabled</Button>);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+  });
 });

@@ -8,6 +8,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: boolean;
+  loading?: boolean;
 }
 
 export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -16,7 +17,7 @@ export const Button: React.FC<ButtonProps> & {
   Group: React.FC<ButtonGroupProps>;
 } = Object.assign(
   React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ children, variant = 'default', size = 'md', icon = false, disabled = false, className = '', ...props }, ref) => {
+    ({ children, variant = 'default', size = 'md', icon = false, disabled = false, loading = false, className = '', ...props }, ref) => {
       const variantClass = variant !== 'default' ? `cn-btn-${variant}` : '';
       const sizeClass = size !== 'md' ? `cn-btn-${size}` : '';
       const iconClass = icon ? 'cn-btn-icon' : '';
@@ -25,9 +26,11 @@ export const Button: React.FC<ButtonProps> & {
         <button
           ref={ref}
           className={`cn-btn ${variantClass} ${sizeClass} ${iconClass} ${className}`.trim()}
-          disabled={disabled}
+          disabled={disabled || loading}
+          aria-busy={loading}
           {...props}
         >
+          {loading && <span className="cn-btn-spinner" aria-hidden="true">⏳</span>}
           {children}
         </button>
       );

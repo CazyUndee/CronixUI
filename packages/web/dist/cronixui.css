@@ -2185,3 +2185,4 @@ body {
 .cn-skip-link:focus {
   top: 0;
 }
+.cn-btn[aria-busy=true] { pointer-events: none; opacity: 0.7; }
