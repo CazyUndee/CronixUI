@@ -2148,3 +2148,40 @@ body {
 @media (min-width: 1200px) {
   .cn-container { max-width: var(--cn-container-max, 1200px); margin: 0 auto; }
 }
+
+/* ========================================
+   FOCUS-VISIBLE (keyboard-only focus indicators)
+   ======================================== */
+.cn-btn:focus-visible,
+.cn-input:focus-visible,
+.cn-select:focus-visible,
+.cn-toggle:focus-visible,
+.cn-tab:focus-visible,
+.cn-accordion-header:focus-visible,
+.cn-checkbox input:focus-visible + .cn-checkbox-box,
+.cn-radio input:focus-visible + .cn-radio-box {
+  outline: 2px solid var(--cn-accent);
+  outline-offset: 2px;
+}
+
+.cn-btn:focus:not(:focus-visible),
+.cn-input:focus:not(:focus-visible),
+.cn-select:focus:not(:focus-visible),
+.cn-toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip-to-content link for screen readers */
+.cn-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--cn-accent);
+  color: var(--cn-text);
+  padding: var(--cn-space-2) var(--cn-space-4);
+  z-index: 10000;
+  transition: top 0.1s;
+}
+.cn-skip-link:focus {
+  top: 0;
+}

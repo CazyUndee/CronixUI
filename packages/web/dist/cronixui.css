@@ -2118,3 +2118,70 @@ body {
 .cn-fileupload-icon { font-size: 32px; margin-bottom: var(--cn-space-2); }
 .cn-fileupload-text { font-size: var(--cn-text-sm); color: var(--cn-text-muted); }
 .cn-fileupload-input { display: none; }
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+@media (max-width: 768px) {
+  .cn-container { padding-left: var(--cn-space-3); padding-right: var(--cn-space-3); }
+  .cn-header { flex-wrap: wrap; }
+  .cn-sidebar { position: fixed; left: -260px; transition: left 0.2s ease; z-index: 1000; }
+  .cn-sidebar.open { left: 0; }
+  .cn-modal { margin: var(--cn-space-4); max-width: calc(100vw - 2rem); }
+  .cn-modal-xl { width: calc(100vw - 2rem); }
+  .cn-tabs { overflow-x: auto; }
+  .cn-table { font-size: var(--cn-text-sm); }
+  .cn-toast { min-width: 250px; }
+  .cn-notification { min-width: unset; max-width: calc(100vw - 2rem); }
+  .cn-drawer-left, .cn-drawer-right { width: 100%; }
+  .cn-drawer-top, .cn-drawer-bottom { max-height: 80vh; }
+}
+
+@media (max-width: 480px) {
+  .cn-btn-group { flex-wrap: wrap; }
+  .cn-btn-group .cn-btn { flex: 1; min-width: 0; }
+  .cn-avatar-group .cn-avatar { width: 28px; height: 28px; }
+  .cn-card { padding: var(--cn-space-3); }
+  .cn-card-header { padding: var(--cn-space-3); }
+}
+
+@media (min-width: 1200px) {
+  .cn-container { max-width: var(--cn-container-max, 1200px); margin: 0 auto; }
+}
+
+/* ========================================
+   FOCUS-VISIBLE (keyboard-only focus indicators)
+   ======================================== */
+.cn-btn:focus-visible,
+.cn-input:focus-visible,
+.cn-select:focus-visible,
+.cn-toggle:focus-visible,
+.cn-tab:focus-visible,
+.cn-accordion-header:focus-visible,
+.cn-checkbox input:focus-visible + .cn-checkbox-box,
+.cn-radio input:focus-visible + .cn-radio-box {
+  outline: 2px solid var(--cn-accent);
+  outline-offset: 2px;
+}
+
+.cn-btn:focus:not(:focus-visible),
+.cn-input:focus:not(:focus-visible),
+.cn-select:focus:not(:focus-visible),
+.cn-toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip-to-content link for screen readers */
+.cn-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--cn-accent);
+  color: var(--cn-text);
+  padding: var(--cn-space-2) var(--cn-space-4);
+  z-index: 10000;
+  transition: top 0.1s;
+}
+.cn-skip-link:focus {
+  top: 0;
+}

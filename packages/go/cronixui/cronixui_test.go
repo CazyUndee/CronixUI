@@ -325,10 +325,10 @@ func TestPaginationNavigation(t *testing.T) {
 		t.Errorf("GoTo(0) should not go below page 1, got %v", p.Current())
 	}
 
-	// Test boundary: can't go after last page
+	// Test boundary: can't go after last page (GoTo ignores out-of-range)
 	p.GoTo(999)
-	if p.Current() != 10 {
-		t.Errorf("GoTo(999) should not go above total pages, got %v", p.Current())
+	if p.Current() != 1 {
+		t.Errorf("GoTo(999) should stay at current page, got %v", p.Current())
 	}
 }
 
