@@ -271,16 +271,16 @@ func TestThemeColorMapping(t *testing.T) {
 func TestThemeSizeMapping(t *testing.T) {
 	th := NewTheme()
 
-	sizeNames := []theme.ThemeSizeName{
-		theme.SizeNameText,
-		theme.SizeNamePadding,
+	// Test Text size
+	sizeText := th.Size(theme.SizeNameText)
+	if sizeText <= 0 {
+		t.Errorf("Size(SizeNameText) = %v, want > 0", sizeText)
 	}
 
-	for _, name := range sizeNames {
-		size := th.Size(name)
-		if size <= 0 {
-			t.Errorf("Size(%v) = %v, want > 0", name, size)
-		}
+	// Test Padding size
+	sizePadding := th.Size(theme.SizeNamePadding)
+	if sizePadding <= 0 {
+		t.Errorf("Size(SizeNamePadding) = %v, want > 0", sizePadding)
 	}
 }
 
@@ -350,16 +350,20 @@ func TestPaginationEdgeCases(t *testing.T) {
 // =============================================================================
 
 func TestNewAccordion(t *testing.T) {
-	items := []string{"Section 1", "Section 2"}
-	acc := NewAccordion(items, nil, false)
+	acc := NewAccordion(
+		AccordionItem{Title: "Section 1"},
+		AccordionItem{Title: "Section 2"},
+	)
 	if acc == nil {
 		t.Fatal("NewAccordion returned nil")
 	}
 }
 
 func TestAccordionToggle(t *testing.T) {
-	items := []string{"Section 1", "Section 2"}
-	acc := NewAccordion(items, nil, false)
+	acc := NewAccordion(
+		AccordionItem{Title: "Section 1"},
+		AccordionItem{Title: "Section 2"},
+	)
 	if acc == nil {
 		t.Fatal("NewAccordion returned nil")
 	}
@@ -386,8 +390,11 @@ func TestAccordionToggle(t *testing.T) {
 }
 
 func TestAccordionOpenAll(t *testing.T) {
-	items := []string{"A", "B", "C"}
-	acc := NewAccordion(items, nil, true)
+	acc := NewAccordion(
+		AccordionItem{Title: "A"},
+		AccordionItem{Title: "B"},
+		AccordionItem{Title: "C"},
+	)
 	acc.OpenAll()
 
 	for i := 0; i < 3; i++ {
@@ -398,8 +405,11 @@ func TestAccordionOpenAll(t *testing.T) {
 }
 
 func TestAccordionCloseAll(t *testing.T) {
-	items := []string{"A", "B", "C"}
-	acc := NewAccordion(items, nil, true)
+	acc := NewAccordion(
+		AccordionItem{Title: "A"},
+		AccordionItem{Title: "B"},
+		AccordionItem{Title: "C"},
+	)
 	acc.OpenAll()
 	acc.CloseAll()
 
