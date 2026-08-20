@@ -1,3 +1,4 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -39,7 +40,7 @@ public sealed class FlTag : ContentControl
 
     public event EventHandler? Removed;
 
-    protected virtual void OnRemoved()
+    public void OnRemoved()
     {
         Removed?.Invoke(this, EventArgs.Empty);
     }

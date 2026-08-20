@@ -1,3 +1,4 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -30,7 +31,7 @@ public sealed class FlPagination : Control
 
     public event EventHandler<int>? PageChanged;
 
-    protected virtual void OnPageChanged(int page)
+    public void OnPageChanged(int page)
     {
         PageChanged?.Invoke(this, page);
     }

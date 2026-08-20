@@ -1,3 +1,4 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -30,7 +31,7 @@ public sealed class FlSearch : Control
 
     public event EventHandler<string>? QueryChanged;
 
-    protected virtual void OnQueryChanged(string query)
+    public void OnQueryChanged(string query)
     {
         QueryChanged?.Invoke(this, query);
     }

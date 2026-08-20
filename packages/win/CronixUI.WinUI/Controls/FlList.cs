@@ -11,11 +11,11 @@ public sealed class FlList : ItemsControl
     }
 
     public static readonly DependencyProperty SelectionModeProperty =
-        DependencyProperty.Register(nameof(SelectionMode), typeof(ListSelectionMode), typeof(FlList), new PropertyMetadata(ListSelectionMode.Single));
+        DependencyProperty.Register(nameof(SelectionMode), typeof(int), typeof(FlList), new PropertyMetadata(0));
 
-    public ListSelectionMode SelectionMode
+    public int SelectionMode
     {
-        get => (ListSelectionMode)GetValue(SelectionModeProperty);
+        get => (int)GetValue(SelectionModeProperty);
         set => SetValue(SelectionModeProperty, value);
     }
 
