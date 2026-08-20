@@ -103,19 +103,50 @@
       this.tabs = $$('.cn-tab', el);
       this.panels = $$('.cn-tab-panel', el.parentElement);
 
+      // Add ARIA attributes
+      this.el.setAttribute('role', 'tablist');
       this.tabs.forEach((tab, i) => {
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('tabindex', i === 0 ? '0' : '-1');
+        tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        tab.setAttribute('id', 'cn-tab-' + i);
         tab.addEventListener('click', () => this.setActive(i));
+        tab.addEventListener('keydown', (e) => this.onKeyDown(e, i));
+      });
+      this.panels.forEach((panel, i) => {
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('id', 'cn-tabpanel-' + i);
+        panel.setAttribute('aria-labelledby', 'cn-tab-' + i);
+        panel.setAttribute('tabindex', '0');
       });
 
       el._cnTabs = this;
     }
 
+    onKeyDown(e, index) {
+      let next = index;
+      switch (e.key) {
+        case 'ArrowRight': case 'ArrowDown':
+          e.preventDefault(); next = (index + 1) % this.tabs.length; break;
+        case 'ArrowLeft': case 'ArrowUp':
+          e.preventDefault(); next = (index - 1 + this.tabs.length) % this.tabs.length; break;
+        case 'Home': e.preventDefault(); next = 0; break;
+        case 'End': e.preventDefault(); next = this.tabs.length - 1; break;
+        default: return;
+      }
+      this.setActive(next);
+      this.tabs[next].focus();
+    }
+
     setActive(index) {
       this.tabs.forEach((tab, i) => {
         tab.classList.toggle('cn-tab-active', i === index);
+        tab.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        tab.setAttribute('tabindex', i === index ? '0' : '-1');
       });
       this.panels.forEach((panel, i) => {
         panel.classList.toggle('cn-tab-panel-active', i === index);
+        panel.hidden = i !== index;
       });
       this.el.dispatchEvent(new CustomEvent('change', {
         detail: { index }
@@ -138,22 +169,44 @@
       this.items = $$('.cn-accordion-item', el);
       this.multi = el.dataset.multi === 'true';
 
-      this.items.forEach(item => {
+      this.items.forEach((item, idx) => {
         const header = $('.cn-accordion-header', item);
-        header.addEventListener('click', () => this.toggle(item));
+        header.setAttribute('role', 'button');
+        header.setAttribute('tabindex', '0');
+        header.setAttribute('aria-expanded', 'false');
+        header.setAttribute('aria-controls', 'accordion-panel-' + idx);
+        header.setAttribute('id', 'accordion-header-' + idx);
+        header.addEventListener('click', () => this.toggle(item, header));
+        header.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.toggle(item, header);
+          }
+        });
+        const content = item.querySelector('.cn-accordion-content');
+        if (content) {
+          content.setAttribute('id', 'accordion-panel-' + idx);
+          content.setAttribute('role', 'region');
+          content.setAttribute('aria-labelledby', 'accordion-header-' + idx);
+        }
       });
 
       el._cnAccordion = this;
     }
 
-    toggle(item) {
+    toggle(item, header) {
       const isOpen = item.classList.contains('cn-accordion-open');
 
       if (!this.multi) {
-        this.items.forEach(i => i.classList.remove('cn-accordion-open'));
+        this.items.forEach(i => {
+          i.classList.remove('cn-accordion-open');
+          const h = i.querySelector('.cn-accordion-header');
+          if (h) h.setAttribute('aria-expanded', 'false');
+        });
       }
 
       item.classList.toggle('cn-accordion-open', !isOpen);
+      if (header) header.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
     }
 
     openAll() {
