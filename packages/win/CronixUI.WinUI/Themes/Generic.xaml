@@ -160,4 +160,181 @@
         <Setter Property="Foreground" Value="{StaticResource CnAccentBrush}"/>
     </Style>
 
+    <!-- New Controls -->
+    <!-- FlAccordion -->
+    <Style TargetType="local:FlAccordion">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadius}"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlAlert -->
+    <Style TargetType="local:FlAlert">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadiusLg}"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlBreadcrumb -->
+    <Style TargetType="local:FlBreadcrumb">
+        <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource CnTextSm}"/>
+        <Setter Property="Foreground" Value="{StaticResource CnTextMutedBrush}"/>
+    </Style>
+
+    <!-- FlCommandPalette -->
+    <Style TargetType="local:FlCommandPalette">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadiusLg}"/>
+        <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <!-- FlContainer -->
+    <Style TargetType="local:FlContainer">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadius}"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlFileInput -->
+    <Style TargetType="local:FlFileInput">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadius}"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+    <!-- FlFooter -->
+    <Style TargetType="local:FlFooter">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlHeader -->
+    <Style TargetType="local:FlHeader">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlList -->
+    <Style TargetType="local:FlList">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <!-- FlPagination -->
+    <Style TargetType="local:FlPagination">
+        <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource CnTextBase}"/>
+        <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
+    </Style>
+
+    <!-- FlSearch -->
+    <Style TargetType="local:FlSearch">
+        <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource CnTextBase}"/>
+        <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadius}"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+    <!-- FlSelect -->
+    <Style TargetType="local:FlSelect" BasedOn="{StaticResource CnTextBox}"/>
+
+    <!-- FlSidebar -->
+    <Style TargetType="local:FlSidebar">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        <Setter Property="Padding" Value="0,8"/>
+    </Style>
+
+    <!-- FlStat -->
+    <Style TargetType="local:FlStat">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadius}"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlTable -->
+    <Style TargetType="local:FlTable">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <!-- FlTag -->
+    <Style TargetType="local:FlTag">
+        <Setter Property="Background" Value="{StaticResource CnSurface2Brush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadiusSm}"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource CnTextSm}"/>
+    </Style>
+
+    <!-- FlToast -->
+    <Style TargetType="local:FlToast">
+        <Setter Property="Background" Value="{StaticResource CnSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CnBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource CnRadiusLg}"/>
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- FlTypography -->
+    <Style TargetType="local:FlTypography">
+        <Setter Property="FontFamily" Value="{StaticResource CnFontFamily}"/>
+        <Setter Property="Foreground" Value="{StaticResource CnTextBrush}"/>
+    </Style>
+
+    <!-- FlStack -->
+    <Style TargetType="local:FlStack">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlStepper">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlChip">
+        <Setter Property="Background" Value="#1A1A1A"/>
+        <Setter Property="Foreground" Value="#CCCCCC"/>
+        <Setter Property="BorderBrush" Value="#2A2A2A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,6"/>
+    </Style>
+
+    <Style TargetType="local:FlDatePicker">
+        <Setter Property="Background" Value="#1A1A1A"/>
+        <Setter Property="Foreground" Value="#CCCCCC"/>
+    </Style>
+
+    <Style TargetType="local:FlTimeline">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlDrawer">
+        <Setter Property="Background" Value="#1A1A1A"/>
+    </Style>
+
+    <Style TargetType="local:FlPopover">
+        <Setter Property="Background" Value="#1A1A1A"/>
+    </Style>
+
 </ResourceDictionary>

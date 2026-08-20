@@ -801,6 +801,65 @@
   }
 
   // ========================================
+  // STEPPER
+  // ========================================
+  function initSteppers() {
+    $$('.cn-stepper').forEach(el => {
+      if (!el._cnStepper) {
+        el._cnStepper = true;
+        const steps = el.querySelectorAll('.cn-stepper-step');
+        steps.forEach((step, i) => {
+          step.addEventListener('click', () => {
+            el.dispatchEvent(new CustomEvent('cn-stepper-change', { detail: { step: i } }));
+          });
+        });
+      }
+    });
+  }
+
+  // ========================================
+  // CHIP
+  // ========================================
+  function initChips() {
+    $$('.cn-chip-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.closest('.cn-chip')?.remove();
+      });
+    });
+  }
+
+  // ========================================
+  // DRAWER
+  // ========================================
+  function initDrawers() {
+    $$('.cn-drawer-overlay').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target === el) el.remove();
+      });
+    });
+  }
+
+  // ========================================
+  // POPOVER
+  // ========================================
+  function initPopovers() {
+    $$('.cn-popover-trigger').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const content = trigger.parentElement?.querySelector('.cn-popover-content');
+        if (content) {
+          const isOpen = content.style.display !== 'none';
+          content.style.display = isOpen ? 'none' : 'block';
+        }
+      });
+    });
+    document.addEventListener('click', () => {
+      $$('.cn-popover-content').forEach(c => c.style.display = 'none');
+    });
+  }
+
+  // ========================================
   // AUTO-INIT
   // ========================================
   if (document.readyState === 'loading') {

@@ -2003,3 +2003,69 @@ body {
     margin: var(--cn-space-3);
   }
 }
+
+/* Stepper */
+.cn-stepper { display: flex; gap: 0; }
+.cn-stepper-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+.cn-stepper-indicator { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--cn-surface-3); color: var(--cn-text-muted); border: 2px solid var(--cn-border); font-size: var(--cn-text-sm); font-weight: 600; }
+.cn-stepper-step.active .cn-stepper-indicator { background: var(--cn-accent); color: var(--cn-accent-text); border-color: var(--cn-accent); }
+.cn-stepper-step.completed .cn-stepper-indicator { background: var(--cn-success); color: white; border-color: var(--cn-success); }
+.cn-stepper-content { text-align: center; margin-top: var(--cn-space-2); }
+.cn-stepper-label { font-size: var(--cn-text-sm); color: var(--cn-text); font-weight: 500; }
+.cn-stepper-description { font-size: var(--cn-text-xs); color: var(--cn-text-muted); }
+.cn-stepper-connector { position: absolute; top: 16px; left: 50%; width: 100%; height: 2px; background: var(--cn-border); }
+.cn-stepper-connector.completed { background: var(--cn-success); }
+
+/* DatePicker */
+.cn-datepicker-input { width: 100%; padding: var(--cn-space-3) var(--cn-space-4); background: var(--cn-surface); border: 1px solid var(--cn-border); border-radius: var(--cn-radius); color: var(--cn-text); font-family: var(--cn-font); font-size: var(--cn-text-base); }
+.cn-datepicker-input::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+
+/* Chip */
+.cn-chip { display: inline-flex; align-items: center; gap: var(--cn-space-1); padding: var(--cn-space-1) var(--cn-space-3); border-radius: var(--cn-radius-full, 9999px); background: var(--cn-surface-2); color: var(--cn-text); font-size: var(--cn-text-sm); border: 1px solid var(--cn-border); cursor: default; }
+.cn-chip-sm { padding: 2px var(--cn-space-2); font-size: var(--cn-text-xs); }
+.cn-chip-lg { padding: var(--cn-space-2) var(--cn-space-4); font-size: var(--cn-text-base); }
+.cn-chip-accent { background: var(--cn-accent-light); color: var(--cn-accent-text); border-color: var(--cn-accent); }
+.cn-chip-success { background: rgba(30,80,40,0.3); color: var(--cn-success-text); border-color: var(--cn-success); }
+.cn-chip-warning { background: rgba(80,60,20,0.3); color: var(--cn-warning-text); border-color: var(--cn-warning); }
+.cn-chip-error { background: rgba(80,20,20,0.3); color: var(--cn-error-text); border-color: var(--cn-error); }
+.cn-chip-info { background: rgba(20,53,80,0.3); color: var(--cn-info-text); border-color: var(--cn-info); }
+.cn-chip-selected { background: var(--cn-accent); color: white; }
+.cn-chip-remove { background: none; border: none; color: inherit; cursor: pointer; padding: 0 2px; font-size: 1.2em; line-height: 1; }
+
+/* Timeline */
+.cn-timeline { display: flex; flex-direction: column; gap: 0; }
+.cn-timeline-item { display: flex; gap: var(--cn-space-3); position: relative; }
+.cn-timeline-connector { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
+.cn-timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cn-surface-3); border: 2px solid var(--cn-border); z-index: 1; }
+.cn-timeline-item.success .cn-timeline-dot { background: var(--cn-success); border-color: var(--cn-success); }
+.cn-timeline-item.warning .cn-timeline-dot { background: var(--cn-warning); border-color: var(--cn-warning); }
+.cn-timeline-item.error .cn-timeline-dot { background: var(--cn-error); border-color: var(--cn-error); }
+.cn-timeline-line { width: 2px; flex: 1; background: var(--cn-border); margin: 4px 0; }
+.cn-timeline-content { padding-bottom: var(--cn-space-6); }
+.cn-timeline-header { display: flex; justify-content: space-between; align-items: baseline; }
+.cn-timeline-title { font-size: var(--cn-text-base); color: var(--cn-text); font-weight: 500; }
+.cn-timeline-timestamp { font-size: var(--cn-text-xs); color: var(--cn-text-muted); }
+.cn-timeline-description { font-size: var(--cn-text-sm); color: var(--cn-text-muted); margin-top: var(--cn-space-1); }
+
+/* Drawer */
+.cn-drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; }
+.cn-drawer { background: var(--cn-surface); border-left: 1px solid var(--cn-border); height: 100%; display: flex; flex-direction: column; overflow-y: auto; }
+.cn-drawer-left { margin-right: auto; }
+.cn-drawer-right { margin-left: auto; border-left: 1px solid var(--cn-border); }
+.cn-drawer-top { width: 100%; height: auto; margin-bottom: auto; border-bottom: 1px solid var(--cn-border); }
+.cn-drawer-bottom { width: 100%; height: auto; margin-top: auto; border-top: 1px solid var(--cn-border); }
+.cn-drawer-sm { width: 300px; }
+.cn-drawer-md { width: 400px; }
+.cn-drawer-lg { width: 600px; }
+.cn-drawer-header { display: flex; justify-content: space-between; align-items: center; padding: var(--cn-space-4); border-bottom: 1px solid var(--cn-border); }
+.cn-drawer-title { margin: 0; font-size: var(--cn-text-lg); font-weight: 600; color: var(--cn-text); }
+.cn-drawer-close { background: none; border: none; color: var(--cn-text-muted); font-size: 20px; cursor: pointer; padding: 4px 8px; }
+.cn-drawer-body { padding: var(--cn-space-4); flex: 1; }
+
+/* Popover */
+.cn-popover-wrapper { position: relative; display: inline-block; }
+.cn-popover-content { position: absolute; z-index: 100; background: var(--cn-surface); border: 1px solid var(--cn-border); border-radius: var(--cn-radius); padding: var(--cn-space-3); box-shadow: 0 4px 20px rgba(0,0,0,0.3); min-width: 200px; }
+.cn-popover-top .cn-popover-content { bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: var(--cn-space-2); }
+.cn-popover-bottom .cn-popover-content { top: 100%; left: 50%; transform: translateX(-50%); margin-top: var(--cn-space-2); }
+.cn-popover-left .cn-popover-content { right: 100%; top: 50%; transform: translateY(-50%); margin-right: var(--cn-space-2); }
+.cn-popover-right .cn-popover-content { left: 100%; top: 50%; transform: translateY(-50%); margin-left: var(--cn-space-2); }

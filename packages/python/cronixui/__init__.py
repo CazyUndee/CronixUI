@@ -12,6 +12,16 @@ from .rating import Rating
 from .form import (
     Input, Textarea, Checkbox, Radio, Select, Slider, FileInput
 )
+from .stat import Stat
+from .tag import Tag
+from .stack import Stack, HStack
+from .typography import H1, H2, H3, H4, H5, H6, StyledText
+from .stepper import Stepper
+from .datepicker import DatePicker
+from .chip import Chip
+from .timeline import Timeline
+from .drawer import Drawer
+from .popover import Popover
 from .core import (
     Frame, Label, Entry, Text, Scrollbar,
     Theme, get_theme, set_theme,
@@ -48,6 +58,18 @@ __all__ = [
     "Select",
     "Slider",
     "FileInput",
+    "Stat",
+    "Tag",
+    "Stack",
+    "HStack",
+    "H1", "H2", "H3", "H4", "H5", "H6",
+    "StyledText",
+    "Stepper",
+    "DatePicker",
+    "Chip",
+    "Timeline",
+    "Drawer",
+    "Popover",
     
     # Core
     "Frame",

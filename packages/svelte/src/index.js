@@ -47,6 +47,12 @@ import H5 from './H5.svelte';
 import H6 from './H6.svelte';
 import Text from './Text.svelte';
 import Label from './Label.svelte';
+import Stepper from './Stepper.svelte';
+import DatePicker from './DatePicker.svelte';
+import Chip from './Chip.svelte';
+import Timeline from './Timeline.svelte';
+import Drawer from './Drawer.svelte';
+import Popover from './Popover.svelte';
 
 export {
   Button, Card, Badge, Tag, Input, Textarea, Checkbox, Radio, Select, Slider,
@@ -54,6 +60,7 @@ export {
   Modal, Dropdown, Tabs, Accordion, Pagination, Toast, Search, CommandPalette,
   Nav, Breadcrumb, FileInput, Container, Header, Sidebar, Footer, Stat,
   ButtonGroup, FormGroup, Rating, Stack, HStack, Divider,
-  H1, H2, H3, H4, H5, H6, Text, Label
+  H1, H2, H3, H4, H5, H6, Text, Label,
+  Stepper, DatePicker, Chip, Timeline, Drawer, Popover
 };
 export * from './tokens.js';

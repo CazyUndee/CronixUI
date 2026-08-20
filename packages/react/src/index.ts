@@ -39,3 +39,9 @@ export { default as FormGroup, type FormGroupProps } from './components/FormGrou
 export { default as Rating, type RatingProps, type RatingSize } from './components/Rating';
 export { default as Stack, HStack, Divider, type StackProps, type DividerProps } from './components/Stack';
 export { H1, H2, H3, H4, H5, H6, Text, Label, type TextProps, type LabelProps } from './components/Typography';
+export { default as Stepper, type StepperProps, type StepperStep } from './components/Stepper';
+export { default as DatePicker, type DatePickerProps } from './components/DatePicker';
+export { default as Chip, type ChipProps } from './components/Chip';
+export { default as Timeline, type TimelineProps, type TimelineItem } from './components/Timeline';
+export { default as Drawer, type DrawerProps } from './components/Drawer';
+export { default as Popover, type PopoverProps } from './components/Popover';
