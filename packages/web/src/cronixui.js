@@ -798,6 +798,12 @@
     initTables();
     initRatings();
     initFileInputs();
+    initSteppers();
+    initChips();
+    initDrawers();
+    initPopovers();
+    initTreeViews();
+    initColorPickers();
   }
 
   // ========================================
@@ -856,6 +862,48 @@
     });
     document.addEventListener('click', () => {
       $$('.cn-popover-content').forEach(c => c.style.display = 'none');
+    });
+  }
+
+  // ========================================
+  // TREEVIEW
+  // ========================================
+  function initTreeViews() {
+    $$('.cn-tree-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const node = toggle.closest('.cn-tree-node');
+        const children = node?.querySelector('.cn-tree-children');
+        if (children) {
+          const isOpen = children.style.display !== 'none';
+          children.style.display = isOpen ? 'none' : '';
+          toggle.textContent = isOpen ? '▶' : '▼';
+        }
+      });
+    });
+    $$('.cn-tree-node-content').forEach(content => {
+      content.addEventListener('click', () => {
+        $$('.cn-tree-node-selected').forEach(el => el.classList.remove('cn-tree-node-selected'));
+        content.classList.add('cn-tree-node-selected');
+      });
+    });
+  }
+
+  // ========================================
+  // COLORPICKER
+  // ========================================
+  function initColorPickers() {
+    $$('.cn-colorpicker-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        const picker = swatch.closest('.cn-colorpicker');
+        const preview = picker?.querySelector('.cn-colorpicker-preview');
+        const input = picker?.querySelector('.cn-colorpicker-input');
+        const color = swatch.style.backgroundColor;
+        if (preview) preview.style.backgroundColor = color;
+        picker?.querySelectorAll('.cn-colorpicker-swatch').forEach(s => s.classList.remove('cn-colorpicker-swatch-active'));
+        swatch.classList.add('cn-colorpicker-swatch-active');
+        if (input) input.value = color;
+      });
     });
   }
 

@@ -2069,3 +2069,21 @@ body {
 .cn-popover-bottom .cn-popover-content { top: 100%; left: 50%; transform: translateX(-50%); margin-top: var(--cn-space-2); }
 .cn-popover-left .cn-popover-content { right: 100%; top: 50%; transform: translateY(-50%); margin-right: var(--cn-space-2); }
 .cn-popover-right .cn-popover-content { left: 100%; top: 50%; transform: translateY(-50%); margin-left: var(--cn-space-2); }
+
+/* TreeView */
+.cn-treeview { font-size: var(--cn-text-sm); }
+.cn-tree-node-content { display: flex; align-items: center; gap: var(--cn-space-1); padding: var(--cn-space-1) var(--cn-space-2); border-radius: var(--cn-radius); cursor: pointer; color: var(--cn-text); }
+.cn-tree-node-content:hover { background: var(--cn-surface-2); }
+.cn-tree-node-selected { background: var(--cn-accent-light); color: var(--cn-accent-text); }
+.cn-tree-toggle { font-size: 10px; color: var(--cn-text-muted); width: 16px; text-align: center; cursor: pointer; }
+.cn-tree-spacer { width: 16px; }
+.cn-tree-children { }
+
+/* ColorPicker */
+.cn-colorpicker { display: flex; flex-direction: column; gap: var(--cn-space-2); }
+.cn-colorpicker-preview { width: 100%; height: 48px; border-radius: var(--cn-radius); border: 1px solid var(--cn-border); }
+.cn-colorpicker-presets { display: flex; flex-wrap: wrap; gap: var(--cn-space-1); }
+.cn-colorpicker-swatch { width: 28px; height: 28px; border-radius: var(--cn-radius); border: 2px solid transparent; cursor: pointer; padding: 0; }
+.cn-colorpicker-swatch:hover { border-color: var(--cn-text-muted); }
+.cn-colorpicker-swatch-active { border-color: var(--cn-accent); }
+.cn-colorpicker-input { width: 100%; height: 36px; border: 1px solid var(--cn-border); border-radius: var(--cn-radius); background: var(--cn-surface); cursor: pointer; padding: 2px; }

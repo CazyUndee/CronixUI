@@ -22,6 +22,8 @@ from .chip import Chip
 from .timeline import Timeline
 from .drawer import Drawer
 from .popover import Popover
+from .treeview import TreeView
+from .colorpicker import ColorPicker
 from .core import (
     Frame, Label, Entry, Text, Scrollbar,
     Theme, get_theme, set_theme,
@@ -70,6 +72,8 @@ __all__ = [
     "Timeline",
     "Drawer",
     "Popover",
+    "TreeView",
+    "ColorPicker",
     
     # Core
     "Frame",

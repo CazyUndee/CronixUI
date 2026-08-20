@@ -338,4 +338,12 @@
         <Setter Property="Background" Value="#1A1A1A"/>
     </Style>
 
+    <Style TargetType="local:FlTreeView">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlColorPicker">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
 </ResourceDictionary>

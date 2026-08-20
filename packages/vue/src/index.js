@@ -43,3 +43,5 @@ export { default as CnTimeline } from './components/CnTimeline.vue';
 export { default as CnDrawer } from './components/CnDrawer.vue';
 export { default as CnPopover } from './components/CnPopover.vue';
 export * from './tokens/index.js';
+export { default as CnTreeView } from './components/CnTreeView.vue';
+export { default as CnColorPicker } from './components/CnColorPicker.vue';

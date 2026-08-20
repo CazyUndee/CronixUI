@@ -53,6 +53,8 @@ import Chip from './Chip.svelte';
 import Timeline from './Timeline.svelte';
 import Drawer from './Drawer.svelte';
 import Popover from './Popover.svelte';
+import TreeView from './TreeView.svelte';
+import ColorPicker from './ColorPicker.svelte';
 
 export {
   Button, Card, Badge, Tag, Input, Textarea, Checkbox, Radio, Select, Slider,

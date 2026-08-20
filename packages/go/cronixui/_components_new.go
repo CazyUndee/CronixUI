@@ -412,3 +412,45 @@ func NewPopover(content fyne.CanvasObject) *Popover {
 func (p *Popover) Show()  { p.open = true }
 func (p *Popover) Hide()  { p.open = false }
 func (p *Popover) Toggle() { p.open = !p.open }
+
+// =============================================================================
+// TreeView & ColorPicker
+// =============================================================================
+
+// TreeNode represents a node in a TreeView.
+type TreeNode struct {
+	ID       string
+	Label    string
+	Children []TreeNode
+}
+
+// TreeView is a hierarchical data display.
+type TreeView struct {
+	fyne.CanvasObject
+}
+
+func NewTreeView(nodes []TreeNode) *TreeView {
+	items := make([]fyne.CanvasObject, 0, len(nodes)*2)
+	for _, n := range nodes {
+		lbl := widget.NewLabel(fmt.Sprintf("📁 %s", n.Label))
+		items = append(items, lbl)
+		for _, c := range n.Children {
+			clbl := widget.NewLabel(fmt.Sprintf("   📄 %s", c.Label))
+			items = append(items, clbl)
+		}
+	}
+	return &TreeView{CanvasObject: container.NewVBox(items...)}
+}
+
+// ColorPicker allows selecting a color.
+type ColorPicker struct {
+	fyne.CanvasObject
+}
+
+func NewColorPicker() *ColorPicker {
+	_ = canvas.NewRectangle(color.NRGBA{R: 107, G: 35, B: 35, A: 255})
+	bg := canvas.NewRectangle(color.NRGBA{R: 107, G: 35, B: 35, A: 255})
+	bg.Resize(fyne.NewSize(200, 36))
+	lbl := widget.NewLabel("#6B2323")
+	return &ColorPicker{CanvasObject: container.NewVBox(bg, lbl)}
+}

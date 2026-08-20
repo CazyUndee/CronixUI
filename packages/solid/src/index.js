@@ -44,3 +44,5 @@ export { Timeline } from './components/Timeline.jsx';
 export { Drawer } from './components/Drawer.jsx';
 export { Popover } from './components/Popover.jsx';
 export * from './tokens/index.js';
+export { TreeView } from './components/TreeView.jsx';
+export { ColorPicker } from './components/ColorPicker.jsx';

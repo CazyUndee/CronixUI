@@ -45,3 +45,5 @@ export { default as Chip, type ChipProps } from './components/Chip';
 export { default as Timeline, type TimelineProps, type TimelineItem } from './components/Timeline';
 export { default as Drawer, type DrawerProps } from './components/Drawer';
 export { default as Popover, type PopoverProps } from './components/Popover';
+export { default as TreeView, type TreeViewProps, type TreeNode } from './components/TreeView';
+export { default as ColorPicker, type ColorPickerProps } from './components/ColorPicker';

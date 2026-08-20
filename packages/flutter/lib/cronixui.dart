@@ -48,3 +48,5 @@ export 'src/widgets/cn_datepicker.dart';
 export 'src/widgets/cn_timeline.dart';
 export 'src/widgets/cn_drawer.dart';
 export 'src/widgets/cn_popover.dart';
+export 'src/widgets/cn_treeview.dart';
+export 'src/widgets/cn_colorpicker.dart';

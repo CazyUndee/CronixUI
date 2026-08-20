@@ -87,3 +87,7 @@ pub use chip::*;
 pub use timeline::*;
 pub use drawer::*;
 pub use popover::*;
+pub mod treeview;
+pub mod colorpicker;
+pub use treeview::*;
+pub use colorpicker::*;
