@@ -3,12 +3,9 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace CronixUI.Controls;
 
-public sealed class FlStack : Panel
+public sealed class FlStack : StackPanel
 {
-    public FlStack()
-    {
-        DefaultStyleKey = typeof(FlStack);
-    }
+    public new string DefaultStyleKey => nameof(FlStack);
 
     public static readonly DependencyProperty OrientationProperty =
         DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(FlStack), new PropertyMetadata(Orientation.Vertical));
