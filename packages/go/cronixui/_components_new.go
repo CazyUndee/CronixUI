@@ -380,6 +380,35 @@ func NewLabel(text string) *canvas.Text {
 }
 
 // =============================================================================
+// DIVIDER
+// =============================================================================
+
+// NewDivider creates a horizontal separator line.
+func NewDivider() *fyne.Container {
+	c := DefaultColors()
+	line := canvas.NewRectangle(c.Border)
+	line.Resize(fyne.NewSize(0, 1))
+	return line
+}
+
+// NewVerticalDivider creates a vertical separator line.
+func NewVerticalDivider() *fyne.Container {
+	c := DefaultColors()
+	line := canvas.NewRectangle(c.Border)
+	line.Resize(fyne.NewSize(1, 0))
+	return line
+}
+
+// =============================================================================
+// HSTACK
+// =============================================================================
+
+// NewHStack creates a horizontal stack layout (alias for NewFlex).
+func NewHStack(objects ...fyne.CanvasObject) *fyne.Container {
+	return container.NewHBox(objects...)
+}
+
+// =============================================================================
 // HEADER
 // =============================================================================
 
