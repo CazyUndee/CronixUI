@@ -306,10 +306,10 @@ type CardOption func(*CardConfig)
 
 // CardConfig holds card configuration.
 type CardConfig struct {
-	Title    string
-	Subtitle string
-	Icon     fyne.CanvasObject
-	Footer   fyne.CanvasObject
+	Title     string
+	Subtitle  string
+	Icon      fyne.CanvasObject
+	Footer    fyne.CanvasObject
 	Clickable bool
 }
 
@@ -346,7 +346,7 @@ func NewCard(content fyne.CanvasObject, options ...CardOption) *fyne.Container {
 	}
 
 	c := DefaultColors()
-	
+
 	var headerObjects []fyne.CanvasObject
 	if config.Icon != nil {
 		headerObjects = append(headerObjects, config.Icon)
@@ -597,11 +597,11 @@ type AccordionRenderer struct {
 	accordion *Accordion
 }
 
-func (r *AccordionRenderer) Destroy() {}
-func (r *AccordionRenderer) Layout(size fyne.Size) {}
-func (r *AccordionRenderer) MinSize() fyne.Size { return fyne.NewSize(200, 40) }
+func (r *AccordionRenderer) Destroy()                     {}
+func (r *AccordionRenderer) Layout(size fyne.Size)        {}
+func (r *AccordionRenderer) MinSize() fyne.Size           { return fyne.NewSize(200, 40) }
 func (r *AccordionRenderer) Objects() []fyne.CanvasObject { return nil }
-func (r *AccordionRenderer) Refresh() {}
+func (r *AccordionRenderer) Refresh()                     {}
 
 type Accordion struct {
 	widget.BaseWidget
@@ -639,11 +639,11 @@ type PaginationRenderer struct {
 	pagination *Pagination
 }
 
-func (r *PaginationRenderer) Destroy() {}
-func (r *PaginationRenderer) Layout(size fyne.Size) {}
-func (r *PaginationRenderer) MinSize() fyne.Size { return fyne.NewSize(200, 36) }
+func (r *PaginationRenderer) Destroy()                     {}
+func (r *PaginationRenderer) Layout(size fyne.Size)        {}
+func (r *PaginationRenderer) MinSize() fyne.Size           { return fyne.NewSize(200, 36) }
 func (r *PaginationRenderer) Objects() []fyne.CanvasObject { return nil }
-func (r *PaginationRenderer) Refresh() {}
+func (r *PaginationRenderer) Refresh()                     {}
 
 type Pagination struct {
 	widget.BaseWidget

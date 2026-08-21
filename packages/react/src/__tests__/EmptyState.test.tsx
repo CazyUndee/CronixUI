@@ -1,14 +1,21 @@
+import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import { EmptyState } from '../components/EmptyState';
+import '@testing-library/jest-dom';
+import EmptyState from '../components/EmptyState';
 
-describe('EmptyState Component', () => {
-  test('renders title', () => {
-    render(<EmptyState title="No items found" />);
-    expect(screen.getByText('No items found')).toBeInTheDocument();
+describe('EmptyState', () => {
+  it('renders title', () => {
+    render(<EmptyState title="No data" />);
+    expect(screen.getByText('No data')).toBeInTheDocument();
   });
 
-  test('renders description when provided', () => {
-    render(<EmptyState title="Empty" description="Create something new" />);
-    expect(screen.getByText('Create something new')).toBeInTheDocument();
+  it('renders description', () => {
+    render(<EmptyState title="Empty" description="Nothing to show" />);
+    expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+  });
+
+  it('applies className', () => {
+    const { container } = render(<EmptyState title="Test" className="custom" />);
+    expect(container.firstChild).toHaveClass('custom');
   });
 });

@@ -1,12 +1,14 @@
 package cronixui
 
 import (
+	"fmt"
 	"image/color"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -14,484 +16,721 @@ import (
 // ALERT
 // =============================================================================
 
-type AlertVariant string
+type AlertVariant int
 
 const (
-	AlertDefault AlertVariant = "default"
-	AlertSuccess AlertVariant = "success"
-	AlertWarning AlertVariant = "warning"
-	AlertError   AlertVariant = "error"
-	AlertInfo    AlertVariant = "info"
+	AlertInfo AlertVariant = iota
+	AlertSuccess
+	AlertWarning
+	AlertError
 )
 
-type Alert struct {
-	fyne.CanvasObject
-}
-
-func NewAlert(text string, variant AlertVariant) *Alert {
-	var bg color.Color
+// NewAlert creates a styled alert banner with a variant color and message text.
+func NewAlert(message string, variant AlertVariant) *fyne.Container {
+	c := DefaultColors()
+	var bgColor, borderColor, textColor color.Color
 
 	switch variant {
 	case AlertSuccess:
-		bg = color.NRGBA{R: 0, G: 80, B: 50, A: 255}
+		bgColor, borderColor, textColor = c.Success, c.SuccessBorder, c.SuccessText
 	case AlertWarning:
-		bg = color.NRGBA{R: 80, G: 70, B: 0, A: 255}
+		bgColor, borderColor, textColor = c.Warning, c.WarningBorder, c.WarningText
 	case AlertError:
-		bg = color.NRGBA{R: 80, G: 20, B: 20, A: 255}
-	case AlertInfo:
-		bg = color.NRGBA{R: 20, G: 40, B: 80, A: 255}
+		bgColor, borderColor, textColor = c.Error, c.ErrorBorder, c.ErrorText
 	default:
-		bg = color.NRGBA{R: 30, G: 30, B: 40, A: 255}
+		bgColor, borderColor, textColor = c.Info, c.InfoBorder, c.InfoText
 	}
 
-	rect := canvas.NewRectangle(bg)
-	rect.CornerRadius = 14
-	rect.StrokeColor = color.NRGBA{R: 50, G: 50, B: 60, A: 255}
-	rect.StrokeWidth = 1
+	label := canvas.NewText(message, textColor)
+	label.TextSize = 13
+	label.Wrapping = fyne.TextTruncate
 
-	label := widget.NewLabel(text)
-	label.Wrapping = fyne.TextWrapWord
+	bg := canvas.NewRectangle(bgColor)
+	bg.StrokeColor = borderColor
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 10
 
-	return &Alert{CanvasObject: container.NewStack(rect, container.NewPadded(label))}
+	return container.NewStack(bg, container.NewPadded(label))
 }
 
 // =============================================================================
 // AVATAR
 // =============================================================================
 
-type Avatar struct {
-	fyne.CanvasObject
+// NewAvatar creates a circular avatar displaying initials or a color.
+func NewAvatar(initials string, bgColor color.Color) *fyne.Container {
+	c := DefaultColors()
+	if bgColor == nil {
+		bgColor = c.Accent
+	}
+
+	label := canvas.NewText(initials, c.Text)
+	label.TextSize = 14
+	label.TextStyle = fyne.TextStyle{Bold: true}
+	label.Alignment = fyne.TextAlignCenter
+
+	bg := canvas.NewRectangle(bgColor)
+	bg.CornerRadius = 20
+
+	return container.NewStack(bg, container.NewCenter(label))
 }
 
-func NewAvatar(size float32, label string) *Avatar {
-	bg := canvas.NewRectangle(color.NRGBA{R: 180, G: 40, B: 60, A: 255})
-	bg.CornerRadius = size / 2
-
-	lbl := widget.NewLabel(label)
-	lbl.Alignment = fyne.TextAlignCenter
-
-	return &Avatar{CanvasObject: container.NewStack(bg, container.NewPadded(lbl))}
+// NewAvatarGroup creates a horizontal row of avatars with overlap.
+func NewAvatarGroup(avatars ...*fyne.Container) *fyne.Container {
+	objs := make([]fyne.CanvasObject, len(avatars))
+	for i, a := range avatars {
+		objs[i] = a
+	}
+	return container.NewHBox(objs...)
 }
 
 // =============================================================================
 // BADGE
 // =============================================================================
 
-type Badge struct {
-	fyne.CanvasObject
-}
+type BadgeVariant int
 
-func NewBadge(text string, variant AlertVariant) *Badge {
-	_ = variant
-	lbl := widget.NewLabel(text)
-	lbl.Importance = widget.LowImportance
-	return &Badge{CanvasObject: lbl}
+const (
+	BadgeDefault BadgeVariant = iota
+	BadgePrimary
+	BadgeSuccess
+	BadgeWarning
+	BadgeError
+	BadgeInfo
+)
+
+// NewBadge creates a small inline badge/label.
+func NewBadge(text string, variant BadgeVariant) *fyne.Container {
+	c := DefaultColors()
+	var bgColor, textColor color.Color
+
+	switch variant {
+	case BadgePrimary:
+		bgColor, textColor = c.Accent, c.Text
+	case BadgeSuccess:
+		bgColor, textColor = c.Success, c.SuccessText
+	case BadgeWarning:
+		bgColor, textColor = c.Warning, c.WarningText
+	case BadgeError:
+		bgColor, textColor = c.Error, c.ErrorText
+	case BadgeInfo:
+		bgColor, textColor = c.Info, c.InfoText
+	default:
+		bgColor, textColor = c.Surface3, c.TextMuted
+	}
+
+	label := canvas.NewText(text, textColor)
+	label.TextSize = 11
+	label.TextStyle = fyne.TextStyle{Bold: true}
+
+	bg := canvas.NewRectangle(bgColor)
+	bg.CornerRadius = 9999
+
+	return container.NewStack(bg, container.NewCenter(label))
 }
 
 // =============================================================================
 // BREADCRUMB
 // =============================================================================
 
-type BreadcrumbItem struct {
-	Label string
-	OnTap func()
-}
-
-type Breadcrumb struct {
-	fyne.CanvasObject
-}
-
-func NewBreadcrumb(items []BreadcrumbItem) *Breadcrumb {
+// NewBreadcrumb creates a breadcrumb navigation row from a list of labels.
+// The last item is styled as the current page.
+func NewBreadcrumb(items []string, onNavigate func(int)) *fyne.Container {
+	c := DefaultColors()
 	var objects []fyne.CanvasObject
+
 	for i, item := range items {
-		lbl := widget.NewLabel(item.Label)
-		if i < len(items)-1 {
-			lbl.Importance = widget.LowImportance
-			if item.OnTap != nil {
-				lbl.OnTapped = item.OnTap
+		i := i
+		isLast := i == len(items)-1
+
+		var txt *canvas.Text
+		if isLast {
+			txt = canvas.NewText(item, c.Text)
+			txt.TextStyle = fyne.TextStyle{Bold: true}
+		} else {
+			txt = canvas.NewText(item, c.AccentText)
+			txt.OnTapped = func() {
+				if onNavigate != nil {
+					onNavigate(i)
+				}
 			}
 		}
-		objects = append(objects, lbl)
-		if i < len(items)-1 {
-			sep := widget.NewLabel(" > ")
-			sep.Importance = widget.LowImportance
+		txt.TextSize = 13
+
+		objects = append(objects, txt)
+
+		if !isLast {
+			sep := canvas.NewText(" / ", c.TextDim)
+			sep.TextSize = 13
 			objects = append(objects, sep)
 		}
 	}
-	return &Breadcrumb{CanvasObject: container.NewHBox(objects...)}
+
+	return container.NewHBox(objects...)
 }
 
 // =============================================================================
-// FILE INPUT
+// CHIP
 // =============================================================================
 
-type FileInput struct {
-	fyne.CanvasObject
-}
+// ChipVariant mirrors BadgeVariant for chips.
+type ChipVariant = BadgeVariant
 
-func NewFileInput(onFileChosen func(string)) *FileInput {
-	btn := widget.NewButton("Choose File...", func() {
-		dialog.ShowFileOpen(func(reader fyne.URIReadCloser, err error) {
-			if err == nil && reader != nil {
-				if onFileChosen != nil {
-					onFileChosen(reader.URI().Path())
-				}
-				reader.Close()
-			}
-		}, nil)
-	})
-	return &FileInput{CanvasObject: btn}
+const (
+	ChipDefault = BadgeDefault
+	ChipPrimary = BadgePrimary
+	ChipSuccess = BadgeSuccess
+	ChipWarning = BadgeWarning
+	ChipError   = BadgeError
+	ChipInfo    = BadgeInfo
+)
+
+// NewChip creates a selectable chip/tag with optional dismiss callback.
+func NewChip(text string, variant ChipVariant, onDismiss func()) *fyne.Container {
+	c := DefaultColors()
+	var bgColor, textColor color.Color
+
+	switch variant {
+	case BadgePrimary:
+		bgColor, textColor = c.Accent, c.Text
+	case BadgeSuccess:
+		bgColor, textColor = c.Success, c.SuccessText
+	case BadgeWarning:
+		bgColor, textColor = c.Warning, c.WarningText
+	case BadgeError:
+		bgColor, textColor = c.Error, c.ErrorText
+	case BadgeInfo:
+		bgColor, textColor = c.Info, c.InfoText
+	default:
+		bgColor, textColor = c.Surface3, c.Text
+	}
+
+	label := canvas.NewText(text, textColor)
+	label.TextSize = 12
+
+	var objects []fyne.CanvasObject
+	objects = append(objects, label)
+
+	if onDismiss != nil {
+		dismiss := canvas.NewText(" ×", textColor)
+		dismiss.TextSize = 12
+		dismiss.OnTapped = onDismiss
+		objects = append(objects, dismiss)
+	}
+
+	row := container.NewHBox(objects...)
+
+	bg := canvas.NewRectangle(bgColor)
+	bg.CornerRadius = 9999
+
+	return container.NewStack(bg, container.NewPadded(row))
 }
 
 // =============================================================================
-// FOOTER
+// EMPTY STATE
 // =============================================================================
 
-type Footer struct {
-	fyne.CanvasObject
-}
+// NewEmptyState creates a centered empty-state placeholder with title and description.
+func NewEmptyState(title, description string) *fyne.Container {
+	c := DefaultColors()
 
-func NewFooter(objects ...fyne.CanvasObject) *Footer {
-	bg := canvas.NewRectangle(color.NRGBA{R: 20, G: 20, B: 28, A: 255})
-	bg.StrokeColor = color.NRGBA{R: 50, G: 50, B: 60, A: 255}
-	bg.StrokeWidth = 1
+	iconText := canvas.NewText("📋", c.TextDim)
+	iconText.TextSize = 48
+	iconText.Alignment = fyne.TextAlignCenter
 
-	return &Footer{CanvasObject: container.NewStack(bg, container.NewPadded(container.NewHBox(objects...)))}
-}
+	titleText := canvas.NewText(title, c.Text)
+	titleText.TextSize = 16
+	titleText.TextStyle = fyne.TextStyle{Bold: true}
+	titleText.Alignment = fyne.TextAlignCenter
 
-// =============================================================================
-// HEADER
-// =============================================================================
+	descText := canvas.NewText(description, c.TextMuted)
+	descText.TextSize = 13
+	descText.Alignment = fyne.TextAlignCenter
+	descText.Wrapping = fyne.TextWordWrap
 
-type Header struct {
-	fyne.CanvasObject
-}
+	content := container.NewVBox(
+		container.NewCenter(iconText),
+		container.NewCenter(titleText),
+		container.NewCenter(descText),
+	)
 
-func NewHeader(title string, actions ...fyne.CanvasObject) *Header {
-	bg := canvas.NewRectangle(color.NRGBA{R: 20, G: 20, B: 28, A: 255})
-	bg.StrokeColor = color.NRGBA{R: 50, G: 50, B: 60, A: 255}
-	bg.StrokeWidth = 1
-
-	titleLbl := widget.NewLabel(title)
-	titleLbl.TextStyle = fyne.TextStyle{Bold: true}
-
-	return &Header{CanvasObject: container.NewStack(bg, container.NewPadded(container.NewHBox(titleLbl, container.NewHBox(actions...))))}
+	return container.NewCenter(content)
 }
 
 // =============================================================================
 // SKELETON
 // =============================================================================
 
-type Skeleton struct {
-	fyne.CanvasObject
+// NewSkeleton creates a rectangular skeleton loading placeholder.
+func NewSkeleton(width, height float32) *fyne.Container {
+	c := DefaultColors()
+	bg := canvas.NewRectangle(c.Surface3)
+	bg.CornerRadius = 6
+	bg.Resize(fyne.NewSize(width, height))
+	return container.NewStack(bg)
 }
 
-func NewSkeleton(width, height float32) *Skeleton {
-	bg := canvas.NewRectangle(color.NRGBA{R: 40, G: 40, B: 50, A: 255})
-	bg.CornerRadius = 8
-	bg.SetMinSize(fyne.NewSize(width, height))
-	return &Skeleton{CanvasObject: bg}
+// NewSkeletonText creates a text-shaped skeleton placeholder.
+func NewSkeletonText() *fyne.Container {
+	return NewSkeleton(200, 14)
 }
 
-// =============================================================================
-// SIDEBAR
-// =============================================================================
-
-type Sidebar struct {
-	fyne.CanvasObject
-}
-
-func NewSidebar(items []string, active int, onSelect func(int)) *Sidebar {
-	list := widget.NewList(
-		func() int { return len(items) },
-		func() fyne.CanvasObject { return widget.NewLabel("") },
-		func(id widget.ListItemID, obj fyne.CanvasObject) {
-			obj.(*widget.Label).SetText(items[id])
-		},
-	)
-	list.OnSelected = func(id widget.ListItemID) {
-		if onSelect != nil {
-			onSelect(id)
-		}
-	}
-	bg := canvas.NewRectangle(color.NRGBA{R: 20, G: 20, B: 28, A: 255})
-	bg.StrokeColor = color.NRGBA{R: 50, G: 50, B: 60, A: 255}
-	bg.StrokeWidth = 1
-	return &Sidebar{CanvasObject: container.NewStack(bg, list)}
+// NewSkeletonCircle creates a circular skeleton placeholder.
+func NewSkeletonCircle(size float32) *fyne.Container {
+	c := DefaultColors()
+	bg := canvas.NewRectangle(c.Surface3)
+	bg.CornerRadius = size / 2
+	bg.Resize(fyne.NewSize(size, size))
+	return container.NewStack(bg)
 }
 
 // =============================================================================
 // SPINNER
 // =============================================================================
 
-type Spinner struct {
-	fyne.CanvasObject
-}
-
-func NewSpinner() *Spinner {
-	return &Spinner{CanvasObject: widget.NewActivity()}
+// NewSpinner creates an activity indicator (spinner) widget.
+func NewSpinner() *widget.Activity {
+	a := widget.NewActivity()
+	a.Start()
+	return a
 }
 
 // =============================================================================
 // TAG
 // =============================================================================
 
-type Tag struct {
-	fyne.CanvasObject
-}
+// NewTag creates a tag with an optional dismiss button.
+func NewTag(text string, onDismiss func()) *fyne.Container {
+	c := DefaultColors()
 
-func NewTag(text string) *Tag {
-	lbl := widget.NewLabel(text)
-	lbl.Importance = widget.LowImportance
-	return &Tag{CanvasObject: lbl}
-}
+	label := canvas.NewText(text, c.Text)
+	label.TextSize = 12
 
-// =============================================================================
-// TOAST
-// =============================================================================
+	var objects []fyne.CanvasObject
+	objects = append(objects, label)
 
-type Toast struct {
-	fyne.CanvasObject
-}
-
-func NewToast(message string, variant AlertVariant) *Toast {
-	var bg color.Color
-	switch variant {
-	case AlertSuccess:
-		bg = color.NRGBA{R: 0, G: 80, B: 50, A: 255}
-	case AlertWarning:
-		bg = color.NRGBA{R: 80, G: 70, B: 0, A: 255}
-	case AlertError:
-		bg = color.NRGBA{R: 80, G: 20, B: 20, A: 255}
-	default:
-		bg = color.NRGBA{R: 30, G: 30, B: 40, A: 255}
+	if onDismiss != nil {
+		dismissBtn := widget.NewButton("×", onDismiss)
+		dismissBtn.Importance = widget.LowImportance
+		objects = append(objects, dismissBtn)
 	}
-	rect := canvas.NewRectangle(bg)
-	rect.CornerRadius = 14
-	label := widget.NewLabel(message)
-	return &Toast{CanvasObject: container.NewStack(rect, container.NewPadded(label))}
+
+	row := container.NewHBox(objects...)
+
+	bg := canvas.NewRectangle(c.Surface3)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 6
+
+	return container.NewStack(bg, container.NewPadded(row))
 }
 
 // =============================================================================
 // TOOLTIP
 // =============================================================================
 
-type Tooltip struct {
-	fyne.CanvasObject
-}
-
-func NewTooltip(content fyne.CanvasObject, text string) *Tooltip {
-	wrapped := widget.NewLabel(text)
-	wrapped.Wrapping = fyne.TextWrapWord
-	bg := canvas.NewRectangle(color.NRGBA{R: 30, G: 30, B: 40, A: 255})
-	bg.CornerRadius = 8
-	return &Tooltip{CanvasObject: container.NewStack(bg, container.NewPadded(wrapped))}
+// NewTooltip wraps a widget with hover tooltip text.
+func NewTooltip(content fyne.CanvasObject, tooltipText string) *fyne.Container {
+	return widget.NewPopUp(
+		canvas.NewText(tooltipText, DefaultColors().Text),
+		nil,
+	)
 }
 
 // =============================================================================
-// NEW COMPONENTS - Stepper, DatePicker, Chip, Timeline, Drawer, Popover
+// TYPOGRAPHY
 // =============================================================================
 
-// StepperStep represents a single step in a Stepper.
-type StepperStep struct {
-	Label       string
-	Description string
+func newTextWithSize(text string, size float32, bold bool) *canvas.Text {
+	c := DefaultColors()
+	txt := canvas.NewText(text, c.Text)
+	txt.TextSize = size
+	txt.TextStyle = fyne.TextStyle{Bold: bold}
+	return txt
 }
 
-// Stepper is a step indicator.
-type Stepper struct {
-	fyne.CanvasObject
-	current int
-	steps   []StepperStep
+// NewH1 creates a large heading text element.
+func NewH1(text string) *canvas.Text { return newTextWithSize(text, 36, true) }
+
+// NewH2 creates a heading level 2 text element.
+func NewH2(text string) *canvas.Text { return newTextWithSize(text, 28, true) }
+
+// NewH3 creates a heading level 3 text element.
+func NewH3(text string) *canvas.Text { return newTextWithSize(text, 20, true) }
+
+// NewH4 creates a heading level 4 text element.
+func NewH4(text string) *canvas.Text { return newTextWithSize(text, 16, true) }
+
+// NewH5 creates a heading level 5 text element.
+func NewH5(text string) *canvas.Text { return newTextWithSize(text, 14, true) }
+
+// NewH6 creates a heading level 6 text element.
+func NewH6(text string) *canvas.Text { return newTextWithSize(text, 12, true) }
+
+// NewText creates a standard body text element.
+func NewText(text string) *canvas.Text { return newTextWithSize(text, 14, false) }
+
+// NewLabel creates a muted/small label text element.
+func NewLabel(text string) *canvas.Text {
+	c := DefaultColors()
+	txt := canvas.NewText(text, c.TextMuted)
+	txt.TextSize = 12
+	return txt
 }
 
-func NewStepper(steps []StepperStep, current int) *Stepper {
-	items := make([]fyne.CanvasObject, len(steps))
-	for i, s := range steps {
-		text := fmt.Sprintf("%d. %s", i+1, s.Label)
-		if i < current {
-			text = fmt.Sprintf("✓ %s", s.Label)
-		} else if i == current {
-			text = fmt.Sprintf("▶ %s", s.Label)
+// =============================================================================
+// HEADER
+// =============================================================================
+
+// NewHeader creates a fixed-height header bar with a title.
+func NewHeader(title string) *fyne.Container {
+	c := DefaultColors()
+	label := canvas.NewText(title, c.Text)
+	label.TextSize = 16
+	label.TextStyle = fyne.TextStyle{Bold: true}
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+
+	return container.NewStack(bg, container.NewPadded(label))
+}
+
+// =============================================================================
+// FOOTER
+// =============================================================================
+
+// NewFooter creates a footer bar with centered text.
+func NewFooter(text string) *fyne.Container {
+	c := DefaultColors()
+	label := canvas.NewText(text, c.TextMuted)
+	label.TextSize = 11
+	label.Alignment = fyne.TextAlignCenter
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+
+	return container.NewStack(bg, container.NewPadded(label))
+}
+
+// =============================================================================
+// SIDEBAR
+// =============================================================================
+
+// NewSidebar creates a vertical navigation sidebar from a list of labels.
+func NewSidebar(items []string, active int, onSelect func(int)) *widget.List {
+	return NewNav(items, active, onSelect)
+}
+
+// =============================================================================
+// FORM GROUP
+// =============================================================================
+
+// NewFormGroup wraps a label and form control into a vertical group.
+func NewFormGroup(label string, control fyne.CanvasObject) *fyne.Container {
+	c := DefaultColors()
+	lbl := canvas.NewText(label, c.TextMuted)
+	lbl.TextSize = 12
+	return container.NewVBox(lbl, control)
+}
+
+// =============================================================================
+// TOAST (component)
+// =============================================================================
+
+// NewToast creates a toast notification widget that auto-hides after duration.
+type Toast struct {
+	widget.BaseWidget
+	container *fyne.Container
+	message   string
+	toastType ToastType
+}
+
+func NewToastComponent(message string, toastType ToastType) *Toast {
+	return &Toast{message: message, toastType: toastType}
+}
+
+func (t *Toast) ShowIn(window fyne.Window) {
+	ShowToast(window, t.message, t.toastType)
+}
+
+func (t *Toast) ShowTimed(window fyne.Window, duration time.Duration) {
+	ShowToast(window, t.message, t.toastType)
+	go func() {
+		time.Sleep(duration)
+	}()
+}
+
+// =============================================================================
+// NOTIFICATION
+// =============================================================================
+
+// NewNotification creates a notification banner with title, description, and optional action.
+func NewNotification(title, description string, onAction func()) *fyne.Container {
+	c := DefaultColors()
+
+	titleText := canvas.NewText(title, c.Text)
+	titleText.TextSize = 13
+	titleText.TextStyle = fyne.TextStyle{Bold: true}
+
+	descText := canvas.NewText(description, c.TextMuted)
+	descText.TextSize = 12
+	descText.Wrapping = fyne.TextWordWrap
+
+	content := container.NewVBox(titleText, descText)
+
+	if onAction != nil {
+		actionBtn := widget.NewButton("View", onAction)
+		actionBtn.Importance = widget.LowImportance
+		content = container.NewVBox(content, actionBtn)
+	}
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 10
+
+	return container.NewStack(bg, container.NewPadded(content))
+}
+
+// =============================================================================
+// DATE PICKER
+// =============================================================================
+
+// NewDatePicker creates a date picker using an entry widget with placeholder.
+func NewDatePicker(placeholder string, onChange func(string)) *widget.Entry {
+	entry := widget.NewEntry()
+	if placeholder == "" {
+		placeholder = "YYYY-MM-DD"
+	}
+	entry.SetPlaceHolder(placeholder)
+	if onChange != nil {
+		entry.OnChanged = onChange
+	}
+	return entry
+}
+
+// =============================================================================
+// DRAWER
+// =============================================================================
+
+// DrawerSide represents which side the drawer slides from.
+type DrawerSide int
+
+const (
+	DrawerLeft DrawerSide = iota
+	DrawerRight
+	DrawerTop
+	DrawerBottom
+)
+
+// NewDrawer creates a slide-in drawer container.
+func NewDrawer(side DrawerSide, content fyne.CanvasObject, trigger fyne.CanvasObject) *fyne.Container {
+	c := DefaultColors()
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.CornerRadius = 10
+
+	padded := container.NewPadded(content)
+
+	switch side {
+	case DrawerLeft, DrawerRight:
+		return container.NewStack(trigger, container.NewGridWithColumns(1, bg, padded))
+	default:
+		return container.NewStack(trigger, container.NewGridWithRows(1, bg, padded))
+	}
+}
+
+// =============================================================================
+// POPOVER
+// =============================================================================
+
+// NewPopover wraps content in a popover-style floating container.
+func NewPopover(content fyne.CanvasObject) *fyne.Container {
+	c := DefaultColors()
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 10
+	bg.ShadowColor = color.RGBA{R: 0, G: 0, B: 0, A: 100}
+
+	return container.NewStack(bg, container.NewPadded(content))
+}
+
+// =============================================================================
+// TREE VIEW
+// =============================================================================
+
+// TreeNode represents a node in a tree structure.
+type TreeNode struct {
+	Title    string
+	Children []*TreeNode
+}
+
+// NewTreeView creates a hierarchical tree view widget from tree nodes.
+func NewTreeView(nodes []*TreeNode, onSelect func(string)) *widget.Tree {
+	if len(nodes) == 0 {
+		return widget.NewTree(
+			func() []widget.TreeNodeID { return nil },
+			func(id widget.TreeNodeID) bool { return false },
+			func(id widget.TreeNodeID) fyne.CanvasObject { return widget.NewLabel("") },
+			func(id widget.TreeNodeID, node fyne.CanvasObject) {},
+		)
+	}
+
+	// Build flat ID list for the tree
+	var ids []widget.TreeNodeID
+	var buildIDs func(nodes []*TreeNode, prefix string)
+	buildIDs = func(nodes []*TreeNode, prefix string) {
+		for i, n := range nodes {
+			id := widget.TreeNodeID(fmt.Sprintf("%s/%d", prefix, i))
+			ids = append(ids, id)
+			if len(n.Children) > 0 {
+				buildIDs(n.Children, id)
+			}
 		}
-		items[i] = widget.NewLabel(text)
 	}
-	return &Stepper{CanvasObject: container.NewHBox(items...), current: current, steps: steps}
+	buildIDs(nodes, "root")
+
+	return widget.NewTree(
+		func() []widget.TreeNodeID { return ids },
+		func(id widget.TreeNodeID) bool {
+			// Determine if this node has children
+			parts := splitPath(string(id))
+			node := nodes
+			for _, p := range parts[1:] { // skip "root"
+				idx := 0
+				fmt.Sscanf(p, "%d", &idx)
+				if idx < len(node) {
+					if len(parts) == 1 || p == parts[len(parts)-1] {
+						return len(node[idx].Children) > 0
+					}
+					node = node[idx].Children
+				}
+			}
+			return false
+		},
+		func(id widget.TreeNodeID) fyne.CanvasObject {
+			return widget.NewLabel("Node")
+		},
+		func(id widget.TreeNodeID, node fyne.CanvasObject) {
+			parts := splitPath(string(id))
+			currentNodes := nodes
+			var currentTitle string
+			for _, p := range parts[1:] {
+				idx := 0
+				fmt.Sscanf(p, "%d", &idx)
+				if idx < len(currentNodes) {
+					currentTitle = currentNodes[idx].Title
+					currentNodes = currentNodes[idx].Children
+				}
+			}
+			node.(*widget.Label).SetText(currentTitle)
+		},
+	)
 }
 
-// DatePicker is a simple date entry.
-type DatePicker struct {
-	*widget.Entry
-}
-
-func NewDatePicker() *DatePicker {
-	e := widget.NewEntry()
-	e.PlaceHolder = "YYYY-MM-DD"
-	return &DatePicker{Entry: e}
-}
-
-// Chip is a selectable/removable tag.
-type Chip struct {
-	fyne.CanvasObject
-	Selected bool
-}
-
-func NewChip(label string, selected bool) *Chip {
-	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 26, A: 255})
-	if selected {
-		bg.FillColor = color.NRGBA{R: 107, G: 35, B: 35, A: 255}
+func splitPath(path string) []string {
+	if path == "" {
+		return nil
 	}
-	bg.CornerRadius = 16
-	lbl := widget.NewLabel(label)
-	return &Chip{CanvasObject: container.NewStack(bg, container.NewPadded(lbl)), Selected: selected}
+	var result []string
+	start := 0
+	for i := 0; i < len(path); i++ {
+		if path[i] == '/' {
+			if i > start {
+				result = append(result, path[start:i])
+			}
+			start = i + 1
+		}
+	}
+	if start < len(path) {
+		result = append(result, path[start:])
+	}
+	return result
 }
 
-// TimelineItem is a single event in a Timeline.
+// =============================================================================
+// STEPPER
+// =============================================================================
+
+// NewStepper creates a step indicator with current step and total steps.
+func NewStepper(current, total int) *fyne.Container {
+	c := DefaultColors()
+	var objects []fyne.CanvasObject
+
+	for i := 1; i <= total; i++ {
+		var dot *canvas.Circle
+		if i <= current {
+			dot = canvas.NewCircle(c.Accent)
+		} else {
+			dot = canvas.NewCircle(c.Surface3)
+		}
+		dot.Resize(fyne.NewSize(12, 12))
+		objects = append(objects, dot)
+
+		if i < total {
+			var line *canvas.Rectangle
+			if i < current {
+				line = canvas.NewRectangle(c.Accent)
+			} else {
+				line = canvas.NewRectangle(c.Surface3)
+			}
+			line.Resize(fyne.NewSize(24, 2))
+			objects = append(objects, line)
+		}
+	}
+
+	return container.NewHBox(objects...)
+}
+
+// =============================================================================
+// TIMELINE
+// =============================================================================
+
+// TimelineItem represents a single timeline event.
 type TimelineItem struct {
 	Title       string
 	Description string
-	Timestamp   string
+	Time        string
 }
 
-// Timeline shows events in chronological order.
-type Timeline struct {
-	fyne.CanvasObject
-}
+// NewTimeline creates a vertical timeline from a list of timeline items.
+func NewTimeline(items []TimelineItem) *fyne.Container {
+	c := DefaultColors()
+	var objects []fyne.CanvasObject
 
-func NewTimeline(items []TimelineItem) *Timeline {
-	boxes := make([]fyne.CanvasObject, 0, len(items)*2)
-	for i, item := range items {
-		dot := canvas.NewCircle(color.NRGBA{R: 107, G: 35, B: 35, A: 255})
-		dot.Resize(fyne.NewSize(10, 10))
-		title := widget.NewLabel(fmt.Sprintf("%s  %s", item.Title, item.Timestamp))
-		title.Wrapping = fyne.TextWrapWord
-		children := []fyne.CanvasObject{dot, title}
-		if item.Description != "" {
-			children = append(children, widget.NewLabel(item.Description))
-		}
-		box := container.NewVBox(children...)
-		boxes = append(boxes, box)
-		if i < len(items)-1 {
-			line := canvas.NewRectangle(color.NRGBA{R: 42, G: 42, B: 42, A: 255})
-			line.Resize(fyne.NewSize(2, 20))
-			boxes = append(boxes, line)
-		}
+	for _, item := range items {
+		// Time label
+		timeText := canvas.NewText(item.Time, c.TextDim)
+		timeText.TextSize = 11
+
+		// Title
+		titleText := canvas.NewText(item.Title, c.Text)
+		titleText.TextSize = 13
+		titleText.TextStyle = fyne.TextStyle{Bold: true}
+
+		// Description
+		descText := canvas.NewText(item.Description, c.TextMuted)
+		descText.TextSize = 12
+		descText.Wrapping = fyne.TextWordWrap
+
+		dot := canvas.NewCircle(c.Accent)
+		dot.Resize(fyne.NewSize(8, 8))
+
+		line := canvas.NewRectangle(c.Border)
+		line.Resize(fyne.NewSize(2, 40))
+
+		content := container.NewVBox(timeText, titleText, descText)
+
+		row := container.NewHBox(
+			container.NewVBox(container.NewCenter(dot), container.NewCenter(line)),
+			content,
+		)
+
+		objects = append(objects, row)
 	}
-	return &Timeline{CanvasObject: container.NewVBox(boxes...)}
-}
 
-// Drawer is a slide-in panel.
-type Drawer struct {
-	fyne.CanvasObject
-	open bool
-}
-
-func NewDrawer(title string, content fyne.CanvasObject) *Drawer {
-	titleLbl := widget.NewLabel(title)
-	return &Drawer{CanvasObject: container.NewBorder(titleLbl, nil, nil, nil, content), open: false}
-}
-
-func (d *Drawer) Open()  { d.open = true }
-func (d *Drawer) Close() { d.open = false }
-func (d *Drawer) Toggle() { d.open = !d.open }
-
-// Popover is a floating content box.
-type Popover struct {
-	fyne.CanvasObject
-	open bool
-}
-
-func NewPopover(content fyne.CanvasObject) *Popover {
-	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 26, A: 255})
-	bg.CornerRadius = 8
-	bg.StrokeColor = color.NRGBA{R: 42, G: 42, B: 42, A: 255}
-	bg.StrokeWidth = 1
-	return &Popover{CanvasObject: container.NewStack(bg, container.NewPadded(content)), open: false}
-}
-
-func (p *Popover) Show()  { p.open = true }
-func (p *Popover) Hide()  { p.open = false }
-func (p *Popover) Toggle() { p.open = !p.open }
-
-// =============================================================================
-// TreeView & ColorPicker
-// =============================================================================
-
-// TreeNode represents a node in a TreeView.
-type TreeNode struct {
-	ID       string
-	Label    string
-	Children []TreeNode
-}
-
-// TreeView is a hierarchical data display.
-type TreeView struct {
-	fyne.CanvasObject
-}
-
-func NewTreeView(nodes []TreeNode) *TreeView {
-	items := make([]fyne.CanvasObject, 0, len(nodes)*2)
-	for _, n := range nodes {
-		lbl := widget.NewLabel(fmt.Sprintf("📁 %s", n.Label))
-		items = append(items, lbl)
-		for _, c := range n.Children {
-			clbl := widget.NewLabel(fmt.Sprintf("   📄 %s", c.Label))
-			items = append(items, clbl)
-		}
-	}
-	return &TreeView{CanvasObject: container.NewVBox(items...)}
-}
-
-// ColorPicker allows selecting a color.
-type ColorPicker struct {
-	fyne.CanvasObject
-}
-
-func NewColorPicker() *ColorPicker {
-	_ = canvas.NewRectangle(color.NRGBA{R: 107, G: 35, B: 35, A: 255})
-	bg := canvas.NewRectangle(color.NRGBA{R: 107, G: 35, B: 35, A: 255})
-	bg.Resize(fyne.NewSize(200, 36))
-	lbl := widget.NewLabel("#6B2323")
-	return &ColorPicker{CanvasObject: container.NewVBox(bg, lbl)}
-}
-
-// =============================================================================
-// EmptyState, Notification, FileUpload
-// =============================================================================
-
-// EmptyState shows a placeholder when no data is available.
-type EmptyState struct {
-	fyne.CanvasObject
-}
-
-func NewEmptyState(title, description string) *EmptyState {
-	titleLbl := widget.NewLabel(title)
-	titleLbl.Wrapping = fyne.TextWrapWord
-	descLbl := widget.NewLabel(description)
-	descLbl.Wrapping = fyne.TextWrapWord
-	return &EmptyState{CanvasObject: container.NewVBox(titleLbl, descLbl)}
-}
-
-// Notification is a toast message.
-type Notification struct {
-	fyne.CanvasObject
-}
-
-func NewNotification(message string) *Notification {
-	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 26, A: 255})
-	bg.CornerRadius = 8
-	lbl := widget.NewLabel(message)
-	return &Notification{CanvasObject: container.NewStack(bg, container.NewPadded(lbl))}
-}
-
-// FileUpload is a drag-and-drop file selector.
-type FileUpload struct {
-	fyne.CanvasObject
-}
-
-func NewFileUpload() *FileUpload {
-	bg := canvas.NewRectangle(color.NRGBA{R: 26, G: 26, B: 42, A: 255})
-	bg.CornerRadius = 8
-	lbl := widget.NewLabel("📁 Click to browse files")
-	return &FileUpload{CanvasObject: container.NewStack(bg, container.NewCenter(lbl))}
+	return container.NewVBox(objects...)
 }
