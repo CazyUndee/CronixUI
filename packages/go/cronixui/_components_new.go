@@ -8,7 +8,8 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -733,4 +734,82 @@ func NewTimeline(items []TimelineItem) *fyne.Container {
 	}
 
 	return container.NewVBox(objects...)
+}
+
+// =============================================================================
+// FILE INPUT
+// =============================================================================
+
+// NewFileInput creates a file selection widget that opens a file dialog.
+func NewFileInput(accept []string, onSelect func(string)) *fyne.Container {
+	c := DefaultColors()
+
+	btn := widget.NewButton("Choose File", func() {
+		dialog := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+			if err == nil && reader != nil {
+				if onSelect != nil {
+					onSelect(reader.URI().Path())
+				}
+				reader.Close()
+			}
+		}, nil)
+		if len(accept) > 0 {
+			filter := storage.NewExtensionFileFilter(accept)
+			dialog.SetFilter(filter)
+		}
+		dialog.Show()
+	})
+	btn.Importance = widget.LowImportance
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 10
+
+	return container.NewStack(bg, container.NewPadded(btn))
+}
+
+// =============================================================================
+// FILE UPLOAD
+// =============================================================================
+
+// NewFileUpload creates a file upload area that accepts files via dialog.
+func NewFileUpload(accept []string, onSelect func(string)) *fyne.Container {
+	return NewFileInput(accept, onSelect)
+}
+
+// =============================================================================
+// COLOR PICKER
+// =============================================================================
+
+// ColorPickerPreset represents a preset color swatch.
+type ColorPickerPreset struct {
+	Name  string
+	Color color.Color
+}
+
+// NewColorPicker creates a color picker with preset swatches.
+func NewColorPicker(presets []ColorPickerPreset, onSelect func(color.Color)) *fyne.Container {
+	c := DefaultColors()
+	var swatches []fyne.CanvasObject
+
+	for _, p := range presets {
+		cc := p.Color
+		btn := widget.NewButton("", func() {
+			if onSelect != nil {
+				onSelect(cc)
+			}
+		})
+		btn.Importance = widget.LowImportance
+		swatches = append(swatches, btn)
+	}
+
+	row := container.NewGridWrap(len(presets), swatches...)
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 10
+
+	return container.NewStack(bg, container.NewPadded(row))
 }
