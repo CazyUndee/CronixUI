@@ -27,6 +27,23 @@ from .colorpicker import ColorPicker
 from .empty_state import EmptyState
 from .notification import Notification
 from .file_upload import FileUpload
+from .accordion import Accordion
+from .alert import Alert
+from .avatar import Avatar, AvatarGroup
+from .badge import Badge
+from .breadcrumb import Breadcrumb, BreadcrumbItem
+from .command_palette import CommandPalette, CommandPaletteItem
+from .dropdown import Dropdown
+from .list import CronixList
+from .loading import Spinner, Skeleton
+from .nav import Nav
+from .pagination import Pagination
+from .progress import Progress
+from .search import Search, SearchItem
+from .table import Table
+from .tabs import Tabs
+from .toast import Toast, ToastType
+from .tooltip import Tooltip
 from .core import (
     Frame, Label, Entry, Text, Scrollbar,
     Theme, get_theme, set_theme,
@@ -80,6 +97,29 @@ __all__ = [
     "EmptyState",
     "Notification",
     "FileUpload",
+    "Accordion",
+    "Alert",
+    "Avatar",
+    "AvatarGroup",
+    "Badge",
+    "Breadcrumb",
+    "BreadcrumbItem",
+    "CommandPalette",
+    "CommandPaletteItem",
+    "Dropdown",
+    "CronixList",
+    "Spinner",
+    "Skeleton",
+    "Nav",
+    "Pagination",
+    "Progress",
+    "Search",
+    "SearchItem",
+    "Table",
+    "Tabs",
+    "Toast",
+    "ToastType",
+    "Tooltip",
     
     # Core
     "Frame",
