@@ -48,3 +48,7 @@ export { default as CnColorPicker } from './components/CnColorPicker.vue';
 export { default as CnEmptyState } from './components/CnEmptyState.vue';
 export { default as CnNotification } from './components/CnNotification.vue';
 export { default as CnFileUpload } from './components/CnFileUpload.vue';
+export { default as CnHStack } from './components/CnHStack.vue';
+export { default as CnDivider } from './components/CnDivider.vue';
+export { default as CnAvatarGroup } from './components/CnAvatarGroup.vue';
+export { default as CnButtonGroup } from './components/CnButtonGroup.vue';

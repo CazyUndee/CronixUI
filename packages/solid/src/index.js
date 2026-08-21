@@ -49,3 +49,5 @@ export { ColorPicker } from './components/ColorPicker.jsx';
 export { EmptyState } from './components/EmptyState.jsx';
 export { Notification } from './components/Notification.jsx';
 export { FileUpload } from './components/FileUpload.jsx';
+export { AvatarGroup } from './components/AvatarGroup.jsx';
+export { ButtonGroup } from './components/ButtonGroup.jsx';
