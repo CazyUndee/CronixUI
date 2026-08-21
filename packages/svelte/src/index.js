@@ -66,6 +66,7 @@ export {
   Nav, Breadcrumb, FileInput, Container, Header, Sidebar, Footer, Stat,
   ButtonGroup, FormGroup, Rating, Stack, HStack, Divider,
   H1, H2, H3, H4, H5, H6, Text, Label,
-  Stepper, DatePicker, Chip, Timeline, Drawer, Popover
+  Stepper, DatePicker, Chip, Timeline, Drawer, Popover,
+  TreeView, ColorPicker, EmptyState, Notification, FileUpload
 };
 export * from './tokens.js';
