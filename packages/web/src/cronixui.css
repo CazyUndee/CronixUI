@@ -2186,3 +2186,57 @@ body {
   top: 0;
 }
 .cn-btn[aria-busy=true] { pointer-events: none; opacity: 0.7; }
+
+/* ========================================
+   MISSING CSS CLASSES FROM JS
+   ======================================== */
+
+/* Dropdown trigger */
+.cn-dropdown-trigger { cursor: pointer; display: inline-flex; align-items: center; gap: var(--cn-space-2); }
+
+/* File input states */
+.cn-file-input-has-file { border-color: var(--cn-success); }
+
+/* Popover trigger */
+.cn-popover-trigger { cursor: pointer; position: relative; display: inline-block; }
+
+/* Stepper change */
+.cn-stepper-change { display: flex; align-items: center; justify-content: space-between; }
+
+/* Toggle box (inner thumb) */
+.cn-toggle-box { width: 20px; height: 20px; border-radius: 50%; background: white; transition: transform 0.2s ease; position: absolute; top: 2px; left: 2px; }
+.cn-toggle.on .cn-toggle-box { transform: translateX(20px); }
+
+/* Tree node */
+.cn-tree-node { padding: var(--cn-space-2) var(--cn-space-3); border-radius: var(--cn-radius-sm); cursor: pointer; transition: background-color 0.15s ease; }
+.cn-tree-node:hover { background-color: var(--cn-surface-2); }
+.cn-tree-node-selected { background-color: var(--cn-accent-bg); }
+
+/* Command palette item content */
+.cn-command-item-content { display: flex; flex-direction: column; gap: var(--cn-space-1); }
+
+/* Tooltip content */
+.cn-tooltip-content { display: none; position: absolute; z-index: 700; background: var(--cn-surface-3); color: var(--cn-text); padding: var(--cn-space-2) var(--cn-space-3); border-radius: var(--cn-radius-sm); font-size: 12px; white-space: nowrap; pointer-events: none; }
+.cn-tooltip:hover .cn-tooltip-content { display: block; }
+.cn-tooltip-bottom .cn-tooltip-content { top: 100%; left: 50%; transform: translateX(-50%); margin-top: var(--cn-space-2); }
+.cn-tooltip-top .cn-tooltip-content { bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: var(--cn-space-2); }
+.cn-tooltip-left .cn-tooltip-content { right: 100%; top: 50%; transform: translateY(-50%); margin-right: var(--cn-space-2); }
+.cn-tooltip-right .cn-tooltip-content { left: 100%; top: 50%; transform: translateY(-50%); margin-left: var(--cn-space-2); }
+
+/* Notification */
+.cn-notification { display: flex; align-items: flex-start; justify-content: space-between; padding: var(--cn-space-3) var(--cn-space-4); border-radius: var(--cn-radius-md); border: 1px solid var(--cn-border); background: var(--cn-surface); }
+.cn-notification-info { border-color: var(--cn-info-border); }
+.cn-notification-success { border-color: var(--cn-success-border); }
+.cn-notification-warning { border-color: var(--cn-warning-border); }
+.cn-notification-error { border-color: var(--cn-error-border); }
+.cn-notification-content { flex: 1; }
+.cn-notification-title { font-weight: 600; font-size: 13px; margin-bottom: var(--cn-space-1); }
+.cn-notification-message { font-size: 12px; color: var(--cn-text-muted); }
+.cn-notification-close { background: none; border: none; color: var(--cn-text-muted); cursor: pointer; padding: var(--cn-space-1); font-size: 16px; line-height: 1; }
+.cn-notification-close:hover { color: var(--cn-text); }
+
+/* Empty state */
+.cn-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--cn-space-12) var(--cn-space-6); text-align: center; gap: var(--cn-space-3); }
+.cn-empty-state-icon { font-size: 48px; opacity: 0.5; }
+.cn-empty-state-title { font-size: 16px; font-weight: 600; color: var(--cn-text); }
+.cn-empty-state-description { font-size: 13px; color: var(--cn-text-muted); max-width: 300px; }
