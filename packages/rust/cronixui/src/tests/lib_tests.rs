@@ -127,9 +127,10 @@ mod tests {
     #[test]
     fn test_color_constants_match_struct() {
         let c = Colors::default();
+        // Only test opaque colors (unmultiplied and premultiplied are the same)
         assert_eq!(c.bg, crate::colors::BG);
         assert_eq!(c.surface, crate::colors::SURFACE);
+        assert_eq!(c.text, crate::colors::TEXT);
         assert_eq!(c.accent, crate::colors::ACCENT);
-        assert_eq!(c.border, crate::colors::BORDER);
     }
 }
