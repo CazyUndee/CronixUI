@@ -358,4 +358,62 @@
         <Setter Property="Background" Value="Transparent"/>
     </Style>
 
+    <!-- Missing styles -->
+    <Style TargetType="local:FlAvatar">
+        <Setter Property="Background" Value="#6b2323"/>
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlBadge">
+        <Setter Property="Background" Value="#222222"/>
+        <Setter Property="Foreground" Value="#80f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlCheckBox">
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlComboBox">
+        <Setter Property="Background" Value="#1a1a1a"/>
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlDropdown">
+        <Setter Property="Background" Value="#1a1a1a"/>
+    </Style>
+
+    <Style TargetType="local:FlModal">
+        <Setter Property="Background" Value="#111111"/>
+    </Style>
+
+    <Style TargetType="local:FlNavigation">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlRadioButton">
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlRating">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlSpinner">
+        <Setter Property="Foreground" Value="#6b2323"/>
+    </Style>
+
+    <Style TargetType="local:FlTabs">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="local:FlTextarea">
+        <Setter Property="Background" Value="#1a1a1a"/>
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
+    <Style TargetType="local:FlTooltip">
+        <Setter Property="Background" Value="#222222"/>
+        <Setter Property="Foreground" Value="#f0ede8"/>
+    </Style>
+
 </ResourceDictionary>
