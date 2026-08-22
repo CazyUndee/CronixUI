@@ -12,6 +12,33 @@
 		dispatch('change', { activeIndex });
 	}
 
+	function handleKeydown(event, index) {
+		let nextIndex = index;
+		switch (event.key) {
+			case 'ArrowRight':
+			case 'ArrowDown':
+				event.preventDefault();
+				nextIndex = (index + 1) % normalizedTabs.length;
+				break;
+			case 'ArrowLeft':
+			case 'ArrowUp':
+				event.preventDefault();
+				nextIndex = (index - 1 + normalizedTabs.length) % normalizedTabs.length;
+				break;
+			case 'Home':
+				event.preventDefault();
+				nextIndex = 0;
+				break;
+			case 'End':
+				event.preventDefault();
+				nextIndex = normalizedTabs.length - 1;
+				break;
+			default:
+				return;
+		}
+		selectTab(nextIndex);
+	}
+
 	$: normalizedTabs = tabs.map(tab => {
 		if (typeof tab === 'string') {
 			return { label: tab, content: null };
@@ -21,13 +48,19 @@
 </script>
 
 <div class="cn-tabs">
-	<div class="cn-tabs-list">
+	<div class="cn-tabs-list" role="tablist">
 		{#each normalizedTabs as tab, index}
 			<button
 				type="button"
 				class="cn-tab"
 				class:cn-tab-active={index === activeIndex}
 				on:click={() => selectTab(index)}
+				on:keydown={(e) => handleKeydown(e, index)}
+				role="tab"
+				aria-selected={index === activeIndex}
+				aria-controls="cn-tabpanel-{index}"
+				id="cn-tab-{index}"
+				tabindex={index === activeIndex ? 0 : -1}
 			>
 				{tab.label}
 			</button>
@@ -40,6 +73,11 @@
 		<div
 			class="cn-tab-panel"
 			class:cn-tab-panel-active={index === activeIndex}
+			role="tabpanel"
+			id="cn-tabpanel-{index}"
+			aria-labelledby="cn-tab-{index}"
+			hidden={index !== activeIndex}
+			tabindex={index === activeIndex ? 0 : -1}
 		>
 			{#if tab.content}
 				{tab.content}
@@ -72,6 +110,12 @@
 		color: rgba(240, 237, 232, 0.5);
 		transition: all 0.15s ease;
 		margin-bottom: -1px;
+		outline: none;
+	}
+
+	.cn-tab:focus-visible {
+		box-shadow: inset 0 0 0 2px #6b2323;
+		border-radius: 4px 4px 0 0;
 	}
 
 	.cn-tab:hover {

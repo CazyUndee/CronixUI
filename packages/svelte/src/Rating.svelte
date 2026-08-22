@@ -13,17 +13,49 @@
       onchange(star);
     }
   }
+
+  function handleKeydown(event, star) {
+    if (disabled) return;
+    let nextStar = star;
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowUp':
+        event.preventDefault();
+        nextStar = Math.min(star + 1, max);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        event.preventDefault();
+        nextStar = Math.max(star - 1, 1);
+        break;
+      case 'Home':
+        event.preventDefault();
+        nextStar = 1;
+        break;
+      case 'End':
+        event.preventDefault();
+        nextStar = max;
+        break;
+      default:
+        return;
+    }
+    handleClick(nextStar);
+  }
 </script>
 
-<div class="cn-rating cn-rating-{size}" class:cn-rating-disabled={disabled}>
+<div class="cn-rating cn-rating-{size}" class:cn-rating-disabled={disabled} role="radiogroup" aria-label="Rating">
   {#each stars as star}
     <button
       type="button"
       class="cn-rating-star"
       class:cn-rating-star-active={star <= value}
       disabled={disabled}
+      role="radio"
+      aria-checked={star <= value}
       aria-label="{star} star{star > 1 ? 's' : ''}"
+      tabindex={star === value || (value === 0 && star === 1) ? 0 : -1}
       on:click={() => handleClick(star)}
+      on:keydown={(e) => handleKeydown(e, star)}
     >★</button>
   {/each}
 </div>

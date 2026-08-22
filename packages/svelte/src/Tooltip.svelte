@@ -1,6 +1,10 @@
 <script>
+  import { onMount } from 'svelte';
+
   export let content = '';
   export let position = 'top';
+
+  let tooltipId = 'tooltip-' + Math.random().toString(36).slice(2, 9);
   
   const positionStyles = {
     top: 'bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);',
@@ -18,10 +22,12 @@
 </script>
 
 <div class="cn-tooltip">
-  <slot />
+  <span aria-describedby={tooltipId}><slot /></span>
   {#if content}
-    <div 
-      class="cn-tooltip-content" 
+    <div
+      class="cn-tooltip-content"
+      id={tooltipId}
+      role="tooltip"
       style="{positionStyles[position]}"
     >
       {content}

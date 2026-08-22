@@ -4,14 +4,18 @@
   export let onStepClick = () => {};
 </script>
 
-<div class="cn-stepper">
+<div class="cn-stepper" role="list" aria-label="Progress">
   {#each steps as step, index}
     <div
       class="cn-stepper-step"
       class:completed={index < currentStep}
       class:active={index === currentStep}
       class:pending={index > currentStep}
+      role="listitem"
+      aria-current={index === currentStep ? 'step' : undefined}
       on:click={() => onStepClick(index)}
+      on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStepClick(index); } }}
+      tabindex={onStepClick ? 0 : undefined}
       style="cursor: {onStepClick ? 'pointer' : 'default'}"
     >
       <div class="cn-stepper-indicator">
@@ -26,7 +30,7 @@
         {/if}
       </div>
       {#if index < steps.length - 1}
-        <div class="cn-stepper-connector" class:completed={index < currentStep}></div>
+        <div class="cn-stepper-connector" class:completed={index < currentStep} aria-hidden="true"></div>
       {/if}
     </div>
   {/each}

@@ -31,9 +31,12 @@ function toggle(index) {
       <div
         class="cn-accordion-header"
         on:click={() => toggle(index)}
+        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(index); } }}
         role="button"
         tabindex="0"
         aria-expanded={isOpen(index)}
+        aria-controls="accordion-panel-{index}"
+        id="accordion-header-{index}"
       >
         <span class="cn-accordion-title">{item.title}</span>
         <span class="cn-accordion-icon">
@@ -42,7 +45,7 @@ function toggle(index) {
           </svg>
         </span>
       </div>
-      <div class="cn-accordion-content">
+      <div class="cn-accordion-content" id="accordion-panel-{index}" role="region" aria-labelledby="accordion-header-{index}">
         {item.content}
       </div>
     </div>
