@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Stepper } from '../components/Stepper';
 
@@ -34,5 +34,28 @@ describe('Stepper Component', () => {
     render(<Stepper steps={steps} currentStep={2} />);
     const checkmarks = screen.getAllByText('✓');
     expect(checkmarks.length).toBeGreaterThanOrEqual(1);
+  });
+
+  test('has list role for accessibility', () => {
+    const { container } = render(<Stepper steps={steps} currentStep={0} />);
+    expect(container.querySelector('[role="list"]')).toBeInTheDocument();
+    const items = container.querySelectorAll('[role="listitem"]');
+    expect(items).toHaveLength(3);
+  });
+
+  test('sets aria-current on active step', () => {
+    const { container } = render(<Stepper steps={steps} currentStep={1} />);
+    const items = container.querySelectorAll('[role="listitem"]');
+    expect(items[0]).not.toHaveAttribute('aria-current');
+    expect(items[1]).toHaveAttribute('aria-current', 'step');
+    expect(items[2]).not.toHaveAttribute('aria-current');
+  });
+
+  test('supports keyboard navigation when clickable', () => {
+    const onStepClick = jest.fn();
+    const { container } = render(<Stepper steps={steps} currentStep={0} onStepClick={onStepClick} />);
+    const items = container.querySelectorAll('[role="listitem"]');
+    fireEvent.keyDown(items[1], { key: 'Enter' });
+    expect(onStepClick).toHaveBeenCalledWith(1);
   });
 });

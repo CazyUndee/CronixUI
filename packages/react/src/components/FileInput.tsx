@@ -65,6 +65,8 @@ export const FileInput: React.FC<FileInputProps> = ({
           accept={accept}
           multiple={multiple}
           onChange={handleChange}
+          aria-label={label}
+          tabIndex={-1}
         />
         <div className="cn-file-input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

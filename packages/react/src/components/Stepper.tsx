@@ -19,7 +19,7 @@ export const Stepper: React.FC<StepperProps> = ({
   ...props
 }) => {
   return (
-    <div className={`cn-stepper ${className}`.trim()} {...props}>
+    <div className={`cn-stepper ${className}`.trim()} role="list" aria-label="Progress" {...props}>
       {steps.map((step, index) => (
         <div
           key={index}
@@ -27,8 +27,16 @@ export const Stepper: React.FC<StepperProps> = ({
             index < currentStep ? 'completed' :
             index === currentStep ? 'active' : 'pending'
           }`}
+          role="listitem"
+          aria-current={index === currentStep ? 'step' : undefined}
           onClick={() => onStepClick?.(index)}
-          style={{ cursor: onStepClick ? 'pointer' : 'default' }}
+          onKeyDown={(e) => {
+            if (onStepClick && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
+              onStepClick(index);
+            }
+          }}
+          tabIndex={onStepClick ? 0 : undefined}
         >
           <div className="cn-stepper-indicator">
             <span className="cn-stepper-number">
@@ -42,7 +50,7 @@ export const Stepper: React.FC<StepperProps> = ({
             )}
           </div>
           {index < steps.length - 1 && (
-            <div className={`cn-stepper-connector ${index < currentStep ? 'completed' : ''}`} />
+            <div className={`cn-stepper-connector ${index < currentStep ? 'completed' : ''}`} aria-hidden="true" />
           )}
         </div>
       ))}

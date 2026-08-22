@@ -45,9 +45,11 @@ export const Search: React.FC<SearchProps> = ({
     onSelect?.(item);
   };
 
+  const searchResultsId = React.useId();
+
   return (
     <div ref={ref} className={`cn-search ${isOpen ? 'cn-search-open' : ''} ${className}`.trim()} {...props}>
-      <svg className="cn-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg className="cn-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
@@ -55,6 +57,7 @@ export const Search: React.FC<SearchProps> = ({
         type="search"
         className="cn-input cn-search-input"
         placeholder={placeholder}
+        aria-label={placeholder}
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
@@ -64,9 +67,10 @@ export const Search: React.FC<SearchProps> = ({
         role="combobox"
         aria-autocomplete="list"
         aria-expanded={isOpen}
+        aria-controls={searchResultsId}
       />
       {isOpen && (
-        <div className="cn-search-results" role="listbox">
+        <div className="cn-search-results" id={searchResultsId} role="listbox">
           {filtered.length > 0 ? (
             filtered.map((item, idx) => (
               <div
@@ -74,6 +78,7 @@ export const Search: React.FC<SearchProps> = ({
                 className="cn-search-result"
                 onClick={() => handleSelect(item)}
                 role="option"
+                aria-selected={query === item.title}
               >
                 <div className="cn-search-result-title">{item.title}</div>
                 {item.subtitle && (

@@ -36,4 +36,27 @@ describe('Rating Component', () => {
     fireEvent.click(stars[2]);
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  test('supports arrow key navigation', () => {
+    const onChange = jest.fn();
+    render(<Rating value={2} onChange={onChange} />);
+    const stars = screen.getAllByRole('radio');
+    fireEvent.keyDown(stars[1], { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenCalledWith(3);
+  });
+
+  test('supports Home and End keys', () => {
+    const onChange = jest.fn();
+    render(<Rating value={3} onChange={onChange} />);
+    const stars = screen.getAllByRole('radio');
+    fireEvent.keyDown(stars[2], { key: 'End' });
+    expect(onChange).toHaveBeenCalledWith(5);
+    fireEvent.keyDown(stars[4], { key: 'Home' });
+    expect(onChange).toHaveBeenCalledWith(1);
+  });
+
+  test('has radiogroup role with label', () => {
+    render(<Rating />);
+    expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-label', 'Rating');
+  });
 });

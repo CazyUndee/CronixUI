@@ -26,13 +26,18 @@ export const Dropdown: React.FC<DropdownProps> & {
           close();
         }
       };
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') close();
+      };
 
       if (isOpen) {
         document.addEventListener('click', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
       }
 
       return () => {
         document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener('keydown', handleEscape);
       };
     }, [isOpen]);
 
@@ -58,7 +63,38 @@ export const Dropdown: React.FC<DropdownProps> & {
         >
           {trigger}
         </div>
-        <div className="cn-dropdown-menu" role="menu" onClick={close}>
+        <div
+          className="cn-dropdown-menu"
+          role="menu"
+          onClick={close}
+          onKeyDown={(e) => {
+            const items = Array.from(dropdownRef.current?.querySelectorAll<HTMLElement>('[role=menuitem]') || []);
+            const currentIdx = items.indexOf(document.activeElement as HTMLElement);
+            let nextIdx = currentIdx;
+
+            switch (e.key) {
+              case 'ArrowDown':
+                e.preventDefault();
+                nextIdx = (currentIdx + 1) % items.length;
+                break;
+              case 'ArrowUp':
+                e.preventDefault();
+                nextIdx = (currentIdx - 1 + items.length) % items.length;
+                break;
+              case 'Home':
+                e.preventDefault();
+                nextIdx = 0;
+                break;
+              case 'End':
+                e.preventDefault();
+                nextIdx = items.length - 1;
+                break;
+              default:
+                return;
+            }
+            items[nextIdx]?.focus();
+          }}
+        >
           {children}
         </div>
       </div>

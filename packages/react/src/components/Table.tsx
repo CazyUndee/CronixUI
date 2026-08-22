@@ -59,8 +59,16 @@ export function Table<T extends Record<string, unknown> = Record<string, unknown
                 <th
                   key={idx}
                   onClick={() => handleSort(col)}
+                  onKeyDown={(e) => {
+                    if (col.sortable && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault();
+                      handleSort(col);
+                    }
+                  }}
                   data-sort={col.key}
                   aria-sort={col.sortable ? sortDirection : undefined}
+                  tabIndex={col.sortable ? 0 : undefined}
+                  role="columnheader"
                 >
                   {col.header}
                   {sortIndicator}

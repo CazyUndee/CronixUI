@@ -28,6 +28,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = React.useState('');
   const [activeIndex, setActiveIndex] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const resultsId = React.useId();
 
   const filtered = items.filter(
     (item) =>
@@ -95,8 +96,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={filtered.length > 0}
+          aria-controls={resultsId}
+          aria-activedescendant={filtered[activeIndex] ? `cmd-option-${activeIndex}` : undefined}
         />
-        <div className="cn-command-palette-results" role="listbox">
+        <div className="cn-command-palette-results" id={resultsId} role="listbox" aria-label="Commands">
           {filtered.length > 0 ? (
             filtered.map((item, idx) => (
               <div
@@ -104,6 +107,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 className={`cn-command-item ${idx === activeIndex ? 'cn-command-item-active' : ''}`.trim()}
                 onClick={() => handleSelect(item)}
                 onMouseEnter={() => setActiveIndex(idx)}
+                id={`cmd-option-${idx}`}
                 role="option"
                 aria-selected={idx === activeIndex}
               >

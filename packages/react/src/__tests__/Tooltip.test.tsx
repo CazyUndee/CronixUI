@@ -31,4 +31,15 @@ describe('Tooltip', () => {
     );
     expect(container.querySelector('.cn-tooltip-bottom')).toBeInTheDocument();
   });
+
+  it('links trigger to tooltip via aria-describedby', () => {
+    const { container } = render(
+      <Tooltip content="Help"><button>Hover</button></Tooltip>
+    );
+    const tooltip = screen.getByRole('tooltip');
+    const tooltipId = tooltip.getAttribute('id');
+    expect(tooltipId).toBeTruthy();
+    const triggerWrapper = container.querySelector(`[aria-describedby="${tooltipId}"]`);
+    expect(triggerWrapper).toBeInTheDocument();
+  });
 });

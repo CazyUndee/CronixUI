@@ -16,11 +16,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
   className = '',
 }) => {
   const positionClass = position !== 'top' ? `cn-tooltip-${position}` : '';
+  const tooltipId = React.useId();
 
   return (
     <div className={`cn-tooltip ${positionClass} ${className}`.trim()}>
-      {children}
-      <div className="cn-tooltip-content" role="tooltip">
+      <span aria-describedby={tooltipId}>{children}</span>
+      <div className="cn-tooltip-content" id={tooltipId} role="tooltip">
         {content}
       </div>
     </div>
