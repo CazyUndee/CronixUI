@@ -493,3 +493,509 @@ func TestToastTypes(t *testing.T) {
 		}
 	}
 }
+
+// =============================================================================
+// COMPONENT CONSTRUCTOR TESTS (non-GUI)
+// =============================================================================
+
+func TestButtonVariants(t *testing.T) {
+	variants := []ButtonVariant{
+		ButtonDefault, ButtonPrimary, ButtonGhost,
+		ButtonOutline, ButtonDanger, ButtonSuccess,
+	}
+	for _, v := range variants {
+		btn := NewButton("test", v, nil)
+		if btn == nil {
+			t.Errorf("NewButton with variant %d returned nil", v)
+		}
+		if btn.Text != "test" {
+			t.Errorf("Button text = %q, want %q", btn.Text, "test")
+		}
+	}
+}
+
+func TestButtonGroup(t *testing.T) {
+	b1 := NewButton("A", ButtonDefault, nil)
+	b2 := NewButton("B", ButtonPrimary, nil)
+	group := NewButtonGroup(b1, b2)
+	if group == nil {
+		t.Fatal("NewButtonGroup returned nil")
+	}
+	if len(group.Objects) != 2 {
+		t.Errorf("ButtonGroup has %d objects, want 2", len(group.Objects))
+	}
+}
+
+func TestCardOptions(t *testing.T) {
+	card := NewCard(nil)
+	if card == nil {
+		t.Fatal("NewCard returned nil")
+	}
+}
+
+func TestNewInput(t *testing.T) {
+	e := NewInput("placeholder")
+	if e == nil {
+		t.Fatal("NewInput returned nil")
+	}
+}
+
+func TestNewTextarea(t *testing.T) {
+	e := NewTextarea("placeholder")
+	if e == nil {
+		t.Fatal("NewTextarea returned nil")
+	}
+}
+
+func TestNewPassword(t *testing.T) {
+	e := NewPassword("placeholder")
+	if e == nil {
+		t.Fatal("NewPassword returned nil")
+	}
+}
+
+func TestNewCheckbox(t *testing.T) {
+	ch := NewCheckbox("check me", nil)
+	if ch == nil {
+		t.Fatal("NewCheckbox returned nil")
+	}
+}
+
+func TestNewRadio(t *testing.T) {
+	r := NewRadio([]string{"a", "b", "c"}, nil)
+	if r == nil {
+		t.Fatal("NewRadio returned nil")
+	}
+}
+
+func TestNewSelect(t *testing.T) {
+	s := NewSelect([]string{"x", "y", "z"}, nil)
+	if s == nil {
+		t.Fatal("NewSelect returned nil")
+	}
+}
+
+func TestNewSlider(t *testing.T) {
+	s := NewSlider(0, 100)
+	if s == nil {
+		t.Fatal("NewSlider returned nil")
+	}
+}
+
+func TestNewProgress(t *testing.T) {
+	p := NewProgress()
+	if p == nil {
+		t.Fatal("NewProgress returned nil")
+	}
+}
+
+func TestNewProgressInfinite(t *testing.T) {
+	p := NewProgressInfinite()
+	if p == nil {
+		t.Fatal("NewProgressInfinite returned nil")
+	}
+}
+
+func TestNewToggle(t *testing.T) {
+	tog := NewToggle(nil)
+	if tog == nil {
+		t.Fatal("NewToggle returned nil")
+	}
+	if tog.IsOn() {
+		t.Error("New toggle should be off")
+	}
+	tog.Toggle()
+	if !tog.IsOn() {
+		t.Error("Toggle should be on after Toggle()")
+	}
+	tog.Toggle()
+	if tog.IsOn() {
+		t.Error("Toggle should be off after second Toggle()")
+	}
+}
+
+func TestToggleSetOn(t *testing.T) {
+	tog := NewToggle(nil)
+	tog.SetOn(true)
+	if !tog.IsOn() {
+		t.Error("SetOn(true) should make toggle on")
+	}
+	tog.SetOn(false)
+	if tog.IsOn() {
+		t.Error("SetOn(false) should make toggle off")
+	}
+}
+
+func TestNewModal(t *testing.T) {
+	m := NewModal(nil)
+	if m == nil {
+		t.Fatal("NewModal returned nil")
+	}
+	if m.IsOpen() {
+		t.Error("New modal should not be open")
+	}
+	m.Close()
+	if m.IsOpen() {
+		t.Error("Closed modal should not be open")
+	}
+}
+
+func TestNewDropdown(t *testing.T) {
+	d := NewDropdown([]string{"a", "b"}, nil)
+	if d == nil {
+		t.Fatal("NewDropdown returned nil")
+	}
+}
+
+func TestNewTabs(t *testing.T) {
+	t1 := container.NewTabItem("Tab 1", nil)
+	t2 := container.NewTabItem("Tab 2", nil)
+	tabs := NewTabs(t1, t2)
+	if tabs == nil {
+		t.Fatal("NewTabs returned nil")
+	}
+}
+
+func TestNewTable(t *testing.T) {
+	table := NewTable(5, 3, func(row, col int) fyne.CanvasObject {
+		return widget.NewLabel(fmt.Sprintf("%d-%d", row, col))
+	})
+	if table == nil {
+		t.Fatal("NewTable returned nil")
+	}
+}
+
+func TestNewList(t *testing.T) {
+	items := []ListItem{{Title: "A"}, {Title: "B"}}
+	l := NewList(items)
+	if l == nil {
+		t.Fatal("NewList returned nil")
+	}
+}
+
+func TestLayoutHelpers(t *testing.T) {
+	c1 := NewContainer(nil)
+	if c1 == nil {
+		t.Fatal("NewContainer returned nil")
+	}
+
+	flex := NewFlex()
+	if flex == nil {
+		t.Fatal("NewFlex returned nil")
+	}
+
+	stack := NewStack()
+	if stack == nil {
+		t.Fatal("NewStack returned nil")
+	}
+
+	grid := NewGrid(3)
+	if grid == nil {
+		t.Fatal("NewGrid returned nil")
+	}
+}
+
+func TestNewForm(t *testing.T) {
+	f := NewForm(widget.NewFormItem("Name", widget.NewEntry()))
+	if f == nil {
+		t.Fatal("NewForm returned nil")
+	}
+}
+
+// =============================================================================
+// CONTAINER COMPONENT TESTS (non-GUI)
+// =============================================================================
+
+func TestNewAlert(t *testing.T) {
+	variants := []AlertVariant{AlertInfo, AlertSuccess, AlertWarning, AlertError}
+	for _, v := range variants {
+		a := NewAlert("test", v)
+		if a == nil {
+			t.Errorf("NewAlert with variant %d returned nil", v)
+		}
+	}
+}
+
+func TestNewAvatar(t *testing.T) {
+	a := NewAvatar("AB", nil)
+	if a == nil {
+		t.Fatal("NewAvatar returned nil")
+	}
+}
+
+func TestNewAvatarGroup(t *testing.T) {
+	a1 := NewAvatar("A", nil)
+	a2 := NewAvatar("B", nil)
+	group := NewAvatarGroup(a1, a2)
+	if group == nil {
+		t.Fatal("NewAvatarGroup returned nil")
+	}
+}
+
+func TestNewBadge(t *testing.T) {
+	variants := []BadgeVariant{BadgeDefault, BadgePrimary, BadgeSuccess, BadgeWarning, BadgeError, BadgeInfo}
+	for _, v := range variants {
+		b := NewBadge("badge", v)
+		if b == nil {
+			t.Errorf("NewBadge with variant %d returned nil", v)
+		}
+	}
+}
+
+func TestNewBreadcrumb(t *testing.T) {
+	bc := NewBreadcrumb([]string{"Home", "Products", "Item"}, nil)
+	if bc == nil {
+		t.Fatal("NewBreadcrumb returned nil")
+	}
+}
+
+func TestNewChip(t *testing.T) {
+	c := NewChip("chip", ChipDefault, nil)
+	if c == nil {
+		t.Fatal("NewChip returned nil")
+	}
+}
+
+func TestNewEmptyState(t *testing.T) {
+	e := NewEmptyState("Title", "Description")
+	if e == nil {
+		t.Fatal("NewEmptyState returned nil")
+	}
+}
+
+func TestNewSkeleton(t *testing.T) {
+	s := NewSkeleton(200, 50)
+	if s == nil {
+		t.Fatal("NewSkeleton returned nil")
+	}
+}
+
+func TestNewSkeletonText(t *testing.T) {
+	s := NewSkeletonText()
+	if s == nil {
+		t.Fatal("NewSkeletonText returned nil")
+	}
+}
+
+func TestNewSkeletonCircle(t *testing.T) {
+	s := NewSkeletonCircle(40)
+	if s == nil {
+		t.Fatal("NewSkeletonCircle returned nil")
+	}
+}
+
+func TestNewSpinner(t *testing.T) {
+	s := NewSpinner()
+	if s == nil {
+		t.Fatal("NewSpinner returned nil")
+	}
+}
+
+func TestNewTag(t *testing.T) {
+	tag := NewTag("tag", nil)
+	if tag == nil {
+		t.Fatal("NewTag returned nil")
+	}
+}
+
+func TestNewDivider(t *testing.T) {
+	d := NewDivider()
+	if d == nil {
+		t.Fatal("NewDivider returned nil")
+	}
+}
+
+func TestNewVerticalDivider(t *testing.T) {
+	d := NewVerticalDivider()
+	if d == nil {
+		t.Fatal("NewVerticalDivider returned nil")
+	}
+}
+
+func TestNewHStack(t *testing.T) {
+	h := NewHStack()
+	if h == nil {
+		t.Fatal("NewHStack returned nil")
+	}
+}
+
+func TestNewHeader(t *testing.T) {
+	h := NewHeader("Title")
+	if h == nil {
+		t.Fatal("NewHeader returned nil")
+	}
+}
+
+func TestNewFooter(t *testing.T) {
+	f := NewFooter("Footer text")
+	if f == nil {
+		t.Fatal("NewFooter returned nil")
+	}
+}
+
+func TestNewFormGroup(t *testing.T) {
+	fg := NewFormGroup("Label", widget.NewEntry())
+	if fg == nil {
+		t.Fatal("NewFormGroup returned nil")
+	}
+}
+
+func TestNewNotification(t *testing.T) {
+	n := NewNotification("Title", "Desc", nil)
+	if n == nil {
+		t.Fatal("NewNotification returned nil")
+	}
+}
+
+func TestNewDatePicker(t *testing.T) {
+	dp := NewDatePicker("", nil)
+	if dp == nil {
+		t.Fatal("NewDatePicker returned nil")
+	}
+}
+
+func TestNewPopover(t *testing.T) {
+	p := NewPopover(nil)
+	if p == nil {
+		t.Fatal("NewPopover returned nil")
+	}
+}
+
+func TestNewStepper(t *testing.T) {
+	s := NewStepper(2, 5)
+	if s == nil {
+		t.Fatal("NewStepper returned nil")
+	}
+}
+
+func TestNewTimeline(t *testing.T) {
+	items := []TimelineItem{{Title: "A", Description: "B", Time: "10:00"}}
+	tl := NewTimeline(items)
+	if tl == nil {
+		t.Fatal("NewTimeline returned nil")
+	}
+}
+
+func TestNewTreeView(t *testing.T) {
+	nodes := []*TreeNode{{Title: "Root", Children: []*TreeNode{{Title: "Child"}}}}
+	tv := NewTreeView(nodes, nil)
+	if tv == nil {
+		t.Fatal("NewTreeView returned nil")
+	}
+}
+
+func TestNewTreeViewEmpty(t *testing.T) {
+	tv := NewTreeView(nil, nil)
+	if tv == nil {
+		t.Fatal("NewTreeView(nil) returned nil")
+	}
+}
+
+func TestTypography(t *testing.T) {
+	// Test all heading levels
+	h1 := NewH1("H1")
+	if h1 == nil || h1.Text != "H1" {
+		t.Error("NewH1 failed")
+	}
+	h2 := NewH2("H2")
+	if h2 == nil || h2.Text != "H2" {
+		t.Error("NewH2 failed")
+	}
+	h3 := NewH3("H3")
+	if h3 == nil || h3.Text != "H3" {
+		t.Error("NewH3 failed")
+	}
+	h4 := NewH4("H4")
+	if h4 == nil || h4.Text != "H4" {
+		t.Error("NewH4 failed")
+	}
+	h5 := NewH5("H5")
+	if h5 == nil || h5.Text != "H5" {
+		t.Error("NewH5 failed")
+	}
+	h6 := NewH6("H6")
+	if h6 == nil || h6.Text != "H6" {
+		t.Error("NewH6 failed")
+	}
+
+	body := NewText("body")
+	if body == nil || body.Text != "body" {
+		t.Error("NewText failed")
+	}
+
+	label := NewLabel("label")
+	if label == nil || label.Text != "label" {
+		t.Error("NewLabel failed")
+	}
+}
+
+func TestNewNav(t *testing.T) {
+	nav := NewNav([]string{"A", "B", "C"}, 0, nil)
+	if nav == nil {
+		t.Fatal("NewNav returned nil")
+	}
+}
+
+func TestNewSidebar(t *testing.T) {
+	sb := NewSidebar([]string{"A", "B"}, 0, nil)
+	if sb == nil {
+		t.Fatal("NewSidebar returned nil")
+	}
+}
+
+func TestToastComponent(t *testing.T) {
+	toast := NewToastComponent("Hello", ToastSuccess)
+	if toast == nil {
+		t.Fatal("NewToastComponent returned nil")
+	}
+}
+
+func TestSearch(t *testing.T) {
+	s := NewSearch(nil, nil)
+	if s == nil {
+		t.Fatal("NewSearch returned nil")
+	}
+}
+
+func TestContainsIgnoreCase(t *testing.T) {
+	if !containsIgnoreCase("Hello World", "hello") {
+		t.Error("containsIgnoreCase should match")
+	}
+	if containsIgnoreCase("Hello", "xyz") {
+		t.Error("containsIgnoreCase should not match")
+	}
+	if !containsIgnoreCase("FOO", "foo") {
+		t.Error("containsIgnoreCase should be case insensitive")
+	}
+}
+
+func TestStatDeltaTypes(t *testing.T) {
+	if StatDeltaUp >= StatDeltaDown {
+		t.Error("StatDeltaUp should be less than StatDeltaDown")
+	}
+}
+
+func TestBreadcrumbNavigation(t *testing.T) {
+	navigated := -1
+	bc := NewBreadcrumb([]string{"Home", "Products"}, func(i int) {
+		navigated = i
+	})
+	if bc == nil {
+		t.Fatal("NewBreadcrumb returned nil")
+	}
+	// Navigation callback should be set
+	if navigated != -1 {
+		t.Error("Navigation should not have fired yet")
+	}
+}
+
+func TestColorPickerPresets(t *testing.T) {
+	presets := []ColorPickerPreset{
+		{Name: "Red", Color: color.RGBA{R: 255, G: 0, B: 0, A: 255}},
+		{Name: "Blue", Color: color.RGBA{R: 0, G: 0, B: 255, A: 255}},
+	}
+	cp := NewColorPicker(presets, nil)
+	if cp == nil {
+		t.Fatal("NewColorPicker returned nil")
+	}
+}
