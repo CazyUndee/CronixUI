@@ -10,7 +10,9 @@
       class="cn-rating-star"
       :class="{ 'cn-rating-star-active': star <= modelValue }"
       :disabled="disabled"
+      :tabindex="star === modelValue || (modelValue === 0 && star === 1) ? 0 : -1"
       @click="$emit('update:modelValue', star)"
+      @keydown="handleKeydown($event, star)"
     >★</button>
   </div>
 </template>
@@ -23,7 +25,35 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
 });
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
+
+function handleKeydown(event, star) {
+  if (props.disabled) return;
+  let nextStar = star;
+  switch (event.key) {
+    case 'ArrowRight':
+    case 'ArrowUp':
+      event.preventDefault();
+      nextStar = Math.min(star + 1, props.max);
+      break;
+    case 'ArrowLeft':
+    case 'ArrowDown':
+      event.preventDefault();
+      nextStar = Math.max(star - 1, 1);
+      break;
+    case 'Home':
+      event.preventDefault();
+      nextStar = 1;
+      break;
+    case 'End':
+      event.preventDefault();
+      nextStar = props.max;
+      break;
+    default:
+      return;
+  }
+  emit('update:modelValue', nextStar);
+}
 </script>
 
 <style scoped>
@@ -40,6 +70,11 @@ defineEmits(['update:modelValue']);
   color: #2a2a2a;
   cursor: pointer;
   transition: color 0.15s ease, transform 0.15s ease;
+  outline: none;
+}
+.cn-rating-star:focus-visible {
+  box-shadow: 0 0 0 2px #6b2323;
+  border-radius: 4px;
 }
 .cn-rating-star:hover {
   transform: scale(1.15);

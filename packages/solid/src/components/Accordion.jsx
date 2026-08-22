@@ -36,12 +36,14 @@ export function Accordion(props) {
             class="cn-accordion-header"
             onClick={() => toggleItem(index())}
             aria-expanded={isOpen(index())}
+            aria-controls={`accordion-panel-${index()}`}
+            id={`accordion-header-${index()}`}
           >
             <span class="cn-accordion-title">{item.title}</span>
             <span class="cn-accordion-icon">{isOpen(index()) ? '−' : '+'}</span>
           </button>
           <Show when={isOpen(index())}>
-            <div class="cn-accordion-content">{item.content}</div>
+            <div class="cn-accordion-content" id={`accordion-panel-${index()}`} role="region" aria-labelledby={`accordion-header-${index()}`}>{item.content}</div>
           </Show>
         </div>
       )}</For>

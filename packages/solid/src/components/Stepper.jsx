@@ -4,7 +4,7 @@ export function Stepper(props) {
   const merged = mergeProps({ steps: [], currentStep: 0, onStepClick: () => {} }, props);
 
   return (
-    <div class="cn-stepper">
+    <div class="cn-stepper" role="list" aria-label="Progress">
       <For each={merged.steps}>
         {(step, index) => (
           <div
@@ -14,8 +14,12 @@ export function Stepper(props) {
               active: index() === merged.currentStep,
               pending: index() > merged.currentStep,
             }}
+            role="listitem"
+            aria-current={index() === merged.currentStep ? 'step' : undefined}
             style={{ cursor: merged.onStepClick ? 'pointer' : 'default' }}
             onClick={() => merged.onStepClick(index())}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); merged.onStepClick(index()); } }}
+            tabindex={merged.onStepClick ? 0 : undefined}
           >
             <div class="cn-stepper-indicator">
               <span class="cn-stepper-number">

@@ -1,4 +1,4 @@
-import { mergeProps, createSignal, Show } from 'solid-js';
+import { mergeProps, createSignal, Show, createUniqueId } from 'solid-js';
 
 export function Tooltip(props) {
   const merged = mergeProps({
@@ -7,6 +7,7 @@ export function Tooltip(props) {
   }, props);
 
   const [isVisible, setIsVisible] = createSignal(false);
+  const tooltipId = createUniqueId();
 
   const positionClasses = {
     top: 'cn-tooltip-top',
@@ -21,12 +22,14 @@ export function Tooltip(props) {
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >
-      {merged.children}
+      <span aria-describedby={tooltipId}>{merged.children}</span>
       <Show when={isVisible()}>
-        <div class={`cn-tooltip ${positionClasses[merged.position] || 'cn-tooltip-top'}`}>
+        <div class={`cn-tooltip ${positionClasses[merged.position] || 'cn-tooltip-top'}`} id={tooltipId} role="tooltip">
           {merged.content}
         </div>
       </Show>
     </div>
   );
 }
+
+export default Tooltip;

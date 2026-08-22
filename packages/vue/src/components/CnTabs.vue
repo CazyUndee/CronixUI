@@ -1,13 +1,19 @@
 <template>
   <div class="cn-tabs">
-    <div class="cn-tabs-list">
+    <div class="cn-tabs-list" role="tablist">
       <button
         v-for="(tab, index) in normalizedTabs"
         :key="index"
         type="button"
         class="cn-tab"
         :class="{ 'cn-tab-active': index === activeIndex }"
+        role="tab"
+        :aria-selected="index === activeIndex"
+        :aria-controls="`cn-tabpanel-${index}`"
+        :id="`cn-tab-${index}`"
+        :tabindex="index === activeIndex ? 0 : -1"
         @click="$emit('update:activeIndex', index); $emit('change', { activeIndex: index })"
+        @keydown="handleKeydown($event, index)"
       >
         {{ tab.label }}
       </button>
@@ -19,6 +25,11 @@
       :key="index"
       class="cn-tab-panel"
       :class="{ 'cn-tab-panel-active': index === activeIndex }"
+      role="tabpanel"
+      :id="`cn-tabpanel-${index}`"
+      :aria-labelledby="`cn-tab-${index}`"
+      :hidden="index !== activeIndex"
+      :tabindex="index === activeIndex ? 0 : -1"
     >
       <slot v-if="!tab.content" />
       <template v-else>{{ tab.content }}</template>
@@ -34,11 +45,40 @@ const props = defineProps({
   activeIndex: { type: Number, default: 0 },
 });
 
-defineEmits(['update:activeIndex', 'change']);
+const emit = defineEmits(['update:activeIndex', 'change']);
 
 const normalizedTabs = computed(() =>
   props.tabs.map(tab => typeof tab === 'string' ? { label: tab, content: null } : tab)
 );
+
+function handleKeydown(event, index) {
+  const len = normalizedTabs.value.length;
+  let nextIndex = index;
+  switch (event.key) {
+    case 'ArrowRight':
+    case 'ArrowDown':
+      event.preventDefault();
+      nextIndex = (index + 1) % len;
+      break;
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      event.preventDefault();
+      nextIndex = (index - 1 + len) % len;
+      break;
+    case 'Home':
+      event.preventDefault();
+      nextIndex = 0;
+      break;
+    case 'End':
+      event.preventDefault();
+      nextIndex = len - 1;
+      break;
+    default:
+      return;
+  }
+  emit('update:activeIndex', nextIndex);
+  emit('change', { activeIndex: nextIndex });
+}
 </script>
 
 <style scoped>
@@ -61,6 +101,11 @@ const normalizedTabs = computed(() =>
   color: rgba(240, 237, 232, 0.5);
   transition: all 0.15s ease;
   margin-bottom: -1px;
+  outline: none;
+}
+.cn-tab:focus-visible {
+  box-shadow: inset 0 0 0 2px #6b2323;
+  border-radius: 4px 4px 0 0;
 }
 .cn-tab:hover {
   color: #f0ede8;

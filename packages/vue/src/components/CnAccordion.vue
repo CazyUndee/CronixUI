@@ -6,7 +6,17 @@
       class="cn-accordion-item"
       :class="{ 'cn-accordion-open': isOpen(index) }"
     >
-      <div class="cn-accordion-header" @click="toggle(index)">
+      <div
+        class="cn-accordion-header"
+        role="button"
+        tabindex="0"
+        :aria-expanded="isOpen(index)"
+        :aria-controls="`accordion-panel-${index}`"
+        :id="`accordion-header-${index}`"
+        @click="toggle(index)"
+        @keydown.enter="toggle(index)"
+        @keydown.space.prevent="toggle(index)"
+      >
         <span class="cn-accordion-title">{{ item.title }}</span>
         <span class="cn-accordion-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -14,7 +24,12 @@
           </svg>
         </span>
       </div>
-      <div class="cn-accordion-content">{{ item.content }}</div>
+      <div
+        class="cn-accordion-content"
+        :id="`accordion-panel-${index}`"
+        role="region"
+        :aria-labelledby="`accordion-header-${index}`"
+      >{{ item.content }}</div>
     </div>
   </div>
 </template>
@@ -69,6 +84,10 @@ function toggle(index) {
   cursor: pointer;
   transition: background 0.15s ease;
   color: #f0ede8;
+  outline: none;
+}
+.cn-accordion-header:focus-visible {
+  box-shadow: inset 0 0 0 2px #6b2323;
 }
 .cn-accordion-header:hover {
   background: #111111;

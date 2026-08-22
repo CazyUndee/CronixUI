@@ -1,7 +1,13 @@
 <template>
   <div class="cn-tooltip">
-    <slot />
-    <div v-if="content" class="cn-tooltip-content" :style="positionStyle">
+    <span :aria-describedby="tooltipId"><slot /></span>
+    <div
+      v-if="content"
+      :id="tooltipId"
+      role="tooltip"
+      class="cn-tooltip-content"
+      :style="positionStyle"
+    >
       {{ content }}
       <span class="cn-tooltip-arrow" :style="arrowStyle"></span>
     </div>
@@ -10,6 +16,9 @@
 
 <script setup>
 import { computed } from 'vue';
+
+let idCounter = 0;
+const tooltipId = `tooltip-${++idCounter}-${Math.random().toString(36).slice(2, 9)}`;
 
 const props = defineProps({
   content: { type: String, default: '' },
