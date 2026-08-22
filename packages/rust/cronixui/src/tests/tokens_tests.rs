@@ -84,22 +84,22 @@ fn test_container_sizes_values() {
 #[test]
 fn test_rounded_functions() {
     let r = rounded();
-    assert_eq!(r.nw, RADIUS as u32);
-    assert_eq!(r.ne, RADIUS as u32);
-    assert_eq!(r.sw, RADIUS as u32);
-    assert_eq!(r.se, RADIUS as u32);
+    assert_eq!(r.nw, RADIUS);
+    assert_eq!(r.ne, RADIUS);
+    assert_eq!(r.sw, RADIUS);
+    assert_eq!(r.se, RADIUS);
 }
 
 #[test]
 fn test_rounded_sm_functions() {
     let r = rounded_sm();
-    assert_eq!(r.nw, RADIUS_SM as u32);
+    assert_eq!(r.nw, RADIUS_SM);
 }
 
 #[test]
 fn test_rounded_lg_functions() {
     let r = rounded_lg();
-    assert_eq!(r.nw, RADIUS_LG as u32);
+    assert_eq!(r.nw, RADIUS_LG);
 }
 
 #[test]
