@@ -54,3 +54,6 @@ export 'src/widgets/cn_empty_state.dart';
 export 'src/widgets/cn_notification.dart';
 export 'src/widgets/cn_file_upload.dart';
 export 'src/widgets/cn_form_group.dart';
+export 'src/widgets/cn_divider.dart';
+export 'src/widgets/cn_avatar_group.dart';
+export 'src/widgets/cn_button_group.dart';
