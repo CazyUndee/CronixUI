@@ -402,6 +402,101 @@ class Slider(Frame):
         self.var.set(value)
 
 
+class FormGroup(Frame):
+    """Form group with label, help text, and error display.
+
+    Args:
+        parent: Parent widget
+        label: Label text
+        help_text: Optional help text
+        required: Whether the field is required
+
+    Example:
+        >>> root = tk.Tk()
+        >>> group = FormGroup(root, label="Email", required=True)
+        >>> entry = Input(group, placeholder="you@example.com")
+        >>> group.pack()
+    """
+
+    def __init__(
+        self,
+        master: tk.Misc,
+        label: str = "",
+        help_text: str = "",
+        required: bool = False,
+        **kwargs
+    ):
+        super().__init__(master, **kwargs)
+
+        theme = get_theme()
+        self.label_text = label
+        self.help_text = help_text
+        self.required = required
+
+        # Label
+        if label:
+            label_display = f"{label} *" if required else label
+            self._label = Label(
+                self,
+                text=label_display,
+                font=(theme.font_family, 12, 'bold'),
+                bg=theme.surface,
+                fg=theme.text,
+            )
+            self._label.pack(anchor='w', pady=(0, 4))
+
+        # Content container
+        self.content_frame = Frame(self, bg=theme.surface)
+        self.content_frame.pack(fill='both', expand=True)
+
+        # Help text
+        self._help_label = None
+        if help_text:
+            self._help_label = Label(
+                self,
+                text=help_text,
+                font=(theme.font_family, 10),
+                bg=theme.surface,
+                fg=theme.text_muted if hasattr(theme, 'text_muted') else theme.text,
+            )
+            self._help_label.pack(anchor='w', pady=(2, 0))
+
+        # Error label (hidden by default)
+        self._error_label = Label(
+            self,
+            text="",
+            font=(theme.font_family, 10),
+            bg=theme.surface,
+            fg=theme.error,
+        )
+
+    def add_widget(self, widget: tk.Widget) -> None:
+        """Add a widget to the content area."""
+        widget.pack(in_=self.content_frame, fill='x', expand=True)
+
+    def set_error(self, error: str) -> None:
+        """Show an error message."""
+        if self._help_label:
+            self._help_label.pack_forget()
+        self._error_label.configure(text=error)
+        self._error_label.pack(anchor='w', pady=(2, 0))
+
+    def clear_error(self) -> None:
+        """Clear the error message."""
+        self._error_label.pack_forget()
+        if self._help_label:
+            self._help_label.pack(anchor='w', pady=(2, 0))
+
+    def get_value(self) -> str:
+        """Get the value of the first child entry widget."""
+        for child in self.content_frame.winfo_children():
+            if hasattr(child, 'get_value'):
+                return child.get_value()
+            elif hasattr(child, 'get'):
+                return child.get()
+        return ""
+
+
 class FileInput(Frame):
     """Native file input widget.
     

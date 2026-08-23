@@ -10,7 +10,7 @@ from .modal import Modal
 from .toggle import Toggle
 from .rating import Rating
 from .form import (
-    Input, Textarea, Checkbox, Radio, Select, Slider, FileInput
+    Input, Textarea, Checkbox, Radio, Select, Slider, FileInput, FormGroup
 )
 from .stat import Stat
 from .tag import Tag
@@ -44,6 +44,9 @@ from .table import Table
 from .tabs import Tabs
 from .toast import Toast, ToastType
 from .tooltip import Tooltip
+from .layout import (
+    Header, Sidebar, Footer, Container, Divider, Section, NavItem
+)
 from .core import (
     Frame, Label, Entry, Text, Scrollbar,
     Theme, get_theme, set_theme,
@@ -80,6 +83,7 @@ __all__ = [
     "Select",
     "Slider",
     "FileInput",
+    "FormGroup",
     "Stat",
     "Tag",
     "Stack",
@@ -120,6 +124,13 @@ __all__ = [
     "Toast",
     "ToastType",
     "Tooltip",
+    "Header",
+    "Sidebar",
+    "Footer",
+    "Container",
+    "Divider",
+    "Section",
+    "NavItem",
     
     # Core
     "Frame",
