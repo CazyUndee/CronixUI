@@ -1662,7 +1662,6 @@ func NewPopover(content fyne.CanvasObject) *fyne.Container {
 	bg.StrokeColor = c.Border
 	bg.StrokeWidth = 1
 	bg.CornerRadius = 10
-	bg.ShadowColor = color.RGBA{R: 0, G: 0, B: 0, A: 100}
 
 	return container.NewStack(bg, container.NewPadded(content))
 }
@@ -1679,15 +1678,6 @@ type TreeNode struct {
 
 // NewTreeView creates a hierarchical tree view widget from tree nodes.
 func NewTreeView(nodes []*TreeNode, onSelect func(string)) *widget.Tree {
-	if len(nodes) == 0 {
-		return widget.NewTree(
-			func() []widget.TreeNodeID { return nil },
-			func(id widget.TreeNodeID) bool { return false },
-			func(id widget.TreeNodeID) fyne.CanvasObject { return widget.NewLabel("") },
-			func(id widget.TreeNodeID, node fyne.CanvasObject) {},
-		)
-	}
-
 	// Build flat ID list for the tree
 	var ids []widget.TreeNodeID
 	var buildIDs func(nodes []*TreeNode, prefix string)
@@ -1703,27 +1693,39 @@ func NewTreeView(nodes []*TreeNode, onSelect func(string)) *widget.Tree {
 	buildIDs(nodes, "root")
 
 	return widget.NewTree(
-		func() []widget.TreeNodeID { return ids },
-		func(id widget.TreeNodeID) bool {
-			// Determine if this node has children
+		func(id widget.TreeNodeID) []widget.TreeNodeID {
 			parts := splitPath(string(id))
 			node := nodes
-			for _, p := range parts[1:] { // skip "root"
+			for _, p := range parts[1:] {
 				idx := 0
 				fmt.Sscanf(p, "%d", &idx)
 				if idx < len(node) {
-					if len(parts) == 1 || p == parts[len(parts)-1] {
-						return len(node[idx].Children) > 0
-					}
 					node = node[idx].Children
 				}
 			}
-			return false
+			var children []widget.TreeNodeID
+			prefix := string(id)
+			for i := range node {
+				children = append(children, widget.TreeNodeID(fmt.Sprintf("%s/%d", prefix, i)))
+			}
+			return children
+		},
+		func(id widget.TreeNodeID) bool {
+			parts := splitPath(string(id))
+			node := nodes
+			for _, p := range parts[1:] {
+				idx := 0
+				fmt.Sscanf(p, "%d", &idx)
+				if idx < len(node) {
+					node = node[idx].Children
+				}
+			}
+			return len(node) > 0
 		},
 		func(id widget.TreeNodeID) fyne.CanvasObject {
 			return widget.NewLabel("Node")
 		},
-		func(id widget.TreeNodeID, node fyne.CanvasObject) {
+		func(id widget.TreeNodeID, isBranch bool, node fyne.CanvasObject) {
 			parts := splitPath(string(id))
 			currentNodes := nodes
 			var currentTitle string
@@ -1852,7 +1854,7 @@ func NewFileInput(accept []string, onSelect func(string)) *fyne.Container {
 	c := DefaultColors()
 
 	btn := widget.NewButton("Choose File", func() {
-		dialog := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+		dlg := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
 			if err == nil && reader != nil {
 				if onSelect != nil {
 					onSelect(reader.URI().Path())
@@ -1862,9 +1864,9 @@ func NewFileInput(accept []string, onSelect func(string)) *fyne.Container {
 		}, nil)
 		if len(accept) > 0 {
 			filter := storage.NewExtensionFileFilter(accept)
-			dialog.SetFilter(filter)
+			dlg.SetFilter(filter)
 		}
-		dialog.Show()
+		dlg.Show()
 	})
 	btn.Importance = widget.LowImportance
 
@@ -1911,7 +1913,11 @@ func NewColorPicker(presets []ColorPickerPreset, onSelect func(color.Color)) *fy
 		swatches = append(swatches, btn)
 	}
 
-	row := container.NewGridWrap(len(presets), swatches...)
+	cols := len(presets)
+	if cols > 6 {
+		cols = 6
+	}
+	row := container.NewGridWrap(fyne.NewSize(float32(cols)*50, 50), swatches...)
 
 	bg := canvas.NewRectangle(c.Surface)
 	bg.StrokeColor = c.Border
