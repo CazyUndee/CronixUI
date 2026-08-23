@@ -1722,7 +1722,7 @@ func NewTreeView(nodes []*TreeNode, onSelect func(string)) *widget.Tree {
 			}
 			return len(node) > 0
 		},
-		func(id widget.TreeNodeID) fyne.CanvasObject {
+		func(isBranch bool) fyne.CanvasObject {
 			return widget.NewLabel("Node")
 		},
 		func(id widget.TreeNodeID, isBranch bool, node fyne.CanvasObject) {
