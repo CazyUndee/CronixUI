@@ -1114,7 +1114,6 @@ func NewAlert(message string, variant AlertVariant) *fyne.Container {
 
 	label := canvas.NewText(message, textColor)
 	label.TextSize = 13
-	label.Wrapping = fyne.TextTruncate
 
 	bg := canvas.NewRectangle(bgColor)
 	bg.StrokeColor = borderColor
@@ -1219,16 +1218,27 @@ func NewBreadcrumb(items []string, onNavigate func(int)) *fyne.Container {
 			txt = canvas.NewText(item, c.Text)
 			txt.TextStyle = fyne.TextStyle{Bold: true}
 		} else {
-			txt = canvas.NewText(item, c.AccentText)
-			txt.OnTapped = func() {
-				if onNavigate != nil {
-					onNavigate(i)
+			btn := widget.NewButton(item, func(idx int) func() {
+				return func() {
+					if onNavigate != nil {
+						onNavigate(idx)
+					}
 				}
-			}
+			}(i))
+			btn.Importance = widget.LowImportance
+			objects = append(objects, btn)
+			continue
 		}
 		txt.TextSize = 13
 
-		objects = append(objects, txt)
+		if isLast {
+			objects = append(objects, txt)
+			if i < len(items)-1 {
+				sep := canvas.NewText(" / ", c.TextDim)
+				sep.TextSize = 13
+				objects = append(objects, sep)
+			}
+		}
 
 		if !isLast {
 			sep := canvas.NewText(" / ", c.TextDim)
@@ -1283,10 +1293,9 @@ func NewChip(text string, variant ChipVariant, onDismiss func()) *fyne.Container
 	objects = append(objects, label)
 
 	if onDismiss != nil {
-		dismiss := canvas.NewText(" ×", textColor)
-		dismiss.TextSize = 12
-		dismiss.OnTapped = onDismiss
-		objects = append(objects, dismiss)
+		dismissBtn := widget.NewButton("×", onDismiss)
+		dismissBtn.Importance = widget.LowImportance
+		objects = append(objects, dismissBtn)
 	}
 
 	row := container.NewHBox(objects...)
@@ -1317,7 +1326,6 @@ func NewEmptyState(title, description string) *fyne.Container {
 	descText := canvas.NewText(description, c.TextMuted)
 	descText.TextSize = 13
 	descText.Alignment = fyne.TextAlignCenter
-	descText.Wrapping = fyne.TextWordWrap
 
 	content := container.NewVBox(
 		container.NewCenter(iconText),
@@ -1359,11 +1367,10 @@ func NewSkeletonCircle(size float32) *fyne.Container {
 // SPINNER
 // =============================================================================
 
-// NewSpinner creates an activity indicator (spinner) widget.
-func NewSpinner() *widget.Activity {
-	a := widget.NewActivity()
-	a.Start()
-	return a
+// NewSpinner creates an infinite progress bar as a spinner.
+func NewSpinner() *widget.ProgressBarInfinite {
+	p := widget.NewProgressBarInfinite()
+	return p
 }
 
 // =============================================================================
@@ -1402,10 +1409,13 @@ func NewTag(text string, onDismiss func()) *fyne.Container {
 
 // NewTooltip wraps a widget with hover tooltip text.
 func NewTooltip(content fyne.CanvasObject, tooltipText string) *fyne.Container {
-	return widget.NewPopUp(
-		canvas.NewText(tooltipText, DefaultColors().Text),
-		nil,
-	)
+	tipText := canvas.NewText(tooltipText, DefaultColors().Text)
+	tipText.TextSize = 11
+
+	bg := canvas.NewRectangle(DefaultColors().Surface2)
+	bg.CornerRadius = 6
+
+	return container.NewStack(bg, container.NewPadded(tipText))
 }
 
 // =============================================================================
@@ -1457,16 +1467,16 @@ func NewLabel(text string) *canvas.Text {
 func NewDivider() *fyne.Container {
 	c := DefaultColors()
 	line := canvas.NewRectangle(c.Border)
-	line.Resize(fyne.NewSize(0, 1))
-	return line
+	line.Resize(fyne.NewSize(200, 1))
+	return container.NewStack(line)
 }
 
 // NewVerticalDivider creates a vertical separator line.
 func NewVerticalDivider() *fyne.Container {
 	c := DefaultColors()
 	line := canvas.NewRectangle(c.Border)
-	line.Resize(fyne.NewSize(1, 0))
-	return line
+	line.Resize(fyne.NewSize(1, 200))
+	return container.NewStack(line)
 }
 
 // =============================================================================
@@ -1576,7 +1586,6 @@ func NewNotification(title, description string, onAction func()) *fyne.Container
 
 	descText := canvas.NewText(description, c.TextMuted)
 	descText.TextSize = 12
-	descText.Wrapping = fyne.TextWordWrap
 
 	content := container.NewVBox(titleText, descText)
 
@@ -1814,7 +1823,6 @@ func NewTimeline(items []TimelineItem) *fyne.Container {
 		// Description
 		descText := canvas.NewText(item.Description, c.TextMuted)
 		descText.TextSize = 12
-		descText.Wrapping = fyne.TextWordWrap
 
 		dot := canvas.NewCircle(c.Accent)
 		dot.Resize(fyne.NewSize(8, 8))
