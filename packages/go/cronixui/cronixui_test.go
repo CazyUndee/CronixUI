@@ -3,13 +3,21 @@ package cronixui
 import (
 	"fmt"
 	"image/color"
+	"os"
 	"testing"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+func TestMain(m *testing.M) {
+	// Start a headless Fyne app so widget constructors work in tests
+	_ = app.NewWithID("cronixui.test")
+	os.Exit(m.Run())
+}
 
 // =============================================================================
 // DESIGN TOKENS TESTS
