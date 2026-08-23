@@ -660,8 +660,8 @@ func TestNewDropdown(t *testing.T) {
 }
 
 func TestNewTabs(t *testing.T) {
-	t1 := container.NewTabItem("Tab 1", nil)
-	t2 := container.NewTabItem("Tab 2", nil)
+	t1 := container.NewTabItem("Tab 1", widget.NewLabel("Content 1"))
+	t2 := container.NewTabItem("Tab 2", widget.NewLabel("Content 2"))
 	tabs := NewTabs(t1, t2)
 	if tabs == nil {
 		t.Fatal("NewTabs returned nil")
