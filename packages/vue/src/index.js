@@ -53,3 +53,4 @@ export { default as CnHStack } from './components/CnHStack.vue';
 export { default as CnDivider } from './components/CnDivider.vue';
 export { default as CnAvatarGroup } from './components/CnAvatarGroup.vue';
 export { default as CnButtonGroup } from './components/CnButtonGroup.vue';
+export { useMediaQuery, useBreakpoint, useEscapeKey, useClickOutside, breakpoints } from './composables/index.js';

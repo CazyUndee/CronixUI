@@ -52,3 +52,4 @@ export { Notification } from './components/Notification.jsx';
 export { FileUpload } from './components/FileUpload.jsx';
 export { AvatarGroup } from './components/AvatarGroup.jsx';
 export { ButtonGroup } from './components/ButtonGroup.jsx';
+export { useMediaQuery, useBreakpoint, useEscapeKey, breakpoints } from './hooks/index.jsx';

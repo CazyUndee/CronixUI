@@ -72,3 +72,4 @@ export {
   ThemeProvider
 };
 export * from './tokens.js';
+export { useMediaQuery, useBreakpoint, useEscapeKey, breakpoints } from './useMediaQuery.js';
