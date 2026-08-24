@@ -59,6 +59,13 @@ import ColorPicker from './ColorPicker.svelte';
 import EmptyState from './EmptyState.svelte';
 import Notification from './Notification.svelte';
 import FileUpload from './FileUpload.svelte';
+import ChatInterface from './ChatInterface.svelte';
+import MessageBubble from './MessageBubble.svelte';
+import TypingIndicator from './TypingIndicator.svelte';
+import ModelSelector from './ModelSelector.svelte';
+import TokenCounter from './TokenCounter.svelte';
+import CodeBlock from './CodeBlock.svelte';
+import PromptInput from './PromptInput.svelte';
 
 export {
   Button, Card, Badge, Tag, Input, Textarea, Checkbox, Radio, Select, Slider,
@@ -69,7 +76,9 @@ export {
   H1, H2, H3, H4, H5, H6, Text, Label,
   Stepper, DatePicker, Chip, Timeline, Drawer, Popover,
   TreeView, ColorPicker, EmptyState, Notification, FileUpload,
-  ThemeProvider
+  ThemeProvider,
+  ChatInterface, MessageBubble, TypingIndicator, ModelSelector, TokenCounter,
+  CodeBlock, PromptInput
 };
 export * from './tokens.js';
 export { useMediaQuery, useBreakpoint, useEscapeKey, breakpoints } from './useMediaQuery.js';

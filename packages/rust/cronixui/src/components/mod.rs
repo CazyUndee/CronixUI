@@ -94,6 +94,8 @@ pub use colorpicker::*;
 pub mod empty_state;
 pub mod notification;
 pub mod file_upload;
+pub mod ai;
 pub use empty_state::*;
 pub use notification::*;
 pub use file_upload::*;
+pub use ai::*;

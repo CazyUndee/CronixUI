@@ -54,3 +54,16 @@ export { default as CnDivider } from './components/CnDivider.vue';
 export { default as CnAvatarGroup } from './components/CnAvatarGroup.vue';
 export { default as CnButtonGroup } from './components/CnButtonGroup.vue';
 export { useMediaQuery, useBreakpoint, useEscapeKey, useClickOutside, breakpoints } from './composables/index.js';
+
+// AI Components
+export { default as CnChatInterface } from './components/ai/CnChatInterface.vue';
+export { default as CnMessageBubble } from './components/ai/CnMessageBubble.vue';
+export { default as CnTypingIndicator } from './components/ai/CnTypingIndicator.vue';
+export { default as CnModelSelector } from './components/ai/CnModelSelector.vue';
+export { default as CnTokenCounter } from './components/ai/CnTokenCounter.vue';
+export { default as CnCodeBlock } from './components/ai/CnCodeBlock.vue';
+export { default as CnPromptInput } from './components/ai/CnPromptInput.vue';
+export { default as CnCopyButton } from './components/ai/CnCopyButton.vue';
+export { default as CnFeedbackButtons } from './components/ai/CnFeedbackButtons.vue';
+export { default as CnStreamingText } from './components/ai/CnStreamingText.vue';
+export { default as CnAIStatus } from './components/ai/CnAIStatus.vue';

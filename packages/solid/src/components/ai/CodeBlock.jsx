@@ -1,0 +1,204 @@
+import { createSignal, Show, createMemo } from 'solid-js';
+import CopyButton from './CopyButton';
+
+export default function CodeBlock(props) {
+  const [isExpanded, setIsExpanded] = createSignal(props.defaultExpanded !== false);
+  const [showLineNumbers, setShowLineNumbers] = createSignal(props.lineNumbers !== false);
+
+  const lines = createMemo(() => (props.code || '').split('\n'));
+
+  const highlightedCode = createMemo(() => {
+    let code = props.code || '';
+    if (props.language) {
+      code = highlightSyntax(code, props.language);
+    }
+    return code;
+  });
+
+  return (
+    <div class="cn-code-block" role="region" aria-label={`Code block: ${props.language || 'code'}`}>
+      <div class="cn-code-header">
+        <div class="cn-code-header-left">
+          <Show when={props.language}>
+            <span class="cn-code-language">{props.language}</span>
+          </Show>
+          <Show when={props.filename}>
+            <span class="cn-code-filename">{props.filename}</span>
+          </Show>
+        </div>
+
+        <div class="cn-code-header-right">
+          <Show when={lines().length > 10}>
+            <button
+              class="cn-code-toggle"
+              onClick={() => setIsExpanded(!isExpanded())}
+              aria-expanded={isExpanded()}
+            >
+              {isExpanded() ? 'Collapse' : 'Expand'}
+            </button>
+          </Show>
+          <CopyButton text={props.code} />
+        </div>
+      </div>
+
+      <div class={`cn-code-content ${isExpanded() ? '' : 'cn-code-collapsed'}`}>
+        {showLineNumbers() ? (
+          <div class="cn-code-with-lines">
+            <div class="cn-code-line-numbers" aria-hidden="true">
+              {lines().map((_, i) => (
+                <span>{i + 1}</span>
+              ))}
+            </div>
+            <pre class="cn-code-pre">
+              <code innerHTML={highlightedCode()} />
+            </pre>
+          </div>
+        ) : (
+          <pre class="cn-code-pre">
+            <code innerHTML={highlightedCode()} />
+          </pre>
+        )}
+      </div>
+
+      <style>{`
+        .cn-code-block {
+          border: 1px solid var(--cn-border-default);
+          border-radius: 8px;
+          overflow: hidden;
+          background: #1e1e1e;
+          font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        }
+
+        .cn-code-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 12px;
+          background: #2d2d2d;
+          border-bottom: 1px solid #404040;
+        }
+
+        .cn-code-header-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .cn-code-header-right {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .cn-code-language {
+          font-size: 12px;
+          font-weight: 600;
+          color: #909090;
+          text-transform: uppercase;
+        }
+
+        .cn-code-filename {
+          font-size: 12px;
+          color: #b0b0b0;
+        }
+
+        .cn-code-toggle {
+          padding: 4px 8px;
+          font-size: 12px;
+          background: #3d3d3d;
+          border: 1px solid #505050;
+          border-radius: 4px;
+          color: #d0d0d0;
+          cursor: pointer;
+        }
+
+        .cn-code-toggle:hover {
+          background: #4d4d4d;
+        }
+
+        .cn-code-content {
+          overflow-x: auto;
+        }
+
+        .cn-code-collapsed {
+          max-height: 300px;
+          overflow: hidden;
+        }
+
+        .cn-code-with-lines {
+          display: flex;
+        }
+
+        .cn-code-line-numbers {
+          display: flex;
+          flex-direction: column;
+          padding: 16px 0;
+          min-width: 40px;
+          background: #252526;
+          border-right: 1px solid #404040;
+          text-align: right;
+          user-select: none;
+        }
+
+        .cn-code-line-numbers span {
+          padding: 0 8px;
+          font-size: 12px;
+          line-height: 1.5;
+          color: #858585;
+        }
+
+        .cn-code-pre {
+          margin: 0;
+          padding: 16px;
+          overflow-x: auto;
+        }
+
+        .cn-code-pre code {
+          font-size: 13px;
+          line-height: 1.5;
+          color: #d4d4d4;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function highlightSyntax(code, language) {
+  const keywords = {
+    javascript: ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'import', 'export', 'from', 'async', 'await'],
+    typescript: ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'import', 'export', 'from', 'async', 'await', 'interface', 'type'],
+    python: ['def', 'class', 'return', 'if', 'else', 'elif', 'for', 'while', 'import', 'from', 'async', 'await', 'with', 'as'],
+    rust: ['fn', 'let', 'mut', 'pub', 'struct', 'enum', 'impl', 'trait', 'use', 'return', 'if', 'else', 'match', 'for', 'while', 'loop', 'async', 'await'],
+    go: ['func', 'var', 'const', 'type', 'struct', 'interface', 'return', 'if', 'else', 'for', 'range', 'switch', 'case', 'package', 'import'],
+  };
+
+  const lang = language?.toLowerCase() || '';
+  const keywordsList = keywords[lang] || keywords.javascript;
+
+  let highlighted = code
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  highlighted = highlighted.replace(
+    /(\/\/.*$|\/\*[\s\S]*?\*\/|#.*$)/gm,
+    '<span style="color: #6a9955">$1</span>'
+  );
+
+  highlighted = highlighted.replace(
+    /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)/g,
+    '<span style="color: #ce9178">$1</span>'
+  );
+
+  highlighted = highlighted.replace(
+    /\b(\d+\.?\d*)\b/g,
+    '<span style="color: #b5cea8">$1</span>'
+  );
+
+  keywordsList.forEach(kw => {
+    const regex = new RegExp(`\\b(${kw})\\b`, 'g');
+    highlighted = highlighted.replace(regex, '<span style="color: #569cd6">$1</span>');
+  });
+
+  return highlighted;
+}

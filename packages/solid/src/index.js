@@ -53,3 +53,16 @@ export { FileUpload } from './components/FileUpload.jsx';
 export { AvatarGroup } from './components/AvatarGroup.jsx';
 export { ButtonGroup } from './components/ButtonGroup.jsx';
 export { useMediaQuery, useBreakpoint, useEscapeKey, breakpoints } from './hooks/index.jsx';
+
+// AI Components
+export { ChatInterface } from './components/ai/ChatInterface.jsx';
+export { MessageBubble } from './components/ai/MessageBubble.jsx';
+export { TypingIndicator } from './components/ai/TypingIndicator.jsx';
+export { ModelSelector } from './components/ai/ModelSelector.jsx';
+export { TokenCounter } from './components/ai/TokenCounter.jsx';
+export { CodeBlock } from './components/ai/CodeBlock.jsx';
+export { PromptInput } from './components/ai/PromptInput.jsx';
+export { CopyButton } from './components/ai/CopyButton.jsx';
+export { FeedbackButtons } from './components/ai/FeedbackButtons.jsx';
+export { StreamingText } from './components/ai/StreamingText.jsx';
+export { AIStatus } from './components/ai/AIStatus.jsx';

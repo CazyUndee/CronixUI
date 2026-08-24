@@ -52,6 +52,10 @@ from .core import (
     Theme, get_theme, set_theme,
     CronixWidget, hex_to_rgb, rgb_to_hex, blend_colors,
 )
+from .ai import (
+    MessageRole, AIStatusType, ChatMessage, AIModel,
+    CnChatInterface, CnTokenCounter, CnCodeBlock, CnModelSelector, CnAIStatus,
+)
 from .tokens import (
     BG, SURFACE, SURFACE_2, SURFACE_3, SURFACE_4,
     TEXT, TEXT_MUTED, TEXT_DIM,
@@ -161,4 +165,15 @@ __all__ = [
     "BORDER", "BORDER_HOVER", "BORDER_FOCUS",
     "Color", "Typography", "Spacing", "Radius", "Shadow", "Transition", "ZIndex", "Layout",
     "typography", "spacing", "radius", "shadow", "transition", "z_index", "layout",
+    
+    # AI Components
+    "MessageRole",
+    "AIStatusType",
+    "ChatMessage",
+    "AIModel",
+    "CnChatInterface",
+    "CnTokenCounter",
+    "CnCodeBlock",
+    "CnModelSelector",
+    "CnAIStatus",
 ]

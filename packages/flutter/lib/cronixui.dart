@@ -57,3 +57,9 @@ export 'src/widgets/cn_form_group.dart';
 export 'src/widgets/cn_divider.dart';
 export 'src/widgets/cn_avatar_group.dart';
 export 'src/widgets/cn_button_group.dart';
+
+// AI Components
+export 'src/widgets/ai/cn_chat_interface.dart';
+export 'src/widgets/ai/cn_model_selector.dart';
+export 'src/widgets/ai/cn_code_block.dart';
+export 'src/widgets/ai/cn_ai_status.dart';

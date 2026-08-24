@@ -1926,3 +1926,230 @@ func NewColorPicker(presets []ColorPickerPreset, onSelect func(color.Color)) *fy
 
 	return container.NewStack(bg, container.NewPadded(row))
 }
+
+// =============================================================================
+// AI COMPONENTS
+// =============================================================================
+
+// AIMessage represents a single AI chat message.
+type AIMessage struct {
+	ID        string
+	Role      string // "user", "assistant", "system"
+	Content   string
+	Timestamp string
+	Status    string // "sending", "sent", "delivered", "error"
+}
+
+// AIModel represents an AI model for selection.
+type AIModel struct {
+	ID        string
+	Name      string
+	Provider  string
+	MaxTokens int
+}
+
+// AIStatusType represents the connection status of an AI service.
+type AIStatusType int
+
+const (
+	AIStatusConnected AIStatusType = iota
+	AIStatusDisconnected
+	AIStatusConnecting
+	AIStatusError
+	AIStatusRateLimited
+	AIStatusIdle
+)
+
+// NewAIStatus creates a status indicator widget for AI connection state.
+func NewAIStatus(status AIStatusType, latency int, model string) *fyne.Container {
+	c := DefaultColors()
+	var statusText string
+	var statusColor color.Color
+
+	switch status {
+	case AIStatusConnected:
+		statusText = "● Connected"
+		statusColor = c.SuccessText
+	case AIStatusDisconnected:
+		statusText = "○ Disconnected"
+		statusColor = c.ErrorText
+	case AIStatusConnecting:
+		statusText = "◐ Connecting..."
+		statusColor = c.WarningText
+	case AIStatusError:
+		statusText = "✕ Error"
+		statusColor = c.ErrorText
+	case AIStatusRateLimited:
+		statusText = "⏱ Rate limited"
+		statusColor = c.WarningText
+	default:
+		statusText = "◌ Idle"
+		statusColor = c.TextMuted
+	}
+
+	label := canvas.NewText(statusText, statusColor)
+	label.TextSize = 13
+
+	var parts []fyne.CanvasObject
+	parts = append(parts, label)
+
+	if latency > 0 {
+		latencyText := canvas.NewText(fmt.Sprintf(" %dms", latency), c.TextMuted)
+		latencyText.TextSize = 12
+		parts = append(parts, latencyText)
+	}
+
+	if model != "" {
+		modelText := canvas.NewText(" | "+model, c.TextMuted)
+		modelText.TextSize = 12
+		parts = append(parts, modelText)
+	}
+
+	row := container.NewHBox(parts...)
+
+	bg := canvas.NewRectangle(c.Surface2)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 8
+
+	return container.NewStack(bg, container.NewPadded(row))
+}
+
+// NewTokenCounter creates a token usage indicator with optional progress bar.
+func NewTokenCounter(count, maxTokens int) *fyne.Container {
+	c := DefaultColors()
+
+	formatCount := func(n int) string {
+		if n >= 1000000 {
+			return fmt.Sprintf("%.1fM", float64(n)/1000000)
+		}
+		if n >= 1000 {
+			return fmt.Sprintf("%.1fk", float64(n)/1000)
+		}
+		return fmt.Sprintf("%d", n)
+	}
+
+	countText := canvas.NewText(formatCount(count), c.Text)
+	countText.TextSize = 14
+	countText.TextStyle = fyne.TextStyle{Bold: true}
+
+	label := canvas.NewText("Tokens", c.TextMuted)
+	label.TextSize = 12
+
+	content := container.NewHBox(label, countText)
+
+	if maxTokens > 0 {
+		maxText := canvas.NewText("/ "+formatCount(maxTokens), c.TextDim)
+		maxText.TextSize = 11
+		content = container.NewHBox(label, countText, maxText)
+
+		progress := widget.NewProgressBar()
+		progress.SetValue(float64(count) / float64(maxTokens))
+		return container.NewVBox(content, progress)
+	}
+
+	return content
+}
+
+// NewCodeBlock creates a code display block with line numbers and copy button.
+func NewCodeBlock(code, language string) *fyne.Container {
+	c := DefaultColors()
+
+	var headerParts []fyne.CanvasObject
+	if language != "" {
+		langText := canvas.NewText(strings.ToUpper(language), c.TextMuted)
+		langText.TextSize = 11
+		langText.TextStyle = fyne.TextStyle{Bold: true}
+		headerParts = append(headerParts, langText)
+	}
+
+	copyBtn := widget.NewButton("Copy", func() {})
+	copyBtn.Importance = widget.LowImportance
+	headerParts = append(headerParts, copyBtn)
+
+	header := container.NewHBox(headerParts...)
+
+	codeText := canvas.NewText(code, c.Text)
+	codeText.TextSize = 13
+
+	scroll := container.NewScroll(codeText)
+
+	bg := canvas.NewRectangle(color.RGBA{R: 30, G: 30, B: 30, A: 255})
+	bg.CornerRadius = 8
+
+	return container.NewStack(bg, container.NewVBox(
+		container.NewPadded(header),
+		container.NewPadded(scroll),
+	))
+}
+
+// NewPromptInput creates a chat input field with send button.
+func NewPromptInput(placeholder string, onSend func(string)) *fyne.Container {
+	c := DefaultColors()
+
+	entry := widget.NewEntry()
+	entry.SetPlaceHolder(placeholder)
+
+	sendBtn := widget.NewButton("↑", func() {
+		if entry.Text != "" && onSend != nil {
+			onSend(entry.Text)
+			entry.SetText("")
+		}
+	})
+	sendBtn.Importance = widget.HighImportance
+
+	row := container.NewBorder(nil, nil, nil, sendBtn, entry)
+
+	bg := canvas.NewRectangle(c.Surface)
+	bg.StrokeColor = c.Border
+	bg.StrokeWidth = 1
+	bg.CornerRadius = 12
+
+	return container.NewStack(bg, container.NewPadded(row))
+}
+
+// NewChatInterface creates a complete chat interface with messages and input.
+func NewChatInterface(messages []AIMessage, onSend func(string)) *fyne.Container {
+	c := DefaultColors()
+
+	var messageWidgets []fyne.CanvasObject
+	for _, msg := range messages {
+		isUser := msg.Role == "user"
+
+		roleLabel := canvas.NewText("You", c.Text)
+		if !isUser {
+			roleLabel = canvas.NewText("Assistant", c.Text)
+		}
+		roleLabel.TextSize = 11
+
+		content := canvas.NewText(msg.Content, c.Text)
+		content.TextSize = 14
+
+		var msgBg color.Color
+		if isUser {
+			msgBg = c.Accent
+			content = canvas.NewText(msg.Content, c.Text)
+		} else {
+			msgBg = c.Surface2
+		}
+
+		bubble := canvas.NewRectangle(msgBg)
+		bubble.CornerRadius = 14
+
+		textContent := container.NewVBox(roleLabel, content)
+		padded := container.NewPadded(textContent)
+
+		msgWidget := container.NewStack(bubble, padded)
+		messageWidgets = append(messageWidgets, msgWidget)
+	}
+
+	messageList := container.NewVBox(messageWidgets...)
+	scroll := container.NewScroll(messageList)
+
+	input := NewPromptInput("Type a message...", onSend)
+
+	bg := canvas.NewRectangle(c.BG)
+	bg.CornerRadius = 12
+
+	return container.NewStack(bg, container.NewBorder(nil, input, nil, nil, scroll))
+}
