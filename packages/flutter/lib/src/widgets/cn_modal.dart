@@ -30,9 +30,12 @@ class CnModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: Container(
+    return Semantics(
+      dialog: true,
+      explicitChildNodes: true,
+      child: Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
         width: fullWidth ? double.infinity : (width ?? 400),
         constraints: BoxConstraints(
           maxWidth: fullWidth ? double.infinity : 500,
@@ -112,7 +115,6 @@ class CnModal extends StatelessWidget {
         ),
       ),
     );
-  }
 
   static Future<T?> show<T>({
     required BuildContext context,

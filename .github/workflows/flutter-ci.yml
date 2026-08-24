@@ -81,3 +81,27 @@ jobs:
           ls lib/src/
           ls lib/src/widgets/ | wc -l
           echo "Total widget files: $(ls lib/src/widgets/*.dart | wc -l)"
+
+      - name: Verify accessibility (Semantics)
+        working-directory: packages/flutter
+        run: |
+          echo "=== Accessibility checks ==="
+          FAIL=0
+          # Check that interactive components have Semantics widgets
+          for comp in cn_toggle cn_checkbox cn_tabs cn_modal cn_accordion cn_rating cn_stepper cn_dropdown; do
+            FILE="lib/src/widgets/${comp}.dart"
+            if [ -f "$FILE" ]; then
+              COUNT=$(grep -c 'Semantics' "$FILE" 2>/dev/null || echo 0)
+              if [ "$COUNT" -lt 1 ]; then
+                echo "WARNING: $comp has no Semantics widgets"
+                FAIL=1
+              else
+                echo "OK: $comp has $COUNT Semantics widgets"
+              fi
+            fi
+          done
+          if [ "$FAIL" -eq 1 ]; then
+            echo "\nAccessibility check failed. Add Semantics widgets to interactive components."
+            exit 1
+          fi
+          echo "\nAll accessibility checks passed!"

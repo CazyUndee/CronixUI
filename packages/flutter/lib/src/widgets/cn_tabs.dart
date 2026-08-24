@@ -90,7 +90,15 @@ class _CnTabsState extends State<CnTabs> with SingleTickerProviderStateMixin {
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
-        tabs: widget.tabs.map((tab) => Tab(text: tab)).toList(),
+        tabs: widget.tabs.asMap().entries.map((entry) {
+          return Tab(
+            child: Semantics(
+              selected: _controller.index == entry.key,
+              button: true,
+              child: Text(entry.value),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

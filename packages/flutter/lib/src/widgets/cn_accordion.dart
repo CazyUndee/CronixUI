@@ -106,41 +106,46 @@ class _CnAccordionGroupState extends State<_CnAccordionGroup> {
             ),
             child: Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _expandedIndex = isExpanded ? null : index;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        if (item.leadingIcon != null) ...[
-                          Icon(
-                            item.leadingIcon,
-                            size: 20,
-                            color: CronixColors.textSecondary,
-                          ),
-                          const SizedBox(width: 12),
-                        ],
-                        Expanded(
-                          child: Text(
-                            item.title,
-                            style: const TextStyle(
-                              color: CronixColors.text,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                Semantics(
+                  button: true,
+                  expanded: isExpanded,
+                  label: item.title,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _expandedIndex = isExpanded ? null : index;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          if (item.leadingIcon != null) ...[
+                            Icon(
+                              item.leadingIcon,
+                              size: 20,
+                              color: CronixColors.textSecondary,
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                          Expanded(
+                            child: Text(
+                              item.title,
+                              style: const TextStyle(
+                                color: CronixColors.text,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ),
-                        Icon(
-                          isExpanded
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: CronixColors.textSecondary,
-                        ),
-                      ],
+                          Icon(
+                            isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            color: CronixColors.textSecondary,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -199,39 +204,44 @@ class _CnAccordionItemState extends State<_CnAccordionItem> {
       ),
       child: Column(
         children: [
-          InkWell(
-            onTap: () {
-              setState(() => _isExpanded = !_isExpanded);
-            },
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  if (widget.item.leadingIcon != null) ...[
-                    Icon(
-                      widget.item.leadingIcon,
-                      size: 20,
-                      color: CronixColors.textSecondary,
-                    ),
-                    const SizedBox(width: 12),
-                  ],
-                  Expanded(
-                    child: Text(
-                      widget.item.title,
-                      style: const TextStyle(
-                        color: CronixColors.text,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+          Semantics(
+            button: true,
+            expanded: _isExpanded,
+            label: widget.item.title,
+            child: InkWell(
+              onTap: () {
+                setState(() => _isExpanded = !_isExpanded);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    if (widget.item.leadingIcon != null) ...[
+                      Icon(
+                        widget.item.leadingIcon,
+                        size: 20,
+                        color: CronixColors.textSecondary,
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Expanded(
+                      child: Text(
+                        widget.item.title,
+                        style: const TextStyle(
+                          color: CronixColors.text,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    _isExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: CronixColors.textSecondary,
-                  ),
-                ],
+                    Icon(
+                      _isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: CronixColors.textSecondary,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

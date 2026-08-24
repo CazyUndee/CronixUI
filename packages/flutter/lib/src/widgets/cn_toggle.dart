@@ -20,30 +20,35 @@ class CnToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final toggle = GestureDetector(
-      onTap: enabled && onChanged != null
-          ? () => onChanged!(!value)
-          : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 44,
-        height: 24,
-        decoration: BoxDecoration(
-          color: value 
-              ? (activeColor ?? CronixColors.accent)
-              : CronixColors.border,
-          borderRadius: CronixRadius.radiusFull,
-        ),
-        child: AnimatedAlign(
+    final toggle = Semantics(
+      toggled: value,
+      label: label ?? (value ? 'On' : 'Off'),
+      button: true,
+      child: GestureDetector(
+        onTap: enabled && onChanged != null
+            ? () => onChanged!(!value)
+            : null,
+        child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            width: 20,
-            height: 20,
-            margin: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              color: CronixColors.text,
-              borderRadius: CronixRadius.radiusFull,
+          width: 44,
+          height: 24,
+          decoration: BoxDecoration(
+            color: value 
+                ? (activeColor ?? CronixColors.accent)
+                : CronixColors.border,
+            borderRadius: CronixRadius.radiusFull,
+          ),
+          child: AnimatedAlign(
+            duration: const Duration(milliseconds: 200),
+            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+            child: Container(
+              width: 20,
+              height: 20,
+              margin: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: CronixColors.text,
+                borderRadius: CronixRadius.radiusFull,
+              ),
             ),
           ),
         ),

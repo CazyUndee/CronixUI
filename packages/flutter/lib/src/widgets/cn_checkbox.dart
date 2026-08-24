@@ -20,7 +20,11 @@ class CnCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final checkbox = GestureDetector(
+    final checkbox = Semantics(
+      checked: value,
+      label: label,
+      button: true,
+      child: GestureDetector(
       onTap: enabled && onChanged != null
           ? () => onChanged!(!value)
           : null,
@@ -46,6 +50,7 @@ class CnCheckbox extends StatelessWidget {
                 color: CronixColors.text,
               )
             : null,
+      ),
       ),
     );
 
