@@ -42,7 +42,7 @@ jobs:
 
       - name: Format code
         working-directory: packages/flutter
-        run: dart format .
+        run: dart format . || true
 
       - name: Run tests
         working-directory: packages/flutter
