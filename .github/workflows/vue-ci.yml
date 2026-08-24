@@ -30,30 +30,111 @@ jobs:
       - name: Verify Vue component structure
         run: |
           echo "Checking Vue component files..."
-          ls packages/vue/src/components/*.vue | head -5
-          echo "Total Vue components:"
-          ls packages/vue/src/components/*.vue | wc -l
+          TOTAL=$(ls packages/vue/src/components/*.vue 2>/dev/null | wc -l)
+          echo "Total Vue components: $TOTAL"
+          if [ "$TOTAL" -lt 45 ]; then
+            echo "ERROR: Expected at least 45 Vue components, found $TOTAL"
+            exit 1
+          fi
 
-      - name: Verify Vue exports
+      - name: Verify all exports map to real files
         run: |
           node -e "
           const fs = require('fs');
+          const path = require('path');
           const indexContent = fs.readFileSync('packages/vue/src/index.js', 'utf8');
-          const exports = indexContent.match(/export \{ default as \w+/g);
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
           console.log('Exported components:', exports.length);
-          if (exports.length < 10) {
-            console.error('Expected at least 10 exports');
+          let errors = 0;
+          for (const name of exports) {
+            // Vue uses Cn prefix: Button -> CnButton.vue
+            const vueFile = path.join('packages/vue/src/components', 'Cn' + name + '.vue');
+            if (!fs.existsSync(vueFile)) {
+              // Also check without Cn prefix
+              const altFile = path.join('packages/vue/src/components', name + '.vue');
+              if (!fs.existsSync(altFile)) {
+                console.error('MISSING FILE:', vueFile, '(exported as', name + ')');
+                errors++;
+              }
+            }
+          }
+          if (errors > 0) {
+            console.error(errors + ' exports have no matching .vue file');
             process.exit(1);
           }
-          console.log('Vue package structure verified!');
+          console.log('All exports verified against source files');
           "
 
       - name: Validate Vue SFC syntax
         run: |
+          ERRORS=0
           for f in packages/vue/src/components/*.vue; do
-            echo "Checking: $f"
+            COMP=$(basename "$f" .vue)
             # Check that each .vue file has <template> and <script>
-            grep -q '<template>' "$f" || { echo "Missing <template> in $f"; exit 1; }
-            grep -q '<script' "$f" || { echo "Missing <script> in $f"; exit 1; }
+            if ! grep -q '<template>' "$f"; then
+              echo "ERROR: Missing <template> in $f"
+              ERRORS=$((ERRORS + 1))
+            fi
+            if ! grep -q '<script' "$f"; then
+              echo "ERROR: Missing <script> in $f"
+              ERRORS=$((ERRORS + 1))
+            fi
+            # Check for defineComponent or script setup
+            if ! grep -q 'defineComponent\|<script setup>\|export default' "$f"; then
+              echo "WARN: No component definition found in $f"
+            fi
           done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "$ERRORS syntax errors found"
+            exit 1
+          fi
           echo "All Vue SFCs have valid structure!"
+
+      - name: Check component accessibility
+        run: |
+          echo "Checking accessibility patterns..."
+          ERRORS=0
+          for f in packages/vue/src/components/*.vue; do
+            COMP=$(basename "$f" .vue)
+            CONTENT=$(cat "$f")
+            case "$COMP" in
+              *Modal*|*Drawer*)
+                if ! echo "$CONTENT" | grep -qi 'aria-modal\|role=.dialog'; then
+                  echo "WARN: $COMP missing aria-modal or role=dialog"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Tabs*)
+                if ! echo "$CONTENT" | grep -qi 'role=.tablist\|role=.tab\b\|aria-selected'; then
+                  echo "WARN: $COMP missing tab ARIA roles"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Accordion*)
+                if ! echo "$CONTENT" | grep -qi 'aria-expanded\|aria-controls'; then
+                  echo "WARN: $COMP missing accordion ARIA attributes"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+            esac
+          done
+          echo "Accessibility check complete ($ERRORS critical issues)"
+
+      - name: Verify component count and exports match
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/vue/src/index.js', 'utf8');
+          const files = fs.readdirSync('packages/vue/src/components').filter(f => f.endsWith('.vue'));
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
+          console.log('Component files:', files.length);
+          console.log('Exported components:', exports.length);
+          if (exports.length < files.length) {
+            console.error('More files than exports - some components may not be exported');
+          }
+          if (exports.length > files.length + 5) {
+            console.error('More exports than files - possible phantom exports');
+            process.exit(1);
+          }
+          console.log('Vue package structure verified!');
+          "

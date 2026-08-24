@@ -30,25 +30,115 @@ jobs:
       - name: Verify Solid component structure
         run: |
           echo "Checking Solid component files..."
-          ls packages/solid/src/components/*.jsx | head -5
-          echo "Total Solid components:"
-          ls packages/solid/src/components/*.jsx | wc -l
+          TOTAL=$(ls packages/solid/src/components/*.jsx 2>/dev/null | wc -l)
+          echo "Total Solid components: $TOTAL"
+          if [ "$TOTAL" -lt 45 ]; then
+            echo "ERROR: Expected at least 45 Solid components, found $TOTAL"
+            exit 1
+          fi
 
-      - name: Verify Solid exports
+      - name: Verify all exports map to real files
         run: |
           node -e "
           const fs = require('fs');
+          const path = require('path');
           const indexContent = fs.readFileSync('packages/solid/src/index.js', 'utf8');
-          const exports = indexContent.match(/export \{ default as \w+/g) || indexContent.match(/export \{ \w+/g);
-          console.log('Exported components:', exports ? exports.length : 0);
-          console.log('Solid package structure verified!');
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
+          console.log('Exported components:', exports.length);
+          let errors = 0;
+          for (const name of exports) {
+            const jsxFile = path.join('packages/solid/src/components', name + '.jsx');
+            const altFile = path.join('packages/solid/src/components', name + '.jsx');
+            if (!fs.existsSync(jsxFile)) {
+              // Check if it's a compound export (e.g., Divider from Stack.jsx)
+              const content = fs.readFileSync('packages/solid/src/index.js', 'utf8');
+              const line = content.split('\\n').find(l => l.includes(name));
+              if (line && line.includes('from')) {
+                const fromMatch = line.match(/from\s+['\"](.+?)['\"]/);
+                if (fromMatch) {
+                  const sourcePath = path.join('packages/solid/src', fromMatch[1]);
+                  if (fs.existsSync(sourcePath)) {
+                    continue; // Compound export from another file - OK
+                  }
+                }
+              }
+              console.error('MISSING FILE:', jsxFile, '(exported as', name + ')');
+              errors++;
+            }
+          }
+          if (errors > 0) {
+            console.error(errors + ' exports have no matching .jsx file');
+            process.exit(1);
+          }
+          console.log('All exports verified against source files');
           "
 
       - name: Validate Solid JSX syntax
         run: |
+          ERRORS=0
           for f in packages/solid/src/components/*.jsx; do
-            echo "Checking: $f"
-            # Check that each .jsx file has proper exports
-            grep -q 'export' "$f" || { echo "Missing exports in $f"; exit 1; }
+            COMP=$(basename "$f" .jsx)
+            # Check that each .jsx file has export
+            if ! grep -q 'export' "$f"; then
+              echo "ERROR: Missing exports in $f"
+              ERRORS=$((ERRORS + 1))
+            fi
+            # Check for function component
+            if ! grep -q 'function\|const.*=.*(' "$f"; then
+              echo "WARN: No component function found in $f"
+            fi
           done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "$ERRORS syntax errors found"
+            exit 1
+          fi
           echo "All Solid components have valid structure!"
+
+      - name: Check component accessibility
+        run: |
+          echo "Checking accessibility patterns..."
+          ERRORS=0
+          for f in packages/solid/src/components/*.jsx; do
+            COMP=$(basename "$f" .jsx)
+            CONTENT=$(cat "$f")
+            case "$COMP" in
+              *Modal*|*Drawer*)
+                if ! echo "$CONTENT" | grep -qi 'aria-modal\|role=.dialog'; then
+                  echo "WARN: $COMP missing aria-modal or role=dialog"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Tabs*)
+                if ! echo "$CONTENT" | grep -qi 'role=.tablist\|role=.tab\b\|aria-selected'; then
+                  echo "WARN: $COMP missing tab ARIA roles"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Accordion*)
+                if ! echo "$CONTENT" | grep -qi 'aria-expanded\|aria-controls'; then
+                  echo "WARN: $COMP missing accordion ARIA attributes"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+            esac
+          done
+          echo "Accessibility check complete ($ERRORS critical issues)"
+
+      - name: Verify component count and exports match
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/solid/src/index.js', 'utf8');
+          const files = fs.readdirSync('packages/solid/src/components').filter(f => f.endsWith('.jsx'));
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
+          console.log('Component files:', files.length);
+          console.log('Exported components:', exports.length);
+          if (exports.length < files.length) {
+            console.error('More files than exports - some components may not be exported');
+          }
+          if (exports.length > files.length + 5) {
+            console.error('More exports than files - possible phantom exports');
+            process.exit(1);
+          }
+          console.log('Solid package structure verified!');
+          "

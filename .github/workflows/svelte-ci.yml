@@ -30,25 +30,112 @@ jobs:
       - name: Verify Svelte component structure
         run: |
           echo "Checking Svelte component files..."
-          ls packages/svelte/src/*.svelte | head -5
-          echo "Total Svelte components:"
-          ls packages/svelte/src/*.svelte | wc -l
+          TOTAL=$(ls packages/svelte/src/*.svelte 2>/dev/null | wc -l)
+          echo "Total Svelte components: $TOTAL"
+          if [ "$TOTAL" -lt 45 ]; then
+            echo "ERROR: Expected at least 45 Svelte components, found $TOTAL"
+            exit 1
+          fi
 
-      - name: Verify Svelte exports
+      - name: Verify all exports map to real files
         run: |
           node -e "
           const fs = require('fs');
+          const path = require('path');
           const indexContent = fs.readFileSync('packages/svelte/src/index.js', 'utf8');
-          const exports = indexContent.match(/export \{ default as \w+/g) || indexContent.match(/export \{ default \w+/g);
-          console.log('Exported components:', exports ? exports.length : 0);
-          console.log('Svelte package structure verified!');
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
+          console.log('Exported components:', exports.length);
+          let errors = 0;
+          for (const name of exports) {
+            const svelteFile = path.join('packages/svelte/src', name + '.svelte');
+            if (!fs.existsSync(svelteFile)) {
+              console.error('MISSING FILE:', svelteFile, '(exported as', name + ')');
+              errors++;
+            }
+          }
+          if (errors > 0) {
+            console.error(errors + ' exports have no matching .svelte file');
+            process.exit(1);
+          }
+          console.log('All exports verified against source files');
           "
 
       - name: Validate Svelte component syntax
         run: |
+          ERRORS=0
           for f in packages/svelte/src/*.svelte; do
-            echo "Checking: $f"
+            COMP=$(basename "$f" .svelte)
             # Check that each .svelte file has <script> and <style>
-            grep -q '<script' "$f" || { echo "Missing <script> in $f"; exit 1; }
+            if ! grep -q '<script' "$f"; then
+              echo "ERROR: Missing <script> in $f"
+              ERRORS=$((ERRORS + 1))
+            fi
+            if ! grep -q '<style' "$f"; then
+              echo "ERROR: Missing <style> in $f"
+              ERRORS=$((ERRORS + 1))
+            fi
+            # Check for class definitions
+            if ! grep -q 'class\|export let\|export function\|let {' "$f"; then
+              echo "WARN: No component definition found in $f"
+            fi
           done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "$ERRORS syntax errors found"
+            exit 1
+          fi
           echo "All Svelte components have valid structure!"
+
+      - name: Check component accessibility
+        run: |
+          echo "Checking accessibility patterns..."
+          ERRORS=0
+          for f in packages/svelte/src/*.svelte; do
+            COMP=$(basename "$f" .svelte)
+            CONTENT=$(cat "$f")
+            # Interactive components should have aria attributes
+            case "$COMP" in
+              *Button*|*Toggle*|*Checkbox*|*Radio*)
+                if ! echo "$CONTENT" | grep -qi 'aria-\|role='; then
+                  echo "WARN: $COMP has no ARIA attributes"
+                fi
+                ;;
+              *Modal*|*Drawer*)
+                if ! echo "$CONTENT" | grep -qi 'aria-modal\|role=.dialog'; then
+                  echo "WARN: $COMP missing aria-modal or role=dialog"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Tabs*)
+                if ! echo "$CONTENT" | grep -qi 'role=.tablist\|role=.tab\b\|aria-selected'; then
+                  echo "WARN: $COMP missing tab ARIA roles"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+              *Accordion*)
+                if ! echo "$CONTENT" | grep -qi 'aria-expanded\|aria-controls'; then
+                  echo "WARN: $COMP missing accordion ARIA attributes"
+                  ERRORS=$((ERRORS + 1))
+                fi
+                ;;
+            esac
+          done
+          echo "Accessibility check complete ($ERRORS critical issues)"
+
+      - name: Verify component count and exports match
+        run: |
+          node -e "
+          const fs = require('fs');
+          const indexContent = fs.readFileSync('packages/svelte/src/index.js', 'utf8');
+          const files = fs.readdirSync('packages/svelte/src').filter(f => f.endsWith('.svelte'));
+          const exports = [...indexContent.matchAll(/export\s*\{\s*default\s+as\s+(\w+)/g)].map(m => m[1]);
+          console.log('Component files:', files.length);
+          console.log('Exported components:', exports.length);
+          if (exports.length < files.length) {
+            console.error('More files than exports - some components may not be exported');
+          }
+          if (exports.length > files.length + 5) {
+            console.error('More exports than files - possible phantom exports');
+            process.exit(1);
+          }
+          console.log('Svelte package structure verified!');
+          "

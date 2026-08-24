@@ -37,7 +37,7 @@ export function Modal(props) {
   return (
     <Show when={merged.open}>
       <div class="cn-modal-backdrop" onClick={handleBackdropClick}>
-        <div class={`cn-modal ${sizeClasses[merged.size] || 'cn-modal-md'}`}>
+        <div class={`cn-modal ${sizeClasses[merged.size] || 'cn-modal-md'}`} role="dialog" aria-modal="true" aria-label={merged.title}>
           <div class="cn-modal-header">
             <h2 class="cn-modal-title">{merged.title}</h2>
             <button class="cn-modal-close" onClick={merged.onClose}>×</button>

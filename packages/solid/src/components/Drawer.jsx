@@ -14,6 +14,9 @@ export function Drawer(props) {
       <div class="cn-drawer-overlay" onClick={merged.onClose}>
         <div
           class={`cn-drawer cn-drawer-${merged.side} cn-drawer-${merged.size}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label={merged.title || 'Drawer'}
           onClick={(e) => e.stopPropagation()}
         >
           <Show when={merged.title}>
