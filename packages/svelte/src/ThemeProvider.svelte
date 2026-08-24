@@ -81,3 +81,7 @@
 </script>
 
 <slot />
+
+<style>
+  /* ThemeProvider is a logic-only component */
+</style>
