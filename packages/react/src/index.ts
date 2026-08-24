@@ -94,3 +94,22 @@ export type {
   AIStatusProps,
   AIStatusType,
 } from './components/ai';
+
+// Demo components
+export {
+  AIComponentsDemo,
+  ChatInterfaceDemo,
+  MessageBubbleDemo,
+  TypingIndicatorDemo,
+  ModelSelectorDemo,
+  TokenCounterDemo,
+  CodeBlockDemo,
+  CopyButtonDemo,
+  FeedbackButtonsDemo,
+  PromptInputDemo,
+  StreamingTextDemo,
+  MarkdownRendererDemo,
+  ConversationHistoryDemo,
+  RAGReferenceDemo,
+  AIStatusDemo,
+} from './demos';
