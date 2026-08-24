@@ -1,8 +1,11 @@
 //! AI-focused components for building chat interfaces and AI-powered UIs.
 
 use egui::{self, Color32, RichText, Ui, Rounding};
+use std::sync::atomic::{AtomicU64, Ordering};
 use crate::colors::Colors;
 use crate::tokens::*;
+
+static COUNTER: AtomicU64 = AtomicU64::new(0);
 
 /// Represents a chat message role.
 #[derive(Debug, Clone, PartialEq)]
@@ -25,7 +28,7 @@ pub struct ChatMessage {
 impl ChatMessage {
     pub fn user(content: impl Into<String>) -> Self {
         Self {
-            id: format!("msg_{}", js_sys::Date::now() as u64),
+            id: format!("msg_{}", COUNTER.fetch_add(1, Ordering::Relaxed)),
             role: MessageRole::User,
             content: content.into(),
             timestamp: None,
@@ -35,7 +38,7 @@ impl ChatMessage {
 
     pub fn assistant(content: impl Into<String>) -> Self {
         Self {
-            id: format!("msg_{}", js_sys::Date::now() as u64),
+            id: format!("msg_{}", COUNTER.fetch_add(1, Ordering::Relaxed)),
             role: MessageRole::Assistant,
             content: content.into(),
             timestamp: None,

@@ -80,14 +80,14 @@ jobs:
                 echo "Missing <script>: $f"
                 ERRORS=$((ERRORS + 1))
               fi
+              # Style is optional - logic-only components may not need it
               if ! grep -q '<style' "$f"; then
-                echo "Missing <style>: $f"
-                ERRORS=$((ERRORS + 1))
+                echo "Warning: No <style> (may be logic-only): $f"
               fi
             fi
           done
           if [ $ERRORS -gt 0 ]; then
-            echo "Found $ERRORS syntax issues"
+            echo "Found $ERRORS critical syntax issues"
             exit 1
           fi
           echo "All Vue files have valid SFC structure"
