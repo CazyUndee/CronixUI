@@ -1,4 +1,5 @@
 export { default as tokens, type Tokens } from './tokens';
+export { ThemeProvider, useTheme, ThemeContext, type ThemeProviderProps, type ThemeContextValue, type ThemeMode } from './components/ThemeProvider';
 
 export { default as Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './components/Button';
 export { default as Card, type CardProps, type CardHeaderProps, type CardBodyProps, type CardFooterProps } from './components/Card';

@@ -1,4 +1,5 @@
 import Button from './Button.svelte';
+import ThemeProvider from './ThemeProvider.svelte';
 import Card from './Card.svelte';
 import Badge from './Badge.svelte';
 import Tag from './Tag.svelte';
@@ -67,6 +68,7 @@ export {
   ButtonGroup, FormGroup, Rating, Stack, HStack, Divider,
   H1, H2, H3, H4, H5, H6, Text, Label,
   Stepper, DatePicker, Chip, Timeline, Drawer, Popover,
-  TreeView, ColorPicker, EmptyState, Notification, FileUpload
+  TreeView, ColorPicker, EmptyState, Notification, FileUpload,
+  ThemeProvider
 };
 export * from './tokens.js';

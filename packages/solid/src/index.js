@@ -1,4 +1,5 @@
 export { Button } from './components/Button.jsx';
+export { ThemeProvider, useTheme } from './components/ThemeProvider.jsx';
 export { Card } from './components/Card.jsx';
 export { Badge } from './components/Badge.jsx';
 export { Input } from './components/Input.jsx';

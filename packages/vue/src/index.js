@@ -1,4 +1,5 @@
 export { default as CnButton } from './components/CnButton.vue';
+export { default as CnThemeProvider, THEME_KEY } from './components/CnThemeProvider.vue';
 export { default as CnCard } from './components/CnCard.vue';
 export { default as CnBadge } from './components/CnBadge.vue';
 export { default as CnInput } from './components/CnInput.vue';
