@@ -2240,3 +2240,96 @@ body {
 .cn-empty-state-icon { font-size: 48px; opacity: 0.5; }
 .cn-empty-state-title { font-size: 16px; font-weight: 600; color: var(--cn-text); }
 .cn-empty-state-description { font-size: 13px; color: var(--cn-text-muted); max-width: 300px; }
+
+/* ========================================
+   ANIMATION UTILITIES
+   ======================================== */
+
+/* Fade animations */
+.cn-fade-in {
+  animation: cn-fade-in 0.2s ease forwards;
+}
+@keyframes cn-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.cn-fade-out {
+  animation: cn-fade-out 0.2s ease forwards;
+}
+@keyframes cn-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Scale animations */
+.cn-scale-in {
+  animation: cn-scale-in 0.15s ease forwards;
+}
+@keyframes cn-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.cn-scale-out {
+  animation: cn-scale-out 0.15s ease forwards;
+}
+@keyframes cn-scale-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+/* Slide animations */
+.cn-slide-up {
+  animation: cn-slide-up 0.25s ease forwards;
+}
+@keyframes cn-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.cn-slide-down {
+  animation: cn-slide-down 0.25s ease forwards;
+}
+@keyframes cn-slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bounce animation */
+.cn-bounce {
+  animation: cn-bounce 0.4s ease;
+}
+@keyframes cn-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Pulse animation */
+.cn-pulse {
+  animation: cn-pulse 2s ease-in-out infinite;
+}
+@keyframes cn-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Shake animation (for errors) */
+.cn-shake {
+  animation: cn-shake 0.4s ease;
+}
+@keyframes cn-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .cn-fade-in, .cn-fade-out,
+  .cn-scale-in, .cn-scale-out,
+  .cn-slide-up, .cn-slide-down,
+  .cn-bounce, .cn-pulse, .cn-shake,
+  .cn-toast, .cn-modal-backdrop,
+  .cn-spinner, .cn-skeleton-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}
