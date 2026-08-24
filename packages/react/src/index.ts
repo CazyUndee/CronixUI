@@ -54,3 +54,43 @@ export { default as ColorPicker, type ColorPickerProps } from './components/Colo
 export { default as EmptyState, type EmptyStateProps } from './components/EmptyState';
 export { default as Notification, type NotificationProps } from './components/Notification';
 export { default as FileUpload, type FileUploadProps } from './components/FileUpload';
+
+// AI Components
+export {
+  ChatInterface,
+  MessageBubble,
+  TypingIndicator,
+  ModelSelector,
+  TokenCounter,
+  CodeBlock,
+  CopyButton,
+  FeedbackButtons,
+  PromptInput,
+  StreamingText,
+  MarkdownRenderer,
+  ConversationHistory,
+  RAGReference,
+  AIStatus,
+} from './components/ai';
+export type {
+  ChatInterfaceProps,
+  ChatMessage,
+  MessageBubbleProps,
+  MessageRole,
+  TypingIndicatorProps,
+  ModelSelectorProps,
+  ModelOption,
+  TokenCounterProps,
+  CodeBlockProps,
+  CopyButtonProps,
+  FeedbackButtonsProps,
+  PromptInputProps,
+  StreamingTextProps,
+  MarkdownRendererProps,
+  ConversationHistoryProps,
+  Conversation,
+  RAGReferenceProps,
+  Reference,
+  AIStatusProps,
+  AIStatusType,
+} from './components/ai';
