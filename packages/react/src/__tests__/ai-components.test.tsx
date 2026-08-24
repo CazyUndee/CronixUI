@@ -1,14 +1,11 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import {
   MessageBubble,
   TypingIndicator,
   ModelSelector,
   TokenCounter,
-  CodeBlock,
   CopyButton,
   FeedbackButtons,
-  PromptInput,
   StreamingText,
   MarkdownRenderer,
   ConversationHistory,

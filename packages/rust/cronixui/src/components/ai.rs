@@ -1,6 +1,6 @@
 //! AI-focused components for building chat interfaces and AI-powered UIs.
 
-use egui::{self, Color32, RichText, Ui, Vec2, Rounding};
+use egui::{self, Color32, RichText, Ui, Rounding};
 use crate::colors::Colors;
 use crate::tokens::*;
 
@@ -25,7 +25,7 @@ pub struct ChatMessage {
 impl ChatMessage {
     pub fn user(content: impl Into<String>) -> Self {
         Self {
-            id: uuid::Uuid::new_v4().to_string(),
+            id: format!("msg_{}", js_sys::Date::now() as u64),
             role: MessageRole::User,
             content: content.into(),
             timestamp: None,
@@ -35,7 +35,7 @@ impl ChatMessage {
 
     pub fn assistant(content: impl Into<String>) -> Self {
         Self {
-            id: uuid::Uuid::new_v4().to_string(),
+            id: format!("msg_{}", js_sys::Date::now() as u64),
             role: MessageRole::Assistant,
             content: content.into(),
             timestamp: None,
@@ -68,36 +68,32 @@ pub fn ai_status(ui: &mut Ui, status: &AIStatusType, latency: Option<u32>, model
         AIStatusType::Idle => ("◌ Idle", colors.text_muted),
     };
 
-    let mut layout = egui::HorizontalLayout::new()
-        .spacing(SPACE_2)
-        .cross_align(egui::Align::Center);
-
-    layout = layout.add(ui.label(RichText::new(label).color(color).size(FONT_SIZE_SM)));
-
-    if let Some(lat) = latency {
-        layout = layout.add(ui.label(
-            RichText::new(format!("{}ms", lat))
-                .color(colors.text_muted)
-                .size(FONT_SIZE_SM),
-        ));
-    }
-
-    if let Some(m) = model {
-        layout = layout.add(ui.label(
-            RichText::new(format!("| {}", m))
-                .color(colors.text_muted)
-                .size(FONT_SIZE_SM),
-        ));
-    }
-
     let frame = egui::Frame::none()
         .fill(colors.surface_2)
         .stroke(egui::Stroke::new(1.0, colors.border))
-        .rounding(Rounding::same(RADIUS_DEFAULT))
+        .rounding(Rounding::same(RADIUS))
         .inner_margin(egui::Margin::symmetric(SPACE_3, SPACE_2));
 
     frame.show(ui, |ui| {
-        layout.show(ui);
+        ui.horizontal(|ui| {
+            ui.label(RichText::new(label).color(color).size(FONT_SIZE_SM));
+
+            if let Some(lat) = latency {
+                ui.label(
+                    RichText::new(format!("{}ms", lat))
+                        .color(colors.text_muted)
+                        .size(FONT_SIZE_SM),
+                );
+            }
+
+            if let Some(m) = model {
+                ui.label(
+                    RichText::new(format!("| {}", m))
+                        .color(colors.text_muted)
+                        .size(FONT_SIZE_SM),
+                );
+            }
+        });
     });
 }
 
@@ -144,8 +140,7 @@ pub fn token_counter(ui: &mut Ui, count: usize, max_tokens: Option<usize>) {
 
         ui.add(
             egui::ProgressBar::new(progress)
-                .fill(bar_color)
-                .min_width(100.0),
+                .fill(bar_color),
         );
     }
 }
@@ -157,7 +152,7 @@ pub fn code_block(ui: &mut Ui, code: &str, language: Option<&str>) {
     let frame = egui::Frame::none()
         .fill(Color32::from_rgb(30, 30, 30))
         .stroke(egui::Stroke::new(1.0, Color32::from_rgb(64, 64, 64)))
-        .rounding(Rounding::same(RADIUS_DEFAULT))
+        .rounding(Rounding::same(RADIUS))
         .inner_margin(egui::Margin::symmetric(SPACE_4, SPACE_3));
 
     frame.show(ui, |ui| {
@@ -180,15 +175,13 @@ pub fn code_block(ui: &mut Ui, code: &str, language: Option<&str>) {
 
         ui.separator();
 
-        // Code content with line numbers
-        let lines: Vec<&str> = code.lines().collect();
-        let line_width = format!("{}", lines.len()).len() as f32 * 8.0 + 16.0;
-
+        // Code content
         egui::ScrollArea::horizontal().show(ui, |ui| {
             ui.horizontal(|ui| {
                 // Line numbers
+                let lines: Vec<&str> = code.lines().collect();
                 let line_numbers: String = (1..=lines.len())
-                    .map(|i| format!("{:>width$}", i, width = line_width as usize))
+                    .map(|i| format!("{:>4} ", i))
                     .collect::<Vec<_>>()
                     .join("\n");
 
@@ -219,7 +212,7 @@ pub fn message_bubble(ui: &mut Ui, message: &ChatMessage) {
     let is_user = message.role == MessageRole::User;
     
     let bg_color = if is_user { colors.accent } else { colors.surface_2 };
-    let text_color = if is_user { colors.text } else { colors.text };
+    let text_color = colors.text;
     let align = if is_user {
         egui::Align::RIGHT
     } else {
@@ -296,9 +289,10 @@ pub fn prompt_input(ui: &mut Ui, text: &mut String, placeholder: &str, on_submit
 pub fn chat_interface(ui: &mut Ui, messages: &[ChatMessage], input_text: &mut String) -> bool {
     let mut submitted = false;
     
+    let colors = Colors::default();
     let frame = egui::Frame::none()
-        .fill(colors().bg)
-        .stroke(egui::Stroke::new(1.0, colors().border))
+        .fill(colors.bg)
+        .stroke(egui::Stroke::new(1.0, colors.border))
         .rounding(Rounding::same(RADIUS_LG));
 
     frame.show(ui, |ui| {
@@ -332,8 +326,4 @@ pub fn chat_interface(ui: &mut Ui, messages: &[ChatMessage], input_text: &mut St
     });
 
     submitted
-}
-
-fn colors() -> Colors {
-    Colors::default()
 }
