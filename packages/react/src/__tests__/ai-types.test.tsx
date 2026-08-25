@@ -1,35 +1,28 @@
-import React from 'react';
-import {
-  ChatInterface,
+/**
+ * TypeScript type tests for AI components
+ *
+ * These tests verify that all AI component props and interfaces
+ * compile correctly at type-check time.
+ */
+
+// Only import types, not runtime components
+import type {
   ChatInterfaceProps,
   ChatMessage,
-  MessageBubble,
   MessageBubbleProps,
   MessageRole,
-  TypingIndicator,
   TypingIndicatorProps,
-  ModelSelector,
   ModelSelectorProps,
   ModelOption,
-  TokenCounter,
   TokenCounterProps,
-  CodeBlock,
   CodeBlockProps,
-  CopyButton,
   CopyButtonProps,
-  FeedbackButtons,
   FeedbackButtonsProps,
-  PromptInput,
   PromptInputProps,
-  StreamingText,
   StreamingTextProps,
-  MarkdownRenderer,
   MarkdownRendererProps,
-  ConversationHistory,
   ConversationHistoryProps,
-  RAGReference,
   RAGReferenceProps,
-  AIStatus,
   AIStatusProps,
   AIStatusType,
 } from '../components/ai';
@@ -56,10 +49,10 @@ const chatInterfaceFull: ChatInterfaceProps = {
   messages: [chatMessage],
   models: [{ id: 'gpt-4', name: 'GPT-4', provider: 'OpenAI' }],
   selectedModel: 'gpt-4',
-  onModelChange: (id: string) => {},
-  onSend: (msg: string, model?: string) => {},
-  onRegenerate: (id: string) => {},
-  onCopy: (content: string) => {},
+  onModelChange: (_id: string) => {},
+  onSend: (_msg: string, _model?: string) => {},
+  onRegenerate: (_id: string) => {},
+  onCopy: (_content: string) => {},
   status: 'generating',
   showTokenCounts: true,
   showModelSelector: true,
@@ -82,8 +75,8 @@ const messageBubbleFull: MessageBubbleProps = {
   rawContent: 'Hello',
   timestamp: new Date(),
   isStreaming: true,
-  onCopy: (content: string) => {},
-  actions: <button>Click</button>,
+  onCopy: (_content: string) => {},
+  actions: null,
   className: 'custom',
 };
 
@@ -105,7 +98,7 @@ const modelOption: ModelOption = {
 const modelSelectorProps: ModelSelectorProps = {
   models: [modelOption],
   value: 'gpt-4',
-  onChange: (id: string) => {},
+  onChange: (_id: string) => {},
   placeholder: 'Select model',
   disabled: false,
   className: 'custom',
@@ -117,43 +110,42 @@ const tokenCounterProps: TokenCounterProps = {
   completionTokens: 200,
   maxTokens: 4096,
   showBreakdown: true,
-  showProgress: true,
   className: 'custom',
 };
 
-// Type test: CodeBlockProps
+// Type test: CodeBlockProps (correct API)
 const codeBlockProps: CodeBlockProps = {
   code: 'console.log("hello")',
   language: 'typescript',
   showLineNumbers: true,
-  showCopyButton: true,
-  highlightLines: [1, 3],
-  maxHeight: '400px',
+  maxHeight: 400,
+  filename: 'index.ts',
   className: 'custom',
 };
 
-// Type test: CopyButtonProps
+// Type test: CopyButtonProps (correct API)
 const copyButtonProps: CopyButtonProps = {
   text: 'Copy this',
-  onCopy: (text: string) => {},
-  variant: 'icon',
   label: 'Copy',
+  copiedLabel: 'Copied!',
+  showIcon: true,
+  timeout: 2000,
   className: 'custom',
 };
 
-// Type test: FeedbackButtonsProps
+// Type test: FeedbackButtonsProps (correct API)
 const feedbackButtonsProps: FeedbackButtonsProps = {
-  onFeedback: (type: 'up' | 'down', comment?: string) => {},
-  showCommentInput: true,
+  onFeedback: (_feedback: 'positive' | 'negative' | null, _comment?: string) => {},
+  showComment: true,
   className: 'custom',
 };
 
 // Type test: PromptInputProps
 const promptInputProps: PromptInputProps = {
-  onSubmit: (message: string, model?: string) => {},
+  onSubmit: (_message: string, _model?: string) => {},
   models: [modelOption],
   selectedModel: 'gpt-4',
-  onModelChange: (id: string) => {},
+  onModelChange: (_id: string) => {},
   loading: false,
   placeholder: 'Type a message...',
   showTokenCount: true,
@@ -176,37 +168,36 @@ const markdownRendererProps: MarkdownRendererProps = {
   className: 'custom',
 };
 
-// Type test: ConversationHistoryProps
+// Type test: ConversationHistoryProps (correct API)
 const conversationHistoryProps: ConversationHistoryProps = {
   conversations: [
-    { id: '1', title: 'Chat 1', lastMessage: 'Hello', timestamp: new Date() },
+    { id: '1', title: 'Chat 1', lastMessage: 'Hello', timestamp: new Date(), messageCount: 5 },
   ],
-  selectedId: '1',
-  onSelect: (id: string) => {},
-  onDelete: (id: string) => {},
-  onNew: () => {},
+  activeId: '1',
+  onSelect: (_id: string) => {},
+  onDelete: (_id: string) => {},
+  onNewChat: () => {},
   className: 'custom',
 };
 
-// Type test: RAGReferenceProps
+// Type test: RAGReferenceProps (correct API)
 const ragReferenceProps: RAGReferenceProps = {
-  id: '1',
-  title: 'Document',
-  snippet: 'This is a snippet...',
-  score: 0.95,
-  url: 'https://example.com',
-  expanded: false,
-  onToggle: (id: string) => {},
+  references: [
+    { id: '1', title: 'Document', source: 'web', snippet: 'This is a snippet...', score: 0.95 },
+  ],
+  expandable: true,
   className: 'custom',
 };
 
-// Type test: AIStatusType
-const statusTypes: AIStatusType[] = ['idle', 'generating', 'streaming', 'error', 'success'];
+// Type test: AIStatusType (correct values)
+const statusTypes: AIStatusType[] = ['idle', 'generating', 'streaming', 'error', 'rate-limited'];
 
-// Type test: AIStatusProps
+// Type test: AIStatusProps (correct API)
 const aiStatusProps: AIStatusProps = {
   status: 'generating',
-  showLabel: true,
+  model: 'gpt-4',
+  errorMessage: 'Something went wrong',
+  retryAfter: 30,
   className: 'custom',
 };
 
@@ -245,7 +236,7 @@ describe('AI Component Types', () => {
   it('MessageBubbleProps accepts full props', () => {
     expect(messageBubbleFull.isStreaming).toBe(true);
     expect(messageBubbleFull.onCopy).toBeDefined();
-    expect(messageBubbleFull.actions).toBeDefined();
+    expect(messageBubbleFull.actions).toBeNull();
   });
 
   it('TypingIndicatorProps works', () => {
@@ -273,17 +264,17 @@ describe('AI Component Types', () => {
   it('CodeBlockProps works', () => {
     expect(codeBlockProps.code).toBe('console.log("hello")');
     expect(codeBlockProps.language).toBe('typescript');
-    expect(codeBlockProps.highlightLines).toEqual([1, 3]);
+    expect(codeBlockProps.maxHeight).toBe(400);
   });
 
   it('CopyButtonProps works', () => {
     expect(copyButtonProps.text).toBe('Copy this');
-    expect(copyButtonProps.variant).toBe('icon');
+    expect(copyButtonProps.label).toBe('Copy');
   });
 
   it('FeedbackButtonsProps works', () => {
     expect(feedbackButtonsProps.onFeedback).toBeDefined();
-    expect(feedbackButtonsProps.showCommentInput).toBe(true);
+    expect(feedbackButtonsProps.showComment).toBe(true);
   });
 
   it('PromptInputProps works', () => {
@@ -304,20 +295,20 @@ describe('AI Component Types', () => {
 
   it('ConversationHistoryProps works', () => {
     expect(conversationHistoryProps.conversations.length).toBe(1);
-    expect(conversationHistoryProps.selectedId).toBe('1');
+    expect(conversationHistoryProps.activeId).toBe('1');
   });
 
   it('RAGReferenceProps works', () => {
-    expect(ragReferenceProps.id).toBe('1');
-    expect(ragReferenceProps.score).toBe(0.95);
+    expect(ragReferenceProps.references.length).toBe(1);
+    expect(ragReferenceProps.references[0].score).toBe(0.95);
   });
 
   it('AIStatusType accepts all valid values', () => {
-    expect(statusTypes).toEqual(['idle', 'generating', 'streaming', 'error', 'success']);
+    expect(statusTypes).toEqual(['idle', 'generating', 'streaming', 'error', 'rate-limited']);
   });
 
   it('AIStatusProps works', () => {
     expect(aiStatusProps.status).toBe('generating');
-    expect(aiStatusProps.showLabel).toBe(true);
+    expect(aiStatusProps.model).toBe('gpt-4');
   });
 });

@@ -8,19 +8,15 @@
  * ```tsx
  * import { AIChatExample } from '@cronixui/react/demos';
  *
- * <AIChatExample
- *   apiKey={process.env.OPENAI_API_KEY}
- *   model="gpt-4"
- * />
+ * <AIChatExample model="gpt-4" />
  * ```
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { ChatInterface, ChatMessage } from '../components/ai/ChatInterface';
 import { ModelOption } from '../components/ai/ModelSelector';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 
 // Simulated streaming response
 async function* streamResponse(
@@ -62,7 +58,6 @@ interface AIChatExampleProps {
 }
 
 export const AIChatExample: React.FC<AIChatExampleProps> = ({
-  apiKey,
   model = 'gpt-4',
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -140,7 +135,7 @@ export const AIChatExample: React.FC<AIChatExampleProps> = ({
               : msg
           )
         );
-      } catch (error) {
+      } catch {
         setStatus('error');
         setMessages((prev) =>
           prev.map((msg) =>
