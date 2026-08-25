@@ -100,9 +100,9 @@ mod tests {
 
     #[test]
     fn test_chat_message_with_string_into() {
-        // Test that ChatMessage::user and ChatMessage::assistant accept &str
+        // Test that ChatMessage::user and ChatMessage::assistant accept &str and String
         let msg1 = ChatMessage::user(String::from("String content"));
-        let msg2 = ChatMessage::assistant(&"Reference content");
+        let msg2 = ChatMessage::assistant("Reference content");
         let msg3 = ChatMessage::user("String literal".to_string());
 
         assert_eq!(msg1.content, "String content");
@@ -118,7 +118,7 @@ mod tests {
 
         // Long content
         let long_content = "a".repeat(10000);
-        let long_msg = ChatMessage::assistant(&long_content);
+        let long_msg = ChatMessage::assistant(long_content.as_str());
         assert_eq!(long_msg.content.len(), 10000);
 
         // Special characters
