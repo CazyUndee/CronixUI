@@ -86,6 +86,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   return (
     <div
       className={cn('cn-markdown-renderer', className)}
+      role="document"
+      aria-label="Markdown content"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

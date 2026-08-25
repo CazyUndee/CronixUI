@@ -57,9 +57,14 @@ export const StreamingText: React.FC<StreamingTextProps> = ({
   }, [text, speed, onComplete, isComplete]);
 
   return (
-    <div className={cn('cn-streaming-text', className)}>
+    <div
+      className={cn('cn-streaming-text', className)}
+      role="status"
+      aria-live="polite"
+      aria-label="Streaming response"
+    >
       <span className="cn-streaming-content">{displayedText}</span>
-      {showCursor && !isComplete && <span className="cn-cursor-blink">|</span>}
+      {showCursor && !isComplete && <span className="cn-cursor-blink" aria-hidden="true">|</span>}
     </div>
   );
 };

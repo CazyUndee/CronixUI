@@ -1,5 +1,6 @@
-// Main comprehensive demo
+// Main comprehensive demos
 export { AIComponentsDemo } from './AIComponentsDemo';
+export { ThemeProviderDemo } from './ThemeProviderDemo';
 
 // Individual component demos
 export {
