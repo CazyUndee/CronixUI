@@ -66,6 +66,13 @@ import ModelSelector from './ModelSelector.svelte';
 import TokenCounter from './TokenCounter.svelte';
 import CodeBlock from './CodeBlock.svelte';
 import PromptInput from './PromptInput.svelte';
+import CopyButton from './CopyButton.svelte';
+import FeedbackButtons from './FeedbackButtons.svelte';
+import StreamingText from './StreamingText.svelte';
+import MarkdownRenderer from './MarkdownRenderer.svelte';
+import ConversationHistory from './ConversationHistory.svelte';
+import RAGReference from './RAGReference.svelte';
+import AIStatus from './AIStatus.svelte';
 
 export {
   Button, Card, Badge, Tag, Input, Textarea, Checkbox, Radio, Select, Slider,
@@ -78,7 +85,8 @@ export {
   TreeView, ColorPicker, EmptyState, Notification, FileUpload,
   ThemeProvider,
   ChatInterface, MessageBubble, TypingIndicator, ModelSelector, TokenCounter,
-  CodeBlock, PromptInput
+  CodeBlock, PromptInput, CopyButton, FeedbackButtons, StreamingText,
+  MarkdownRenderer, ConversationHistory, RAGReference, AIStatus
 };
 export * from './tokens.js';
 export { useMediaQuery, useBreakpoint, useEscapeKey, breakpoints } from './useMediaQuery.js';
