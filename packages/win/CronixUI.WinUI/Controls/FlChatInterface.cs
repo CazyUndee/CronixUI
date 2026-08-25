@@ -30,7 +30,7 @@ public sealed class FlChatInterface : Control
     #region Dependency Properties
 
     public static readonly DependencyProperty MessagesProperty =
-        DependencyProperty.Register(nameof(Messages), typeof(IList<ChatMessage>), typeof(FlChatInterface), new PropertyMetadata(null, OnMessagesChanged));
+        DependencyProperty.Register(nameof(Messages), typeof(IList<ChatMessage>), typeof(FlChatInterface), new PropertyMetadata(null, (d, e) => ((FlChatInterface)d).UpdateMessagesList()));
 
     public IList<ChatMessage> Messages
     {
@@ -57,7 +57,7 @@ public sealed class FlChatInterface : Control
     }
 
     public static readonly DependencyProperty StatusProperty =
-        DependencyProperty.Register(nameof(Status), typeof(ChatStatus), typeof(FlChatInterface), new PropertyMetadata(ChatStatus.Idle, OnStatusChanged));
+        DependencyProperty.Register(nameof(Status), typeof(ChatStatus), typeof(FlChatInterface), new PropertyMetadata(ChatStatus.Idle, (d, e) => ((FlChatInterface)d).UpdateStatusIndicator()));
 
     public ChatStatus Status
     {
@@ -118,6 +118,7 @@ public sealed class FlChatInterface : Control
             _sendButton.Click += OnSendClick;
 
         if (_inputBox != null)
+            if (_inputBox != null)
             _inputBox.KeyDown += OnInputKeyDown;
 
         if (_modelSelector != null)
@@ -174,15 +175,7 @@ public sealed class FlChatInterface : Control
         }
     }
 
-    private void OnMessagesChanged(DependencyPropertyChangedEventArgs e)
-    {
-        UpdateMessagesList();
-    }
 
-    private void OnStatusChanged(DependencyPropertyChangedEventArgs e)
-    {
-        UpdateStatusIndicator();
-    }
 
     private void UpdateMessagesList()
     {
@@ -194,7 +187,7 @@ public sealed class FlChatInterface : Control
         // Auto-scroll to bottom
         if (_scrollViewer != null)
         {
-            _scrollViewer.ScrollToEnd();
+            _scrollViewer.ChangeView(null, _scrollViewer.ScrollableHeight, null);
         }
     }
 
