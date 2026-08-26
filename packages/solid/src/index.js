@@ -66,3 +66,6 @@ export { CopyButton } from './components/ai/CopyButton.jsx';
 export { FeedbackButtons } from './components/ai/FeedbackButtons.jsx';
 export { StreamingText } from './components/ai/StreamingText.jsx';
 export { AIStatus } from './components/ai/AIStatus.jsx';
+export { MarkdownRenderer } from './components/ai/MarkdownRenderer.jsx';
+export { ConversationHistory } from './components/ai/ConversationHistory.jsx';
+export { RAGReference } from './components/ai/RAGReference.jsx';

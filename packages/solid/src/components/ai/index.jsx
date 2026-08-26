@@ -8,3 +8,6 @@ export { default as PromptInput } from './PromptInput';
 export { default as StreamingText } from './StreamingText';
 export { default as FeedbackButtons } from './FeedbackButtons';
 export { default as AIStatus } from './AIStatus';
+export { MarkdownRenderer } from './MarkdownRenderer';
+export { ConversationHistory } from './ConversationHistory';
+export { RAGReference } from './RAGReference';

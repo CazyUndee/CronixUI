@@ -67,3 +67,6 @@ export { default as CnCopyButton } from './components/ai/CnCopyButton.vue';
 export { default as CnFeedbackButtons } from './components/ai/CnFeedbackButtons.vue';
 export { default as CnStreamingText } from './components/ai/CnStreamingText.vue';
 export { default as CnAIStatus } from './components/ai/CnAIStatus.vue';
+export { default as CnMarkdownRenderer } from './components/ai/CnMarkdownRenderer.vue';
+export { default as CnConversationHistory } from './components/ai/CnConversationHistory.vue';
+export { default as CnRAGReference } from './components/ai/CnRAGReference.vue';

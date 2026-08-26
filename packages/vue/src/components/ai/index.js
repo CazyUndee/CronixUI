@@ -9,3 +9,6 @@ export { default as CnCopyButton } from './CnCopyButton.vue';
 export { default as CnFeedbackButtons } from './CnFeedbackButtons.vue';
 export { default as CnStreamingText } from './CnStreamingText.vue';
 export { default as CnAIStatus } from './CnAIStatus.vue';
+export { default as CnMarkdownRenderer } from './CnMarkdownRenderer.vue';
+export { default as CnConversationHistory } from './CnConversationHistory.vue';
+export { default as CnRAGReference } from './CnRAGReference.vue';
