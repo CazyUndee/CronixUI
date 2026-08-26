@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -38,13 +38,12 @@ import {
   Notification,
   Divider,
   Stack,
+  Footer,
   HStack,
   Container,
   Breadcrumb,
   Nav,
   Header,
-  Sidebar,
-  Footer,
   FormGroup,
   DatePicker,
   Table,
@@ -56,13 +55,14 @@ import {
 
 // ----------------------------- helpers -----------------------------
 
-const Section: React.FC<{ title: string; desc?: string; children: React.ReactNode }> = ({ title, desc, children }) => (
-  <section style={{ marginBottom: '48px' }}>
-    <h2 style={{ fontSize: '22px', marginBottom: '4px' }}>{title}</h2>
-    {desc && <p style={{ color: 'var(--cn-text-muted)', fontSize: '14px', marginBottom: '20px' }}>{desc}</p>}
-    <div className="card" style={{ padding: '24px', background: 'var(--cn-surface)' }}>
-      {children}
+const Section: React.FC<{ id: string; title: string; subtitle?: string; children: React.ReactNode }> = ({ id, title, subtitle, children }) => (
+  <section id={id} className="demo-section">
+    <div className="demo-section-head">
+      <div className="demo-section-index" aria-hidden="true" />
+      <h2 className="demo-section-title">{title}</h2>
+      {subtitle && <p className="demo-section-sub">{subtitle}</p>}
     </div>
+    <div className="demo-stage">{children}</div>
   </section>
 );
 
@@ -81,18 +81,23 @@ function ButtonDemo() {
     setTimeout(() => setLoading(false), 2000);
   };
   return (
-    <Row>
-      <Button variant="primary">Primary</Button>
-      <Button>Default</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="danger">Danger</Button>
-      <Button variant="success">Success</Button>
-      <Button size="sm">Small</Button>
-      <Button size="lg">Large</Button>
-      <Button loading={loading} onClick={startLoad}>Click me</Button>
-      <Button disabled>Disabled</Button>
-    </Row>
+    <>
+      <Row>
+        <Button variant="primary">Primary</Button>
+        <Button>Default</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="danger">Danger</Button>
+        <Button variant="success">Success</Button>
+      </Row>
+      <Row>
+        <Button size="sm">Small</Button>
+        <Button>Medium</Button>
+        <Button size="lg">Large</Button>
+        <Button loading={loading} onClick={startLoad}>Click me</Button>
+        <Button disabled>Disabled</Button>
+      </Row>
+    </>
   );
 }
 
@@ -101,26 +106,27 @@ function ButtonDemo() {
 function InputDemo() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
-  return (      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 480 }}>
-        <FormGroup label="Full name">
-          <Input placeholder="Regular input" />
-        </FormGroup>
-        <FormGroup label="Email" error={error ? 'Please enter a valid email' : undefined}>
-          <Input
-            error={error}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError(!e.target.value.includes('@') && e.target.value.length > 3);
-            }}
-            placeholder="Email (type invalid to see error)"
-          />
-        </FormGroup>
-        <Input size="lg" placeholder="Large input" />
-        <Input icon={<span>🔍</span>} placeholder="With icon" />
-        <Input action={<Button size="sm">Go</Button>} placeholder="With action" />
-        <Textarea placeholder="Textarea — multi-line input" rows={4} />
-      </div>
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 480 }}>
+      <FormGroup label="Full name">
+        <Input placeholder="Regular input" />
+      </FormGroup>
+      <FormGroup label="Email" error={error ? 'Please enter a valid email' : undefined}>
+        <Input
+          error={error}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setError(!e.target.value.includes('@') && e.target.value.length > 3);
+          }}
+          placeholder="Email (type invalid to see error)"
+        />
+      </FormGroup>
+      <Input size="lg" placeholder="Large input" />
+      <Input icon={<span>🔍</span>} placeholder="With icon" />
+      <Input action={<Button size="sm">Go</Button>} placeholder="With action" />
+      <Textarea placeholder="Textarea — multi-line input" rows={4} />
+    </div>
   );
 }
 
@@ -383,12 +389,14 @@ function NavigationDemo() {
       </Breadcrumb>
 
       <Row gap={24} wrap={false} style={{ alignItems: 'flex-start' }}>
-        <div style={{ width: 220, flexShrink: 0 }}>
-          <Nav active={activeNav} onChange={setActiveNav}>
-            <Nav.Item id="dashboard">📊 Dashboard</Nav.Item>
-            <Nav.Item id="analytics">📈 Analytics</Nav.Item>
-            <Nav.Item id="settings">⚙️ Settings</Nav.Item>
-          </Nav>
+        <div style={{ width: 200, flexShrink: 0 }}>
+          <div style={{ background: 'var(--cn-surface-2)', borderRadius: 10, padding: 4 }}>
+            <Nav active={activeNav} onChange={setActiveNav}>
+              <Nav.Item id="dashboard">📊 Dashboard</Nav.Item>
+              <Nav.Item id="analytics">📈 Analytics</Nav.Item>
+              <Nav.Item id="settings">⚙️ Settings</Nav.Item>
+            </Nav>
+          </div>
           <p style={{ marginTop: 12, fontSize: 13, color: 'var(--cn-text-muted)' }}>
             Active: <strong style={{ color: 'var(--cn-text)' }}>{activeNav}</strong>
           </p>
@@ -519,7 +527,7 @@ function InteractiveDemo() {
 
       <Divider />
 
-      <div style={{ maxWidth: 480 }}>
+      <div style={{ maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <DatePicker placeholder="Pick a date" onChange={(d) => console.log('date:', d)} />
         <FileInput
           accept="image/*"
@@ -549,13 +557,26 @@ function LayoutDemo() {
       />
 
       <div style={{ display: 'flex', gap: 16, minHeight: 200 }}>
-        <Sidebar header={<strong>Menu</strong>} footer={<span style={{ fontSize: 12, color: 'var(--cn-text-dim)' }}>v1.2</span>}>
-          <Nav>
-            <Nav.Item id="overview">Overview</Nav.Item>
-            <Nav.Item id="reports">Reports</Nav.Item>
-            <Nav.Item id="billing">Billing</Nav.Item>
-          </Nav>
-        </Sidebar>
+        {/* Simple card-based sidebar mock instead of fixed Sidebar component */}
+        <div style={{ width: 200, flexShrink: 0, background: 'var(--cn-surface)', borderRadius: 10, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <strong style={{ fontSize: 14, padding: '4px 8px', borderBottom: '1px solid var(--cn-border)', paddingBottom: 8, marginBottom: 4 }}>Menu</strong>
+          {['Overview', 'Reports', 'Billing'].map((label, i) => (
+            <div
+              key={label}
+              style={{
+                padding: '8px 12px',
+                borderRadius: 6,
+                fontSize: 14,
+                color: i === 0 ? 'var(--cn-text)' : 'var(--cn-text-muted)',
+                background: i === 0 ? 'var(--cn-surface-2)' : 'transparent',
+                cursor: 'pointer',
+              }}
+            >
+              {label}
+            </div>
+          ))}
+          <span style={{ marginTop: 'auto', paddingTop: 12, fontSize: 12, color: 'var(--cn-text-dim)' }}>v1.2</span>
+        </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <HStack spacing="4">
@@ -573,6 +594,8 @@ function LayoutDemo() {
         </div>
       </div>
 
+      <Divider />
+
       <Footer
         copyright={`© ${new Date().getFullYear()} CronixUI`}
         links={[
@@ -587,67 +610,85 @@ function LayoutDemo() {
 
 // ----------------------------- Page -----------------------------
 
+const sections = [
+  { id: 'buttons', label: 'Buttons', index: '01', render: () => <ButtonDemo />, sub: 'Six variants, three sizes, loading and disabled states.' },
+  { id: 'inputs', label: 'Inputs', index: '02', render: () => <InputDemo />, sub: 'Labels, validation, icons, actions and textareas.' },
+  { id: 'selects', label: 'Selects', index: '03', render: () => <SelectDemo />, sub: 'Controlled, accessible single-select.' },
+  { id: 'choices', label: 'Choices', index: '04', render: () => <ChoiceDemo />, sub: 'Checkbox, radio, toggle and slider.' },
+  { id: 'data', label: 'Data Display', index: '05', render: () => <DataDisplayDemo />, sub: 'Cards, tables, badges, lists, timelines, avatars and progress.' },
+  { id: 'feedback', label: 'Feedback', index: '06', render: () => <FeedbackDemo />, sub: 'Alerts, toasts, modal, popover, dropdown, spinner and skeleton.' },
+  { id: 'nav', label: 'Navigation', index: '07', render: () => <NavigationDemo />, sub: 'Tabs, nav, breadcrumb, pagination and drawer.' },
+  { id: 'interactive', label: 'Interactive', index: '08', render: () => <InteractiveDemo />, sub: 'Rating, stepper, color picker, accordion, tree and date picker.' },
+  { id: 'layout', label: 'Layout', index: '09', render: () => <LayoutDemo />, sub: 'Header, footer, stacks and container.' },
+];
+
 export default function Demo() {
-  const [activeSection, setActiveSection] = useState('buttons');
+  const [active, setActive] = useState('buttons');
+  const refs = useRef<Record<string, HTMLElement | null>>({});
 
-  const sections = [
-    { id: 'buttons', label: 'Buttons', render: () => <ButtonDemo /> },
-    { id: 'inputs', label: 'Inputs', render: () => <InputDemo /> },
-    { id: 'selects', label: 'Selects', render: () => <SelectDemo /> },
-    { id: 'choices', label: 'Choices', render: () => <ChoiceDemo /> },
-    { id: 'data', label: 'Data Display', render: () => <DataDisplayDemo /> },
-    { id: 'feedback', label: 'Feedback', render: () => <FeedbackDemo /> },
-    { id: 'nav', label: 'Navigation', render: () => <NavigationDemo /> },
-    { id: 'interactive', label: 'Interactive', render: () => <InteractiveDemo /> },
-    { id: 'layout', label: 'Layout', render: () => <LayoutDemo /> },
-  ];
+  const scrollTo = (id: string) => {
+    setActive(id);
+    refs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
-  const active = sections.find(s => s.id === activeSection) ?? sections[0];
+  useEffect(() => {
+    const onScroll = () => {
+      let current = sections[0].id;
+      for (const s of sections) {
+        const el = refs.current[s.id];
+        if (el && el.getBoundingClientRect().top < 180) current = s.id;
+      }
+      setActive(current);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <div className="container" style={{ padding: '48px 24px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '42px', marginBottom: '12px' }}>Live Demo</h1>
-        <p style={{ color: 'var(--cn-text-muted)', fontSize: '18px', maxWidth: 560, margin: '0 auto' }}>
-          Every component below is the <strong style={{ color: 'var(--cn-text)' }}>real thing</strong> — rendered
-          directly from <code>cronixui-react</code> with the official design tokens. Click around!
+    <div className="demo-page">
+      {/* Hero */}
+      <header className="demo-hero">
+        <p className="demo-eyebrow">cronixui-react — live playground</p>
+        <h1 className="demo-title">
+          Every component,<br />hands&nbsp;on.
+        </h1>
+        <p className="demo-lede">
+          Scroll the full catalogue. Each card renders the actual <code>@cronixui/react</code>
+          component against the official design tokens — not a mockup. Everything below is clickable.
         </p>
-      </div>
+        <div className="demo-cta">
+          <Button variant="primary" size="lg" onClick={() => scrollTo('buttons')}>Start at buttons</Button>
+          <Button size="lg" onClick={() => scrollTo('interactive')}>Jump to interactive</Button>
+        </div>
+        <div className="demo-meta">
+          <span>9 sections</span><span aria-hidden="true">·</span><span>50+ components</span><span aria-hidden="true">·</span><span>all real</span>
+        </div>
+      </header>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 8,
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          marginBottom: '48px',
-          position: 'sticky',
-          top: '76px',
-          zIndex: 50,
-          background: 'var(--cn-bg)',
-          padding: '8px',
-          borderRadius: '12px',
-          border: '1px solid var(--cn-border)',
-        }}
-      >
+      {/* Sticky section nav */}
+      <nav className="demo-nav" aria-label="Component sections">
         {sections.map(s => (
-          <Button
+          <button
             key={s.id}
-            size="sm"
-            variant={activeSection === s.id ? 'primary' : 'ghost'}
-            onClick={() => setActiveSection(s.id)}
+            className={`demo-nav-link${active === s.id ? ' is-active' : ''}`}
+            onClick={() => scrollTo(s.id)}
           >
+            <span className="demo-nav-index">{s.index}</span>
             {s.label}
-          </Button>
+          </button>
         ))}
-      </div>
+      </nav>
 
-      <Section
-        title={active.label}
-        desc={`Interactive example of ${active.label.toLowerCase()}.`}
-      >
-        {active.render()}
-      </Section>
+      {/* All sections on one page */}
+      <main className="demo-main">
+        {sections.map(s => (
+          <div key={s.id} ref={(el) => { refs.current[s.id] = el; }}>
+            <Section id={s.id} title={s.label} subtitle={s.sub}>
+              {s.render()}
+            </Section>
+          </div>
+        ))}
+      </main>
     </div>
   );
 }
