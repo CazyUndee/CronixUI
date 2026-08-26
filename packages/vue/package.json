@@ -1,6 +1,6 @@
 {
   "name": "cronixui-vue",
-  "version": "1.0.6",
+  "version": "1.1.5",
   "description": "CronixUI Vue 3 components",
   "type": "module",
   "main": "./src/index.js",

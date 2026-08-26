@@ -1,0 +1,47 @@
+name: Publish to npm
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/react/**'
+      - 'packages/svelte/**'
+      - 'packages/solid/**'
+      - 'packages/vue/**'
+      - 'packages/typescript/**'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - pkg: react
+            cmd: "npm ci --legacy-peer-deps && npm run build"
+          - pkg: svelte
+            cmd: "npm ci && npm run build"
+          - pkg: solid
+            cmd: "npm ci && npm run build"
+          - pkg: vue
+            cmd: "npm ci && npm run build"
+          - pkg: typescript
+            cmd: "npm ci && npm run build"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install and build
+        working-directory: packages/${{ matrix.pkg }}
+        run: ${{ matrix.cmd }}
+
+      - name: Publish to npm
+        working-directory: packages/${{ matrix.pkg }}
+        run: npm publish --access public --no-git-tag-version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

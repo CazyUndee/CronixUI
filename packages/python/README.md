@@ -81,7 +81,7 @@ CronixUI is also available for:
 | Svelte | `npm install cronixui` |
 | Solid | `npm install cronixui` |
 | Go | `go get github.com/CazyUndee/CronixUI/packages/go/cronixui` |
-| Rust | `cronixui = "1.1.2"` |
+| Rust | `cronixui = "1.1.5"` |
 | Flutter | GitHub URL in pubspec.yaml |
 
 ## License

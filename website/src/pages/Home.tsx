@@ -29,7 +29,7 @@ export default function Home() {
       {/* Hero */}
       <section className="home-hero">
         <div className="container">
-          <span className="home-kicker">CronixUI · v1.1.2</span>
+          <span className="home-kicker">CronixUI · v1.1.5</span>
           <h1 className="home-title">
             One design system.
             <br />

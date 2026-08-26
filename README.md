@@ -96,7 +96,7 @@ Learn more [here](https://deepwiki.com/CazyUndee/CronixUI)
 If you are lazy then paste the following into your agent (claude code, opencode, openclaw...):
 
 ```
-Install CronixUI v1.1.2:  
+Install CronixUI v1.1.5:  
 1. Detect project type (package.json, pubspec.yaml, etc.)  
 2. Ask user which platform:  
    - Web (JS/React/Vue/Svelte/Solid): npm install cronixui  

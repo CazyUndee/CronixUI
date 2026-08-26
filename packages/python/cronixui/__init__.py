@@ -69,7 +69,7 @@ from .tokens import (
     typography, spacing, radius, shadow, transition, z_index, layout,
 )
 
-__version__ = "1.2.3"
+__version__ = "1.1.5"
 
 __all__ = [
     # Widgets

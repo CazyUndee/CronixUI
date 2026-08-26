@@ -57,7 +57,7 @@ const installOptions = [
     icon: 'RS',
     code: `cargo add cronixui`,
     description: 'Add to your Cargo.toml:',
-    toml: `[dependencies]\ncronixui = "1.1.2"`,
+    toml: `[dependencies]\ncronixui = "1.1.5"`,
   },
   {
     id: 'flutter',

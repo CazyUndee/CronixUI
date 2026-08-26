@@ -5,6 +5,35 @@ All notable changes to CronixUI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5] - 2026-08-26
+
+### Added
+- React, Svelte, Solid, Vue, TypeScript, Rust, Python, Flutter: 7 new AI components (MarkdownRenderer, ConversationHistory, RAGReference, CopyButton, FeedbackButtons, StreamingText, AIStatus)
+- WinUI: 8 new controls (AvatarGroup, ButtonGroup, Divider, HStack, FormGroup, MarkdownRenderer, ModelSelector, CopyButton)
+- React: Interactive demo page showing all 50+ components with live examples
+- React: TypeScript type tests for AI components
+- Svelte: 7 missing AI components for parity with React/Solid/Vue
+- Solid: 3 missing AI components (MarkdownRenderer, ConversationHistory, RAGReference)
+- Vue: 3 missing AI components (MarkdownRenderer, ConversationHistory, RAGReference)
+- Go: 25+ new components (Alert, Avatar, Badge, Breadcrumb, Chip, ColorPicker, DatePicker, Divider, Drawer, EmptyState, FileInput, FileUpload, FormGroup, HStack, Header, Footer, Navigation, Popover, Skeleton, Spinner, Stepper, Tag, Timeline, Tooltip, TreeView, Typography)
+- Python: Exported 17 missing modules and 37 comprehensive tests
+- React: Accessibility improvements (Tabs arrow keys, Modal focus trap, ARIA on TreeView, ColorPicker, Popover, Toggle, Slider)
+- Website: Editorial homepage redesign with code wall showing all 11 languages
+- Website: GitHub Pages deploy workflow
+
+### Changed
+- Version bumped to 1.1.5 across all packages
+- Demo page renders all 9 sections on one scrollable page
+- Replaced fixed-position sidebar in LayoutDemo with CSS-contained mock
+
+### Fixed
+- Sidebar component fixed-position overlay covering demo page content
+- Go duplicate switch cases in theme Size method
+- Rust Frame::new → Frame::default compatibility
+- Python Stepper tests now work without display
+- PyPI publish workflow now uses PYPI_API_TOKEN secret
+- Website uses HashRouter for static hosting compatibility
+
 ## [Unreleased]
 
 ### Added
