@@ -69,11 +69,9 @@
     "publish:dry": "pnpm -r publish --dry-run --access public"
   },
   "workspaces": [
-    "packages/web",
     "packages/react",
     "packages/svelte",
     "packages/solid",
-    "packages/vue",
-    "packages/typescript"
+    "packages/vue"
   ]
 }
