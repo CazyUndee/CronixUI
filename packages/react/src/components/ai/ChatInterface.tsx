@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '../../utils/cn';
-import { MessageBubble, MessageRole } from './MessageBubble';
+import { MessageBubble } from './MessageBubble';
+import type { MessageRole } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
 import { PromptInput } from './PromptInput';
-import { ModelSelector, ModelOption } from './ModelSelector';
+import { ModelSelector } from './ModelSelector';
+import type { ModelOption } from './ModelSelector';
 import { TokenCounter } from './TokenCounter';
 import { StreamingText } from './StreamingText';
-import { AIStatus, AIStatusType } from './AIStatus';
+import { AIStatus } from './AIStatus';
+import type { AIStatusType } from './AIStatus';
 import { MarkdownRenderer } from './MarkdownRenderer';
 
 export interface ChatMessage {

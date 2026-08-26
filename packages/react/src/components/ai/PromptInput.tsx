@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '../../utils/cn';
-import { ModelSelector, ModelOption } from './ModelSelector';
+import { ModelSelector } from './ModelSelector';
+import type { ModelOption } from './ModelSelector';
 import { TokenCounter } from './TokenCounter';
 
 export interface PromptInputProps {

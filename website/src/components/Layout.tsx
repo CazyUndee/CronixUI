@@ -41,6 +41,12 @@ export default function Layout() {
             })}>
               Components
             </NavLink>
+            <NavLink to="/demo" className={({ isActive }) => `btn ${isActive ? '' : 'btn-ghost'}`} style={({ isActive }) => ({
+              background: isActive ? 'var(--cn-surface-2)' : 'transparent',
+              border: 'none',
+            })}>
+              Demo
+            </NavLink>
             <NavLink to="/install" className={({ isActive }) => `btn ${isActive ? '' : 'btn-ghost'}`} style={({ isActive }) => ({
               background: isActive ? 'var(--cn-surface-2)' : 'transparent',
               border: 'none',
