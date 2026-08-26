@@ -23,13 +23,5 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Build TypeScript package
-        working-directory: packages/typescript
-        run: npm ci && npm run build
-
-      - name: Build React package
-        working-directory: packages/react
-        run: npm ci --legacy-peer-deps && npm run build
-
       - name: Publish cronixui
         run: npm publish --provenance --access public
