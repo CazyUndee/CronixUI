@@ -24,7 +24,7 @@ public class FlAvatarGroup : Control
     #region Dependency Properties
 
     public static readonly DependencyProperty MaxProperty =
-        DependencyProperty.Register(nameof(Max), typeof(int), typeof(FlAvatarGroup), new PropertyMetadata(0, OnMaxChanged));
+        DependencyProperty.Register(nameof(Max), typeof(int), typeof(FlAvatarGroup), new PropertyMetadata(0, OnMaxChangedStatic));
 
     public int Max
     {
@@ -60,7 +60,7 @@ public class FlAvatarGroup : Control
         UpdateAvatars();
     }
 
-    private void OnMaxChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnMaxChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is FlAvatarGroup group)
         {

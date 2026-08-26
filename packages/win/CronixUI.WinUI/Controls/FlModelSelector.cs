@@ -23,7 +23,7 @@ public sealed class FlModelSelector : Control
 
     public static readonly DependencyProperty SelectedModelProperty =
         DependencyProperty.Register(nameof(SelectedModel), typeof(string), typeof(FlModelSelector), 
-            new PropertyMetadata(string.Empty, OnSelectedModelChanged));
+            new PropertyMetadata(string.Empty, OnSelectedModelChangedStatic));
 
     public string SelectedModel
     {
@@ -87,7 +87,7 @@ public sealed class FlModelSelector : Control
         LoadModels();
     }
 
-    private void OnSelectedModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnSelectedModelChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is FlModelSelector selector)
         {

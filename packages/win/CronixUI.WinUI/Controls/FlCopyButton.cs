@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Input;
 using System;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
+using Windows.UI.Core;
 
 namespace CronixUI.Controls;
 
@@ -78,7 +79,7 @@ public sealed class CopyButton : Button
         {
             var dataPackage = new DataPackage();
             dataPackage.SetText(ContentToCopy);
-            Clipboard.setContent(dataPackage);
+            Clipboard.SetContent(dataPackage);
 
             _isCopied = true;
             UpdateDisplay();

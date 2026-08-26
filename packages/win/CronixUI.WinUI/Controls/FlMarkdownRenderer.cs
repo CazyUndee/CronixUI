@@ -93,7 +93,7 @@ public sealed class MarkdownRenderer : Control
             // Horizontal rule
             else if (line.Trim() == "---")
             {
-                currentParagraph.Inlines.Add(new Line { StrokeThickness = 1, Stroke = new SolidColorBrush(Microsoft.UI.Colors.Gray) });
+                
                 _richTextBlock.Blocks.Add(currentParagraph);
                 currentParagraph = new Paragraph();
             }

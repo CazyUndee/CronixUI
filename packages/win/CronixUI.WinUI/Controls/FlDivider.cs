@@ -34,7 +34,7 @@ public class FlDivider : Control
 
     public static readonly DependencyProperty DividerBrushProperty =
         DependencyProperty.Register(nameof(DividerBrush), typeof(Brush), typeof(FlDivider), 
-            new PropertyMetadata(new SolidColorBrush(Microsoft.UI.Colors.FromArgb(255, 255, 255, 20))));
+            new PropertyMetadata(new SolidColorBrush(Microsoft.UI.Colors.LightGray)));
 
     public Brush DividerBrush
     {
