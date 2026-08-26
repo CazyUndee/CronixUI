@@ -1,25 +1,17 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Windows;
 
 namespace CronixUI.Controls;
 
 /// <summary>
 /// Groups multiple buttons together with consistent spacing and borders.
+/// Built on StackPanel for proper layout in WinUI 3.
 /// </summary>
-public class FlButtonGroup : Panel
+public class FlButtonGroup : StackPanel
 {
-    public static readonly DependencyProperty DirectionProperty =
-        DependencyProperty.Register(nameof(Direction), typeof(Orientation), typeof(FlButtonGroup), new PropertyMetadata(Orientation.Horizontal));
-
-    public Orientation Direction
-    {
-        get => (Orientation)GetValue(DirectionProperty);
-        set => SetValue(DirectionProperty, value);
-    }
-
     public static readonly DependencyProperty ItemSpacingProperty =
-        DependencyProperty.Register(nameof(ItemSpacing), typeof(double), typeof(FlButtonGroup), new PropertyMetadata(0.0));
+        DependencyProperty.Register(nameof(ItemSpacing), typeof(double), typeof(FlButtonGroup), 
+            new PropertyMetadata(0.0, OnItemSpacingChanged));
 
     public double ItemSpacing
     {
@@ -27,57 +19,27 @@ public class FlButtonGroup : Panel
         set => SetValue(ItemSpacingProperty, value);
     }
 
-    protected override Size MeasureOverride(Size availableSize)
+    public static readonly DependencyProperty ButtonCornerRadiusProperty =
+        DependencyProperty.Register(nameof(ButtonCornerRadius), typeof(CornerRadius), typeof(FlButtonGroup),
+            new PropertyMetadata(new CornerRadius(4)));
+
+    public CornerRadius ButtonCornerRadius
     {
-        double totalWidth = 0;
-        double totalHeight = 0;
-        double maxWidth = 0;
-        double maxHeight = 0;
-
-        foreach (UIElement child in Children)
-        {
-            child.Measure(availableSize);
-            if (Direction == Orientation.Horizontal)
-            {
-                totalWidth += child.DesiredSize.Width + ItemSpacing;
-                maxHeight = Math.Max(maxHeight, child.DesiredSize.Height);
-            }
-            else
-            {
-                totalHeight += child.DesiredSize.Height + ItemSpacing;
-                maxWidth = Math.Max(maxWidth, child.DesiredSize.Width);
-            }
-        }
-
-        if (Direction == Orientation.Horizontal)
-            totalWidth -= ItemSpacing;
-        else
-            totalHeight -= ItemSpacing;
-
-        return new Size(
-            Direction == Orientation.Horizontal ? totalWidth : maxWidth,
-            Direction == Orientation.Vertical ? totalHeight : maxHeight);
+        get => (CornerRadius)GetValue(ButtonCornerRadiusProperty);
+        set => SetValue(ButtonCornerRadiusProperty, value);
     }
 
-    protected override Size ArrangeOverride(Size finalSize)
+    public FlButtonGroup()
     {
-        double x = 0;
-        double y = 0;
+        Spacing = 0;
+        Orientation = Orientation.Horizontal;
+    }
 
-        foreach (UIElement child in Children)
+    private static void OnItemSpacingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is FlButtonGroup group)
         {
-            if (Direction == Orientation.Horizontal)
-            {
-                child.Arrange(new Rect(x, 0, child.DesiredSize.Width, finalSize.Height));
-                x += child.DesiredSize.Width + ItemSpacing;
-            }
-            else
-            {
-                child.Arrange(new Rect(0, y, finalSize.Width, child.DesiredSize.Height));
-                y += child.DesiredSize.Height + ItemSpacing;
-            }
+            group.Spacing = (double)e.NewValue;
         }
-
-        return finalSize;
     }
 }
