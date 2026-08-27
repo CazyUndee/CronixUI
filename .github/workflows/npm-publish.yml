@@ -1,13 +1,6 @@
 name: Publish to npm
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'package.json'
-      - 'packages/web/**'
-      - 'packages/react/**'
-      - 'packages/typescript/**'
   workflow_dispatch:
 
 permissions:
@@ -23,12 +16,6 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
-
-      - name: Build packages
-        run: |
-          cd packages/web && npm ci && npm run build
-          cd ../react && npm ci && npm run build
-          cd ../typescript && npm ci && npm run build
 
       - name: Publish
         run: npm publish --access public
