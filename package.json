@@ -70,5 +70,9 @@
     "packages/svelte",
     "packages/solid",
     "packages/vue"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CazyUndee/CronixUI.git"
+  }
 }
