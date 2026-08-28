@@ -17,8 +17,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Configure npm registry
-        run: echo "//registry.npmjs.org/:_authToken=" > ~/.npmrc
-
-      - name: Publish with provenance
-        run: npm publish --access public --provenance
+      - name: Publish with provenance via OIDC
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm publish --access public --provenance
