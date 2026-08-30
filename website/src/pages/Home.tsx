@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 
 const languages = [
-  { name: 'JavaScript', tag: 'js', code: `import { Button } from '@cronixui/web';` },
-  { name: 'TypeScript', tag: 'ts', code: `import { Button } from '@cronixui/ts';` },
-  { name: 'React', tag: 'jsx', code: `import { Button } from '@cronixui/react';` },
-  { name: 'Vue', tag: 'vue', code: `import { CnButton } from '@cronixui/vue';` },
-  { name: 'Svelte', tag: 'svelte', code: `import Button from '@cronixui/svelte/Button';` },
-  { name: 'Solid', tag: 'jsx', code: `import { Button } from '@cronixui/solid';` },
+  { name: 'JavaScript', tag: 'js', code: `import { Button } from 'cronixui'` },
+  { name: 'TypeScript', tag: 'ts', code: `import { Button } from 'cronixui';` },
+  { name: 'React', tag: 'jsx', code: `import { Button } from 'cronixui/react';` },
+  { name: 'Vue', tag: 'vue', code: `import { CnButton } from 'cronixui/vue';` },
+  { name: 'Svelte', tag: 'svelte', code: `import Button from 'cronixui/svelte/Button';` },
+  { name: 'Solid', tag: 'jsx', code: `import { Button } from 'cronixui/solid';` },
   { name: 'Python', tag: 'py', code: `from cronixui import Button` },
-  { name: 'Go', tag: 'go', code: `import "github.com/cronixui/cronixui"` },
+  { name: 'Go', tag: 'go', code: `import "github.com/CazyUndee/CronixUI/packages/go/cronixui"` },
   { name: 'Rust', tag: 'rs', code: `use cronixui::Button;` },
   { name: 'Flutter', tag: 'dart', code: `import 'package:cronixui/cronixui.dart';` },
   { name: 'WinUI', tag: 'cs', code: `using CronixUI.WinUI;` },
@@ -34,12 +34,12 @@ export default function Home() {
           <h1 className="home-title">
             One design system.
             <br />
-            <span className="home-title-accent">Eleven native stacks.</span>
+            <span className="home-title-accent">Twelve native stacks.</span>
           </h1>
           <p className="home-lede">
             CronixUI ships the same component library as <em>real, native widgets</em> in React, Vue,
-            Svelte, Solid, Flutter, Go, Rust, Python, WinUI — and plain JS/TS. Dark first, accessible,
-            and consistent down to the last design token.
+            Svelte, Solid, Flutter, Go, Rust, Python, WinUI, Java — and plain JS/TS. Dark first,
+            accessible, and consistent down to the last design token.
           </p>
           <div className="home-actions">
             <Link to="/demo" className="btn btn-primary" style={{ padding: '14px 28px', fontSize: '16px' }}>
@@ -65,7 +65,7 @@ export default function Home() {
       <section className="home-langs">
         <div className="container">
           <div className="home-section-head">
-            <h2>Same component. Eleven imports.</h2>
+            <h2>Same component. Twelve imports.</h2>
             <p>
               Write it once in your framework of choice — every package exposes the identical
               component set, so switching stacks takes minutes, not weeks.
