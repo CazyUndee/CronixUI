@@ -37,6 +37,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Distribution & Marketing
+- **npm**: `cronixui@1.1.5` published via OIDC Trusted Publisher (no token needed)
+- **PyPI**: `cronixui@1.1.5` published (PYPI_API_TOKEN)
+- **crates.io**: publish workflow added (`crates-publish.yml`); first publish blocked until the crates.io account email is verified
+- **pub.dev**: publish workflow added (`pubdev-publish.yml`, needs PUB_CREDENTIALS)
+- **NuGet**: WinUI csproj now has full packaging metadata; publish step in release workflow (needs NUGET_API_KEY)
+- **Release orchestration**: new `release.yml` publishes to npm + PyPI + crates.io + pub.dev + NuGet on `v*` tags, with independent jobs so a missing secret never blocks the rest
+- **Website**: full Open Graph + Twitter + SEO meta tags, `og:image` social preview (1200×630), `og.png` generator script
+- **README**: shield badges (npm, PyPI, crates, license, stars, downloads, contributors); accurate 11-platform component matrix incl. Java
+- **Repo**: GitHub topics added (ui-components, design-system, dark-mode, react, vue, svelte, solid, typescript, python, rust, go, flutter)
+
 ### Added
 - **Go**: 25 new components (Alert, Avatar, Badge, Breadcrumb, Chip, ColorPicker, DatePicker, Divider, Drawer, EmptyState, FileInput, FileUpload, FormGroup, HStack, Header, Footer, Navigation, Popover, Skeleton, Spinner, Stepper, Tag, Timeline, Tooltip, TreeView, Typography H1-H6)
 - **Python**: Exported 17 missing modules (Accordion, Alert, Avatar, Badge, Breadcrumb, CommandPalette, Dropdown, List, Spinner, Skeleton, Nav, Pagination, Progress, Search, Table, Tabs, Toast, Tooltip)
