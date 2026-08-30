@@ -82,11 +82,14 @@ dependencies:
     id: 'java',
     title: 'Java',
     icon: 'JV',
-    code: `<dependency>
-  <groupId>io.cronixui</groupId>
-  <artifactId>cronixui</artifactId>
-  <version>1.1.5</version>
-</dependency>`,
+    code: `# Clone the monorepo
+git clone https://github.com/CazyUndee/CronixUI.git
+
+# Java 17+ Swing components
+# build with Maven:
+mvn -f packages/java/pom.xml package
+
+# then add packages/java/src/main/java as a source root`,
     description: 'Native Swing components for Java 17+',
   },
 ];
@@ -198,8 +201,8 @@ export default function Install() {
             fontSize: '13px',
             overflow: 'auto',
           }}>
-{`<link rel="stylesheet" href="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.css">
-<script src="https://unpkg.com/cronixui@1.1.2/packages/web/dist/cronixui.js"></script>`}
+{`<link rel="stylesheet" href="https://unpkg.com/cronixui@1.1.5/packages/web/dist/cronixui.css">
+<script src="https://unpkg.com/cronixui@1.1.5/packages/web/dist/cronixui.js"></script>`}
           </div>
         </div>
       </div>
