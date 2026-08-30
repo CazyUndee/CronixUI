@@ -1,0 +1,40 @@
+name: Publish to pub.dev
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Analyze
+        working-directory: packages/flutter
+        run: flutter analyze
+
+      - name: Test
+        working-directory: packages/flutter
+        run: flutter test
+
+      - name: Publish dry-run
+        working-directory: packages/flutter
+        run: flutter pub publish --dry-run
+
+      - name: Publish to pub.dev
+        working-directory: packages/flutter
+        env:
+          PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
+        run: flutter pub publish --force

@@ -1,21 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup>
-<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
-<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-<RootNamespace>CronixUI</RootNamespace>
-<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-<UseWinUI>true</UseWinUI>
-<Nullable>enable</Nullable>
-<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-<EnableDefaultPageItems>false</EnableDefaultPageItems>
-</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>CronixUI</RootNamespace>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
 
-<ItemGroup>
-<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250205002" />
-<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
-</ItemGroup>
+    <!-- NuGet packaging -->
+    <PackageId>CronixUI.WinUI</PackageId>
+    <Version>1.1.5</Version>
+    <Authors>CazyUndee</Authors>
+    <PackageDescription>Dark-themed WinUI 3 component library with crimson accents and Outfit typography. Native Windows widgets — no webviews.</PackageDescription>
+    <Description>Dark-themed WinUI 3 component library with crimson accents and Outfit typography.</Description>
+    <PackageTags>winui;winui3;windows;ui;components;dark-mode;design-system</PackageTags>
+    <RepositoryUrl>https://github.com/CazyUndee/CronixUI</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CazyUndee/CronixUI</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
 
-<ItemGroup>
-<Page Include="Themes\\*.xaml" />
-</ItemGroup>
-</Project>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250205002" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Themes\\*.xaml" />
+  </ItemGroup>
+</Project>

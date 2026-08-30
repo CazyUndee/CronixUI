@@ -1,0 +1,95 @@
+name: Release (all registries)
+
+# Fires when a version tag like v1.1.6 is pushed, or manually.
+# Publishes the matching version to every registry.
+#
+# Required secrets:
+#   - npm:          OIDC Trusted Publisher (no secret) OR NPM_TOKEN
+#   - PyPI:         PYPI_API_TOKEN
+#   - crates.io:    CRATES_TOKEN
+#   - pub.dev:      PUB_CREDENTIALS
+#   - NuGet:        NUGET_API_KEY
+#
+# Jobs fail independently so one missing secret doesn't block the others.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to tag & publish (e.g. 1.1.6)'
+        required: false
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  npm:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Ensure latest npm CLI
+        run: npm install -g npm@latest
+      - name: Publish to npm
+        run: npm publish --access public --provenance
+
+  pypi:
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/deploy-main.yml
+    with: {}
+    secrets:
+      PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+
+  crates:
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/crates-publish.yml
+    with: {}
+    secrets:
+      CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+
+  pubdev:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Validate
+        working-directory: packages/flutter
+        run: flutter pub publish --dry-run
+      - name: Publish to pub.dev
+        if: ${{ secrets.PUB_CREDENTIALS != '' }}
+        working-directory: packages/flutter
+        env:
+          PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
+        run: flutter pub publish --force
+
+  nuget:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: microsoft/setup-msbuild@v2
+      - name: Build NuGet package
+        working-directory: packages/win/CronixUI.WinUI
+        run: msbuild CronixUI.WinUI.csproj /restore /p:Configuration=Release /p:GeneratePackageOnBuild=true /m
+      - name: Publish to NuGet
+        if: ${{ secrets.NUGET_API_KEY != '' }}
+        shell: pwsh
+        run: |
+          $nupkg = Get-ChildItem bin\Release -Recurse -Filter *.nupkg | Select-Object -First 1
+          dotnet nuget push $nupkg.FullName --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
