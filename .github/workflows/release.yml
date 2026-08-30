@@ -10,7 +10,9 @@ name: Release (all registries)
 #   - pub.dev:      PUB_CREDENTIALS
 #   - NuGet:        NUGET_API_KEY
 #
-# Jobs fail independently so one missing secret doesn't block the others.
+# All jobs are gated on a v* tag so plain branch pushes never publish.
+# Jobs run as independent top-level jobs; a job missing its secret fails
+# on its publish step without blocking the others.
 
 on:
   workflow_dispatch:
@@ -63,11 +65,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - name: Validate
+      - name: Validate package
         working-directory: packages/flutter
         run: flutter pub publish --dry-run
       - name: Publish to pub.dev
-        if: ${{ secrets.PUB_CREDENTIALS != '' }}
         working-directory: packages/flutter
         env:
           PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
@@ -86,7 +87,6 @@ jobs:
         working-directory: packages/win/CronixUI.WinUI
         run: msbuild CronixUI.WinUI.csproj /restore /p:Configuration=Release /p:GeneratePackageOnBuild=true /m
       - name: Publish to NuGet
-        if: ${{ secrets.NUGET_API_KEY != '' }}
         shell: pwsh
         run: |
           $nupkg = Get-ChildItem bin\Release -Recurse -Filter *.nupkg | Select-Object -First 1
