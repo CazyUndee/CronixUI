@@ -29,10 +29,11 @@ public class CnBadge extends JLabel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        java.awt.Composite origComposite = g2.getComposite();
+        g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.15f));
         g2.setColor(getForeground());
-        g2.globalAlpha = 0.15;
         g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), CronixTheme.RADIUS_SM, CronixTheme.RADIUS_SM));
-        g2.globalAlpha = 1.0;
+        g2.setComposite(origComposite);
         g2.setColor(getForeground());
         g2.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, CronixTheme.RADIUS_SM, CronixTheme.RADIUS_SM));
         g2.dispose();
