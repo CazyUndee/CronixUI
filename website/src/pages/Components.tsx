@@ -126,7 +126,7 @@ export default function Components() {
       <div style={{ textAlign: 'center', marginBottom: '56px' }}>
         <h1 style={{ fontSize: '42px', marginBottom: '16px' }}>Components</h1>
         <p style={{ color: 'var(--cn-text-muted)', fontSize: '18px' }}>
-          52 production-ready components, shipped natively across{' '}
+          53 production-ready components, shipped natively across{' '}
           {ALL_PLATFORMS.length} platforms — same API everywhere.
         </p>
       </div>

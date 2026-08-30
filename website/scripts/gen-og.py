@@ -72,7 +72,7 @@ def main():
         x += w + 14
 
     # Footer
-    d.text((64, 470), "52 components  ·  500+ native implementations  ·  1 consistent API",
+    d.text((64, 470), "53 components  ·  500+ native implementations  ·  1 consistent API",
            font=small, fill=MUTED)
     d.text((64, 520), "npm  ·  PyPI  ·  crates.io  ·  pub.dev  ·  NuGet  ·  Maven  ·  Go",
            font=small, fill=ACCENT_TEXT)

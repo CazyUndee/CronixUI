@@ -253,7 +253,7 @@ function DataDisplayDemo() {
       <Timeline
         items={[
           { title: 'Project created', description: 'Repository initialized', timestamp: '09:00', variant: 'success' },
-          { title: 'Components built', description: '52 components across 11 frameworks', timestamp: '11:30', variant: 'info' },
+          { title: 'Components built', description: '53 components across 11 frameworks', timestamp: '11:30', variant: 'info' },
           { title: 'CI passing', description: 'All 11 workflows green', timestamp: '14:15', variant: 'success' },
         ]}
       />

@@ -12,7 +12,7 @@ A multi-platform, multi-language UI toolkit with a dark theme, crimson accents, 
 ![Stars](https://img.shields.io/github/stars/CazyUndee/CronixUI?style=social)
 ![GitHub contributors](https://img.shields.io/github/contributors/CazyUndee/CronixUI?color=crimson)
 
-**12 languages · 52 components · 500+ native implementations.** Write UI once, ship it everywhere — React, Vue, Svelte, Solid, TypeScript, Python, Go, Rust, Flutter, WinUI, Java, and plain web.
+**12 languages · 53 components · 500+ native implementations.** Write UI once, ship it everywhere — React, Vue, Svelte, Solid, TypeScript, Python, Go, Rust, Flutter, WinUI, Java, and plain web.
 
 Learn more [here](https://deepwiki.com/CazyUndee/CronixUI)
 
@@ -81,7 +81,7 @@ Learn more [here](https://deepwiki.com/CazyUndee/CronixUI)
 | FormGroup | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — | — | — |
 | AvatarGroup | ✅ | — | — | — | — | — | — | — | — | ✅ | — |
 
-**Total: 52 components across 11 platforms — full coverage in 10, Java (11/52) rolling out.**
+**Total: 53 components across 11 platforms — full coverage in 10, Java (11/53) rolling out.**
 
 ### Accessibility Features (React)
 - **Tabs**: Arrow key navigation, Home/End, `role=tablist`, `aria-controls`
