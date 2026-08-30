@@ -2,7 +2,17 @@
 
 A multi-platform, multi-language UI toolkit with a dark theme, crimson accents, and Outfit typography.
 
-> If you find this useful, consider starring this repo!
+> If you find this useful, consider starring this repo! ⭐
+
+![npm version](https://img.shields.io/npm/v/cronixui?color=crimson&label=npm)
+![npm downloads](https://img.shields.io/npm/dt/cronixui?color=crimson&label=downloads)
+![PyPI version](https://img.shields.io/pypi/v/cronixui?color=crimson&label=pypi)
+![crates.io version](https://img.shields.io/crates/v/cronixui?color=crimson&label=crates.io)
+![License](https://img.shields.io/github/license/CazyUndee/CronixUI?color=crimson)
+![Stars](https://img.shields.io/github/stars/CazyUndee/CronixUI?style=social)
+![GitHub contributors](https://img.shields.io/github/contributors/CazyUndee/CronixUI?color=crimson)
+
+**12 languages · 52 components · 500+ native implementations.** Write UI once, ship it everywhere — React, Vue, Svelte, Solid, TypeScript, Python, Go, Rust, Flutter, WinUI, Java, and plain web.
 
 Learn more [here](https://deepwiki.com/CazyUndee/CronixUI)
 
