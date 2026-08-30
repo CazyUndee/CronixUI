@@ -12,12 +12,13 @@ const languages = [
   { name: 'Rust', tag: 'rs', code: `use cronixui::Button;` },
   { name: 'Flutter', tag: 'dart', code: `import 'package:cronixui/cronixui.dart';` },
   { name: 'WinUI', tag: 'cs', code: `using CronixUI.WinUI;` },
+  { name: 'Java', tag: 'java', code: `import cronixui.CronixUI;` },
 ];
 
 const marquee = [
   'Native, not HTML wrappers.',
   'One design language.',
-  '11 frameworks.',
+  '12 frameworks.',
   'Dark first.',
   'Accessible out of the box.',
   'Real widget toolkits, no electron.',

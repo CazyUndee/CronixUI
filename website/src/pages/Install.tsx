@@ -78,6 +78,17 @@ dependencies:
     code: `dotnet add package CronixUI.WinUI`,
     description: 'Windows UI 3 controls',
   },
+  {
+    id: 'java',
+    title: 'Java',
+    icon: 'JV',
+    code: `<dependency>
+  <groupId>io.cronixui</groupId>
+  <artifactId>cronixui</artifactId>
+  <version>1.1.5</version>
+</dependency>`,
+    description: 'Native Swing components for Java 17+',
+  },
 ];
 
 export default function Install() {

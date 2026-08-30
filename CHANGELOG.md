@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5] - 2026-08-26
 
 ### Added
+- Java (Swing): New CronixUI package with 12 native components (Button, TextField, Card, Badge, Toggle, Alert, Progress, Spinner, Tabs, Modal, Toast, theme system) — 50+ component slots
 - React, Svelte, Solid, Vue, TypeScript, Rust, Python, Flutter: 7 new AI components (MarkdownRenderer, ConversationHistory, RAGReference, CopyButton, FeedbackButtons, StreamingText, AIStatus)
 - WinUI: 8 new controls (AvatarGroup, ButtonGroup, Divider, HStack, FormGroup, MarkdownRenderer, ModelSelector, CopyButton)
 - React: Interactive demo page showing all 50+ components with live examples

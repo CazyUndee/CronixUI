@@ -74,7 +74,7 @@ export default function Layout() {
       }}>
         <div className="container" style={{ textAlign: 'center', color: 'var(--cn-text-muted)' }}>
           <p style={{ marginBottom: '8px' }}>CronixUI - Dark-themed UI toolkit with crimson accents</p>
-          <p style={{ fontSize: '14px' }}>Available for JavaScript, TypeScript, React, Vue, Svelte, Solid, Python, Go, Rust, Flutter</p>
+          <p style={{ fontSize: '14px' }}>Available for JavaScript, TypeScript, React, Vue, Svelte, Solid, Python, Go, Rust, Flutter, Java</p>
         </div>
       </footer>
     </div>
