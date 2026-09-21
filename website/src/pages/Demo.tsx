@@ -383,8 +383,8 @@ function NavigationDemo() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <Breadcrumb>
-        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/components">Components</Breadcrumb.Item>
+        <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="#/components">Components</Breadcrumb.Item>
         <Breadcrumb.Item active>Navigation</Breadcrumb.Item>
       </Breadcrumb>
 
@@ -528,11 +528,10 @@ function InteractiveDemo() {
       <Divider />
 
       <div style={{ maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <DatePicker placeholder="Pick a date" onChange={(d) => console.log('date:', d)} />
+        <DatePicker placeholder="Pick a date" />
         <FileInput
           accept="image/*"
           label="Upload an image"
-          onFileSelect={(file) => console.log('file:', file)}
         />
       </div>
     </div>
@@ -575,7 +574,7 @@ function LayoutDemo() {
               {label}
             </div>
           ))}
-          <span style={{ marginTop: 'auto', paddingTop: 12, fontSize: 12, color: 'var(--cn-text-dim)' }}>v1.2</span>
+          <span style={{ marginTop: 'auto', paddingTop: 12, fontSize: 12, color: 'var(--cn-text-dim)' }}>v1.1.5</span>
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -600,8 +599,8 @@ function LayoutDemo() {
         copyright={`© ${new Date().getFullYear()} CronixUI`}
         links={[
           { label: 'GitHub', href: 'https://github.com/CazyUndee/CronixUI' },
-          { label: 'License', href: '#' },
-          { label: 'Docs', href: '/docs' },
+          { label: 'License', href: 'https://github.com/CazyUndee/CronixUI/blob/main/LICENSE' },
+          { label: 'Docs', href: 'https://deepwiki.com/CazyUndee/CronixUI' },
         ]}
       />
     </div>
